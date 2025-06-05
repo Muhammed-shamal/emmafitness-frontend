@@ -26,11 +26,10 @@ export default function RootLayout({ children }) {
 
 
         <Providers>
-
           <header className='sticky top-0 z-50'>
             <Header />
           </header>
-          <NavMenu />
+          {/* <NavMenu /> */}
           <BottomHeader/>
           {children}
 

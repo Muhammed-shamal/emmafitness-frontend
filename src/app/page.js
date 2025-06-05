@@ -1,7 +1,9 @@
 
 import Title from '../components/global/Title'
-import { NewProducts, FeaturedBanner, FeaturedProducts, MainSlider, SmallBanners, OurBrands } from '../components/home/index'
+// import { NewProducts, FeaturedBanner, FeaturedProducts, MainSlider, SmallBanners, OurBrands } from '../components/home/index'
 import fetchApi from '../utility/api/fetchApi'
+import Banner from '../components/Banner.jsx'
+import TrendingSection from '../components/TrendingSection.jsx'
 
 export const metadata = {
   title: 'Top Fitness Brands at Competitive Prices: Shop Now at Emma Fitness in Dubai & Sharjah',
@@ -11,14 +13,14 @@ export const metadata = {
 export default async function Page() {
   // const data = await fetchApi({ URI: "home-slider?populate=*" });
 
-  // const data = await fetchApi({ URI: "addresses" });
-   const result = await fetch(`http://localhost:1337/api/addresses`, {
-        method: "GET",
-      });
-   console.log('result are ', result);
+  const data = await fetchApi({ URI: "addresses" });
+    
+   console.log('result are ', data);
 
   return (
     <main className='container space-y-2 md:space-y-4'>
+      <Banner />
+      <TrendingSection />
       {/* {(data?.data?.attributes?.Main_Slider_1500x450?.data.length > 0 ||
         data?.data?.attributes?.Mobile_Main_Slider_1368x550?.data.length > 0) && (
         <section className='max-h-96 overflow-hidden mt-4'>
@@ -29,7 +31,7 @@ export default async function Page() {
         </section>
       )} */}
 
-      <Title titlePart1={'Deals'} titlePart2={'For You'} viewAllUrl='/products' />
+      {/* <Title titlePart1={'Deals'} titlePart2={'For You'} viewAllUrl='/products' /> */}
 
       {/* {data?.data?.attributes?.small_banners?.data && (
         <section>
@@ -37,8 +39,8 @@ export default async function Page() {
         </section>
       )} */}
 
-      <section><OurBrands /></section>
-      <section><FeaturedProducts /></section>
+      {/* <section><OurBrands /></section> */}
+      {/* <section><FeaturedProducts /></section> */}
 
       {/* {data?.data?.attributes?.Banner_1440x200?.data && (
         <section>
@@ -49,15 +51,15 @@ export default async function Page() {
         </section>
       )} */}
 
-      <Title titlePart1={'Prime'} titlePart2={'Brand Deals'} viewAllUrl='/products' />
+      {/* <Title titlePart1={'Prime'} titlePart2={'Brand Deals'} viewAllUrl='/products' /> */}
       {/* {data?.data?.attributes?.small_banners_bottum?.data?.length > 0 && (
         <section>
           <SmallBanners BannerImage={data?.data?.attributes?.small_banners_bottum?.data} />
         </section>
       )} */}
 
-      <Title titlePart1={'New'} titlePart2={'Products'} viewAllUrl='/products' />
-      <section><NewProducts /></section>
+      {/* <Title titlePart1={'New'} titlePart2={'Products'} viewAllUrl='/products' /> */}
+      {/* <section><NewProducts /></section> */}
     </main>
   );
 }
