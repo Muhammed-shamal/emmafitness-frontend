@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+.ant-menu-item:hover,
+.ant-menu-item-selected {
+  background: #e40101 !important;
+  /* Change this to your desired color */
+  color: yellow !important;
+  
+}
+
+
+
+/* Hide the horizontal scrollbar but allow horizontal scrolling */
+.hide-scrollbar {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+  overflow: -moz-scrollbars-none;
+  /* Firefox */
+}
+
+/* Hide the scrollbar thumb */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+input {
+  height: 2.5rem;
+}
+
+
+
+/* .ant-menu-item ant-menu-item-selected */
+
+/* :root{
+  --primary-color: #000000;
+  --light-primary-color: #2D2D2D;
+  --secondary-color: #FF0000;
+  --dark-secondary-color: #ca0303;
+}
+
+
+body{
+  margin: 0px;
+}
+.container {
+    max-width: 98%;
+    margin: 0 auto;
+ 
+  }
+  
+  @media screen and (min-width: 768px) {
+    .container {
+      max-width: 768px;
+    }
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .container {
+      max-width: 1280px;
+    }
+  }
+
+
+.bg-p{
+  background: var(--primary-color);
+}
+
+.bg-lp{
+  background: var(--light-primary-color);
+}
+
+.text-red{
+  color: var(--secondary-color);
+}
+
+.text-white{
+  color: white;
+}
+
+.text-sm{
+  font-size: 9pt;
+}
+
+.flex{
+  display: flex;
+}
+
+.flex-col{
+  flex-direction: column;
+}
+
+.flex-row{
+  flex-direction: row;
+}
+
+.justify-between{
+  justify-content: space-between;
+}
+
+.items-center{
+  align-items: center;
+}
+
+.flex-1{
+  flex: 1;
+}
+
+
+
+
+.p-8 {
+  padding: 8px;
+}
+.p-4 {
+  padding: 4px;
+}
+
+.gap-4{
+  gap: 4px;
+}
+.gap-8{
+  gap: 8px;
+} */
+
+
+/* Styles for larger screens */
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.user-info {
+  text-align: center;
+}
+
+.mobile-links-toggle {
+  display: none;
+}
+
+.sidebar-links {
+  display: block;
+}
+
+@media (max-width: 991px) {
+  .sidebar {
+    width: 100%;
+    transition: .2s ease;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .user-info button {
+    margin-left: 10px;
+  }
+
+
+
+  .mobile-links-toggle {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .sidebar-links {
+    display: none;
+  }
+
+  .sidebar-links.visible {
+    display: block;
+    transition: .2s ease;
+  }
+}
