@@ -13,7 +13,7 @@ import fetchApi from '../../utility/api/fetchApi'
 import { useSignOut } from '../../utility/userHandle'
 import UserSession from '../user/userSessions'
 import { addBulkWishlist } from '../../utility/redux/wishListSlice'
-import { categories } from '../../constant' // Adjust the import path as necessary
+import CategoryNav from './CategoryNav'
 
 
 function Header() {
@@ -25,7 +25,6 @@ function Header() {
     const signOut = useSignOut()
 
     const [popup, setPopup] = useState(false)
-
 
     useEffect(() => {
 
@@ -88,9 +87,6 @@ function Header() {
             label: (<div onClick={() => setPopup(!popup)} className='w-24'> Login </div>),
         }
         ]
-
-
-
 
     return (
         <>
@@ -160,43 +156,7 @@ function Header() {
                 </div>
 
                 {/* Category List */}
-                <div className="bg-white shadow-sm border-t border-gray-100">
-                    <div className="container mx-auto px-4">
-                        <div className="flex justify-center gap-6 text-sm font-medium py-3">
-                            {categories.map((cat, idx) => (
-                                <div key={idx} className="relative group">
-                                    <Link
-                                        href={`/category/${cat.slug}`}
-                                        className="hover:text-secondary transition-colors duration-200 text-gray-700"
-                                    >
-                                        {cat.name}
-                                    </Link>
-
-                                    {/* Dropdown */}
-                                    {cat.subCategories && (
-                                        <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-40 bg-white shadow-lg border border-gray-100 rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                                            <ul className="flex flex-col text-gray-700 text-sm">
-                                                {cat.subCategories.map((sub, subIdx) => (
-                                                    <li key={subIdx}>
-                                                        <Link
-                                                            href={`/category/${cat.slug}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
-                                                            className="block px-4 py-2 hover:bg-gray-100"
-                                                        >
-                                                            {sub}
-                                                        </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-
-
+                <CategoryNav />
             </div>
         </>
     )
