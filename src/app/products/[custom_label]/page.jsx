@@ -22,7 +22,6 @@ function Page() {
   const searchparams = useSearchParams()
 
 
-
   useEffect(() => {
     setLoading(true)
 

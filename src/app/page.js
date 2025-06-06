@@ -4,6 +4,8 @@ import Title from '../components/global/Title'
 import fetchApi from '../utility/api/fetchApi'
 import Banner from '../components/Banner.jsx'
 import TrendingSection from '../components/TrendingSection.jsx'
+import axios from 'axios';
+import { baseUrl } from '../utility/api/constant';
 
 export const metadata = {
   title: 'Top Fitness Brands at Competitive Prices: Shop Now at Emma Fitness in Dubai & Sharjah',
@@ -13,7 +15,8 @@ export const metadata = {
 export default async function Page() {
   // const data = await fetchApi({ URI: "home-slider?populate=*" });
 
-  const data = await fetchApi({ URI: "addresses" });
+  const data = await fetchApi({ URI: "addresses"});
+  // const res = await axios.get(`${baseUrl}/api/addresses`)
     
    console.log('result are ', data);
 
