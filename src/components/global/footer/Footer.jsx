@@ -3,7 +3,7 @@ import MainSection from './MainSection'
 import BottomSection from './BottomSection'
 function Page() {
   return (
-    <div>
+    <div className='mt-5'>
       <AddressSection/>
       <MainSection/>
       <BottomSection/>

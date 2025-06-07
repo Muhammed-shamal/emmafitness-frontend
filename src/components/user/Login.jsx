@@ -3,24 +3,29 @@ import { useState } from "react"
 import { useSignIn } from "../../utility/userHandle"
 import PostAPI from "../../utility/api/postApi"
 
-function Login({Close}) {
-    const [result, setResult] = useState({ loading: false, err: false, msg: "" })
-    const signIn = useSignIn()
+function Login({ Close }) {
+  const [result, setResult] = useState({ loading: false, err: false, msg: "" })
+  const signIn = useSignIn()
 
-    const formHandle = async (e) => {
-      try {
-        setResult({ ...result, loading: true })
-        const user = await PostAPI({ URI: 'auth/local', Data: e, isTop: true }).catch(err => { throw err })
-        if(user.error) throw user
-        signIn({ token: user.jwt, userId: user?.user?.id, fullName: user?.user?.FullName })
-        setResult({ err: false, msg: "Successfully legged in", loading: false })
-        if(Close) Close(true)
+  const formHandle = async (e) => {
+    //     {
+    //     "identifier": "shamal",
+    //     "password": "password"
+    // }data in e;
+
+    try {
+      setResult({ ...result, loading: true })
+      const user = await PostAPI({ URI: 'auth/local', Data: e, isTop: true }).catch(err => { throw err })
+      if (user.error) throw user
+      signIn({ token: user.jwt, userId: user?.user?.id, fullName: user?.user?.FullName })
+      setResult({ err: false, msg: "Successfully legged in", loading: false })
+      if (Close) Close(true)
       router.back()
-      } catch (err) {
-        console.log(err)
-        setResult({ err: true, msg: err?.error?.message , loading: false })
-      }
+    } catch (err) {
+      console.log(err)
+      setResult({ err: true, msg: err?.error?.message, loading: false })
     }
+  }
 
   return (
     <>
@@ -35,7 +40,7 @@ function Login({Close}) {
           ]}
         >
           <label>  User Name / Email Id
-            <Input className="h-12"/>
+            <Input className="h-12" />
           </label>
         </Form.Item>
 

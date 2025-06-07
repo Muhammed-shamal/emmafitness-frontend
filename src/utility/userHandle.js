@@ -7,9 +7,7 @@ import fetchApi from "./api/fetchApi"
 import { addBulkWishlist } from "./redux/wishListSlice"
 
 const useSignOut = () => {
-
     const dispatch = useDispatch()
-
     const signOut = () => {
         sessionStorage.clear()
         dispatch(loggedIn({}))

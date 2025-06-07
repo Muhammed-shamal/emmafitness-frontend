@@ -6,7 +6,7 @@ import ProductList from '../../components/products/ProductsList'
 import fetchApi from '../../utility/api/fetchApi'
 import useFilter from '../../utility/useFilter'
 import { useEffect, useState } from 'react'
-import  CustomSpinner from '../../components/global/CustomSpinner'
+import CustomSpinner from '../../components/global/CustomSpinner'
 import PaginationButton from '../../components/products/PaginationButton'
 
 function Page() {
@@ -29,7 +29,8 @@ function Page() {
       })
       .catch(e => {
         setLoading(false)
-        console.log(e)})
+        console.log(e)
+      })
   }, [params, reload])
 
 
@@ -43,11 +44,11 @@ function Page() {
         <div className='w-full md:w-[70vw]  p-2 bg-white max-h-52 overflow-hidden'>
           <CategoryList />
         </div>
-        <CustomSpinner spinning={loading}>   
+        <CustomSpinner spinning={loading}>
 
-        <ProductList products={result?.data} />
-      
-        <PaginationButton reload={setReload} setPagination={setPagination} meta={result?.meta}/>
+          <ProductList products={result?.data} />
+
+          <PaginationButton reload={setReload} setPagination={setPagination} meta={result?.meta} />
         </CustomSpinner>
       </div>
     </div>
