@@ -44,8 +44,6 @@ function Login({ Close }) {
           </label>
         </Form.Item>
 
-
-
         <Form.Item
           name="password"
           rules={[

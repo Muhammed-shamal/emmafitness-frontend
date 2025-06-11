@@ -116,3 +116,29 @@ export const categories = [
     slug: "sale",
   },
 ];
+
+
+
+export const bannerCategories = [
+  {
+    id: 'cardio',
+    name: 'Cardio',
+    icon: '/icons/guarantee.png', // example
+    subCategories: [
+      { name: 'Treadmills', image: '/logos/emma_logo-01.png' },
+      { name: 'Exercise Bikes', image: '/logos/product-placehold.png' },
+      { name: 'Rowing Machines', image: '/subcategories/rowing-machines.webp' },
+    ],
+  },
+  {
+    id: 'strength',
+    name: 'Strength',
+    icon: '/icons/easy-installation.png',
+    subCategories: [
+      { name: 'Multi-Gyms', image: '/logos/fitness-banner.webp' },
+      { name: 'Smith Machines', image: '/subcategories/smith-machines.webp' },
+      { name: 'Power Racks', image: '/subcategories/power-racks.webp' },
+    ],
+  },
+   
+]

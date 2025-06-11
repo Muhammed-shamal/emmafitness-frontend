@@ -3,9 +3,8 @@ import Title from '../components/global/Title'
 // import { NewProducts, FeaturedBanner, FeaturedProducts, MainSlider, SmallBanners, OurBrands } from '../components/home/index'
 import fetchApi from '../utility/api/fetchApi'
 import Banner from '../components/Banner.jsx'
+import CategorySlider from '../components/categorySlider.jsx'
 import TrendingSection from '../components/TrendingSection.jsx'
-import axios from 'axios';
-import { baseUrl } from '../utility/api/constant';
 
 export const metadata = {
   title: 'Top Fitness Brands at Competitive Prices: Shop Now at Emma Fitness in Dubai & Sharjah',
@@ -23,6 +22,7 @@ export default async function Page() {
   return (
     <main className='container space-y-2 md:space-y-4'>
       <Banner />
+      <CategorySlider />
       <TrendingSection />
       {/* {(data?.data?.attributes?.Main_Slider_1500x450?.data.length > 0 ||
         data?.data?.attributes?.Mobile_Main_Slider_1368x550?.data.length > 0) && (
