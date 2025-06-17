@@ -54,27 +54,13 @@ function SignUp({ Close=()=>{} }) {
 
 
       <Form
-      className="space-y-2"
+        className="space-y-2"
         name="signUpForm"
         initialValues={initialValues}
         onFinish={formHandle}
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <Form.Item name="FullName"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your full name!',
-            },
-          ]}
-        >
-          <label>
-            Full Name
-            <Input  className="h-12"/>
-          </label>
-        </Form.Item>
-
         <Form.Item name="username"
           rules={[
             {
@@ -163,6 +149,18 @@ function SignUp({ Close=()=>{} }) {
           </label>
         </Form.Item>
 
+        <Form.Item name="address"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your address!',
+            },
+          ]}
+        >
+          <label>Address
+            <Input  className="h-12"/>
+          </label>
+        </Form.Item>
 
 
         <Form.Item>
