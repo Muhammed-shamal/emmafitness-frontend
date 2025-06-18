@@ -15,12 +15,13 @@ function SignUp({ Close=()=>{} }) {
   async function formHandle(e) {
     try{
       setResult({...result, loading: true})
-      const user =  await postApi({URI: 'auth/local/register', Data: e, isTop: true})
+      const user =  await postApi({URI: 'auth/customer/new-register', Data: e, isTop: true})
       if(user.error) throw user
 
       signIn({token:user.jwt, userId:user?.user?.id, fullName: user?.user?.FullName })
-      setResult({err: false, msg: "Successfully saved", loading: false})
-     Close && Close(true)
+      // setResult({err: false, msg: "Successfully saved", loading: false})
+      dispatch(showToast({ type: 'success', message: 'Registered Successfully' }));
+      Close && Close(true)
 
     }catch(err){
       console.log(err)
@@ -61,7 +62,7 @@ function SignUp({ Close=()=>{} }) {
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <Form.Item name="username"
+        <Form.Item name="name"
           rules={[
             {
               required: true,
@@ -93,7 +94,7 @@ function SignUp({ Close=()=>{} }) {
         </Form.Item>
 
         <Form.Item
-          name="Mobile"
+          name="phone"
           rules={[
             {
               required: true,

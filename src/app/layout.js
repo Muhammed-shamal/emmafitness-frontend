@@ -7,8 +7,10 @@ import { Providers } from '../utility/redux/provider'
 import NavMenu from '../components/global/Menu';
 import { GoogleTagManager } from '@next/third-parties/google'
 import { WhatsAppOutlined } from '@ant-design/icons';
+import { Toaster } from 'react-hot-toast';
 import BottomHeader from '../components/global/BottumHeader'
 import basicData from '../utility/basicDatas';
+import ToastListener from '../components/ToastListner'
 
 const inter = Gothic_A1({ subsets: ['latin'], weight: ['400'] });
 
@@ -26,6 +28,8 @@ export default function RootLayout({ children }) {
 
 
         <Providers>
+          <Toaster position="top-right" />
+          <ToastListener />
           <header className='sticky top-0 z-50'>
             <Header />
           </header>

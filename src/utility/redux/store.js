@@ -3,6 +3,7 @@ import cartReducer from './cartSlice'
 import wishListReducer from './wishListSlice'
 import userReducer from './userSlice'
 import orderDraftReducer from './orderDraftSlice'
+import toastReducer from './toastSlice'
 
 
 export default configureStore({
@@ -10,6 +11,7 @@ export default configureStore({
         cart: cartReducer,
         wishList: wishListReducer,
         user: userReducer,
-        orderDraft: orderDraftReducer
+        orderDraft: orderDraftReducer,
+        toast:toastReducer
     }
 })

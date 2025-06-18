@@ -1,25 +1,27 @@
+import { baseUrl } from "./constant";
 
-const deleteApi = async ({ URI,  token }) => {
-    try {
-        const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${URI}`, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json',
-                'Host' : process.env.NEXT_PUBLIC_API_URL_NO_SSL,
-                'Authorization': `Bearer ${token}`
-            }
-        })
+const deleteApi = async ({ URI, token }) => {
+  try {
+    if (!token) throw new Error("Invalid token");
 
-        if (!result.ok) {
-            const responseText = await result.text();
-            console.error(`Response text: ${responseText}`);
-            throw new Error(`Bad response: ${result.status}`);
-        }
-        return await result.json()
-    } catch (err) {
-        throw err
+    const result = await fetch(`${baseUrl}/api/${URI}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+
+    if (!result.ok) {
+      const errorData = await result.json().catch(() => ({}));
+      throw new Error(errorData?.error?.message || `Bad response: ${result.status}`);
     }
-}
 
+    return await result.json();
+  } catch (err) {
+    console.error("deleteApi error:", err);
+    throw err;
+  }
+};
 
 export default deleteApi

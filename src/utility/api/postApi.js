@@ -1,26 +1,37 @@
+import { baseUrl } from "./constant";
 
 
-const PostAPI = async ({ URI, Data={} , isTop = false, token = undefined}) => {
-    try {
-        const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${URI}`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Host' : process.env.NEXT_PUBLIC_API_URL_NO_SSL,
-                'Authorization': `Bearer ${token ? token : process.env.NEXT_PUBLIC_API_TOKEN}`
-            },
-            body: JSON.stringify(isTop ? Data: {
-                 data: Data
-            })
-        })
-        
-      
-         return await result.json()
-    } catch (err) {
-        console.log(err)
-        throw err
+const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN = null }) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (API_TOKEN) {
+      headers['Authorization'] = `Bearer ${API_TOKEN}`;
     }
-}
 
+    const body = JSON.stringify(isTop ? Data : { data: Data });
+
+    const result = await fetch(`${baseUrl}/api/${URI}`, {
+      method: 'POST',
+      headers,
+      body,
+    });
+
+    console.log('result when posting is', result);
+
+    if (!result.ok) {
+      const errorData = await result.json();
+      console.log('errorData',errorData)
+      throw new Error(errorData?.error?.message || result.statusText);
+    }
+
+    return await result.json();
+  } catch (err) {
+    console.error("postApi error:", err);
+    return { error: true, message: err.message }; // return better error object
+  }
+};
 
 export default PostAPI
