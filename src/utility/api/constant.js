@@ -1,2 +1,2 @@
-// export const baseUrl = "http://Admin.emmafitness.ae";
-export const baseUrl = "http://localhost:1000";
+export const baseUrl = "https://emmafitness-server.onrender.com";
+// export const baseUrl = "http://localhost:1000";
