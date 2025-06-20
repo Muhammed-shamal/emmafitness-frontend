@@ -1,5 +1,5 @@
 
-import { Gothic_A1 } from 'next/font/google';
+// import { Gothic_A1 } from 'next/font/google';
 import '../../theme/global.css'
 import Header from '../components/global/Header';
 import Footer from '../components/global/footer/Footer';
@@ -12,7 +12,7 @@ import BottomHeader from '../components/global/BottumHeader'
 import basicData from '../utility/basicDatas';
 import ToastListener from '../components/ToastListner'
 
-const inter = Gothic_A1({ subsets: ['latin'], weight: ['400'] });
+// const inter = Gothic_A1({ subsets: ['latin'], weight: ['400'] });
 
 
 
@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" type="image/svg" href="/logos/emma_logo-02.svg" />
       </head>
-      <body className={`${inter.className} text-gray-700 relative`}>
+      <body className={` text-gray-700 relative`}>
         {/* <!-- Google Tag Manager (noscript) --> */}
         {/* <GoogleTagManager gtmId='' /> */}
 
