@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-       domains: ['localhost', 'admin.emmafitness.ae','emmafitnessphotos.s3.ap-southeast-1.amazonaws.com', 'emmafitness.ae']
+       domains: ['localhost',"emmafitness-server.onrender.com", 'admin.emmafitness.ae','emmafitnessphotos.s3.ap-southeast-1.amazonaws.com', 'emmafitness.ae']
       },
       
 }
