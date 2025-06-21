@@ -18,7 +18,7 @@ export default async function Page() {
   return (
     <main className='container space-y-2 md:space-y-4'>
       <Banner />
-      {/* <CategorySlider /> */}
+      <CategorySlider />
       <TrendingSection />
       {/* {(data?.data?.attributes?.Main_Slider_1500x450?.data.length > 0 ||
         data?.data?.attributes?.Mobile_Main_Slider_1368x550?.data.length > 0) && (

@@ -1,9 +1,29 @@
 'use client'
-import { useState } from 'react'
-import { bannerCategories } from '../constant'
+import { useEffect, useState } from 'react'
+import { categoryUrl } from '../utility/api/constant';
+import fetchApi from '../utility/api/fetchApi';
+// import { bannerCategories } from '../constant'
 
 export default function CategorySlider() {
+  const [loading, setLoading] = useState(false);
+  const [bannerCategories, setBannerCategories] = useState([]);
   const [selected, setSelected] = useState(bannerCategories[0])
+
+  useEffect(() => {
+    setLoading(true);
+    fetchApi({ URI: 'public/banner-categories' })
+      .then(res => {
+        const data = res?.data || [];
+        console.log("data is",data)
+        setBannerCategories(data);
+        if (data.length > 0) {
+          setSelected(data[0]); // Set default selected category after fetch
+        }
+      })
+      .catch(e => console.log(e))
+      .finally(() => setLoading(false));
+  }, []);
+
 
   return (
     <section className="px-4 mt-6">
@@ -24,15 +44,22 @@ export default function CategorySlider() {
 
       {/* Subcategories */}
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {selected.subCategories.map((sub) => (
+        {selected?.children?.map((sub, index) => (
           <div
-            key={sub}
+            key={index}
             className="border p-4 rounded-lg text-center bg-white shadow hover:shadow-md transition"
           >
-            {sub}
+            <img
+              src={`${categoryUrl}/${sub.image}`} // or just sub.image if it's full URL
+              alt={sub.name}
+              className="w-16 h-16 object-contain mx-auto mb-2"
+            />
+            <div className="text-sm font-medium">{sub.name}</div>
           </div>
         ))}
+
       </div>
+
     </section>
   )
 }

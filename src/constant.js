@@ -127,7 +127,7 @@ export const bannerCategories = [
     subCategories: [
       { name: 'Treadmills', image: '/logos/emma_logo-01.png' },
       { name: 'Exercise Bikes', image: '/logos/product-placehold.png' },
-      { name: 'Rowing Machines', image: '/subcategories/rowing-machines.webp' },
+      // { name: 'Rowing Machines', image: '/subcategories/rowing-machines.webp' },
     ],
   },
   {
@@ -136,8 +136,8 @@ export const bannerCategories = [
     icon: '/icons/easy-installation.png',
     subCategories: [
       { name: 'Multi-Gyms', image: '/logos/fitness-banner.webp' },
-      { name: 'Smith Machines', image: '/subcategories/smith-machines.webp' },
-      { name: 'Power Racks', image: '/subcategories/power-racks.webp' },
+      // { name: 'Smith Machines', image: '/subcategories/smith-machines.webp' },
+      // { name: 'Power Racks', image: '/subcategories/power-racks.webp' },
     ],
   },
    
