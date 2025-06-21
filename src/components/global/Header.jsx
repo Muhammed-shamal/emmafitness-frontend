@@ -17,7 +17,6 @@ import CategoryNav from './CategoryNav'
 
 
 function Header() {
-
     const dispatcher = useDispatch()
     const cart = useSelector(state => state.cart)
     const wishList = useSelector(state => state.wishList)

@@ -1,17 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import { categories } from '../../constant' // Adjust the import path as necessary
+import fetchApi from "../../utility/api/fetchApi";
 
 export default function CategoryNav() {
     const [open, setOpen] = useState(false);
+    const [categories, setCategories] = useState([])
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetchApi({ URI: 'public/categories-nav' });
+                const raw = res?.data || [];
+
+                // Map into structure expected by your UI
+                const structured = raw.map(cat => ({
+                    id: cat._id,
+                    name: cat.name,
+                    slug: cat.slug,
+                    subCategories: cat.children?.map(child => ({
+                        name: child.name,
+                        slug: child.slug
+                    })) || []
+                }));
+
+                setCategories(structured);
+            } catch (e) {
+                console.error('Failed to fetch categories', e);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     return (
         <div className="bg-white shadow-sm border-t border-gray-100">
             <div className="container mx-auto px-4">
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex justify-center gap-6 text-sm font-medium py-3">
+                {/* <div className="hidden md:flex justify-center gap-6 text-sm font-medium py-3">
                     {categories.map((cat, idx) => (
                         <div key={idx} className="relative group">
                             <Link
@@ -21,26 +48,20 @@ export default function CategoryNav() {
                                 {cat.name}
                             </Link>
 
-                            {/* Subcategories dropdown */}
-                            {cat.subCategories && (
-                                <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-40 bg-white shadow-lg border border-gray-100 rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                                    <ul className="flex flex-col text-gray-700 text-sm">
-                                        {cat.subCategories.map((sub, subIdx) => (
-                                            <li key={subIdx}>
-                                                <Link
-                                                    href={`/category/${cat.slug}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
-                                                    className="block px-4 py-2 hover:bg-gray-100"
-                                                >
-                                                    {sub}
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
+                            {cat.subCategories.map((sub, subIdx) => (
+                                <li key={subIdx}>
+                                    <Link
+                                        href={`/category/${cat.slug}/${sub.slug}`}
+                                        className="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                        {sub.name}
+                                    </Link>
+                                </li>
+                            ))}
+
                         </div>
                     ))}
-                </div>
+                </div> */}
 
                 {/* Mobile Toggle Button */}
                 <div className="flex md:hidden justify-between items-center py-3">
@@ -76,20 +97,17 @@ export default function CategoryNav() {
                                 </Link>
 
                                 {/* Show subcategories */}
-                                {cat.subCategories && (
-                                    <ul className="pl-4 text-sm text-gray-600 space-y-1">
-                                        {cat.subCategories.map((sub, subIdx) => (
-                                            <li key={subIdx}>
-                                                <Link
-                                                    href={`/category/${cat.slug}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
-                                                    className="hover:text-secondary"
-                                                >
-                                                    {sub}
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
+                                {cat.subCategories.map((sub, subIdx) => (
+                                    <li key={subIdx}>
+                                        <Link
+                                            href={`/category/${cat.slug}/${sub.slug}`}
+                                            className="hover:text-secondary"
+                                        >
+                                            {sub.name}
+                                        </Link>
+                                    </li>
+                                ))}
+
                             </div>
                         ))}
                     </div>
