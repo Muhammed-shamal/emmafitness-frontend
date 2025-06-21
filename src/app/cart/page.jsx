@@ -7,7 +7,7 @@ function Page() {
   return (
     <div className='container my-4'>
       <Title titlePart2="Your shopping cart" />
-      <CartList token={token}/>
+      <CartList />
     </div>
   )
 }

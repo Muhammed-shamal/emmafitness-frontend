@@ -16,7 +16,7 @@ import useAddAndRemoveCart from '../../../utility/useAddAndRemoveCart'
 import { Button,  message } from 'antd'
 import CustomSpinner from '../../global/CustomSpinner'
 
-function CartList({token}) {
+function CartList() {
     const cartItem = useSelector(state => state.cart)
     const [cartProduct, setCartProduct] = useState([])
     const [accountSummery, setAccountSummery] = useState({})
