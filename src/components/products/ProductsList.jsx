@@ -2,48 +2,52 @@
 import ProductCard from "../global/ProductCard"
 import { useEffect, useState } from "react"
 import TitleWithSort from "./TitleWithSort"
+import { productUrl } from "../../utility/api/constant"
 
 
- function ProductsList({ products }) {
+function ProductsList({ products }) {
   const [product, setProducts] = useState()
 
 
-  useEffect(()=>{
+  useEffect(() => {
+    if (!products) return;
 
-    setProducts(products?.map(prdct => ({
-      id: prdct?.id,
-      name: prdct?.attributes?.Name,
-      category: prdct?.attributes?.category?.data?.attributes?.Name,
-      brand: prdct?.attributes?.brand?.data?.attributes?.Name,
-      salePrice: prdct?.attributes?.Sale_Price,
-      regularPrice: prdct?.attributes?.Regular_Price,
-      imageUrl: prdct?.attributes?.Feature_Photo?.data?.attributes?.url,
-      createdAt: prdct?.attributes?.createdAt,
-      customLabel : prdct?.attributes?.custom_label?.data?.attributes?.Name,
-      brand: prdct?.attributes?.brand?.data?.attributes?.Name,
-      slug: prdct?.attributes?.Slug
-    })))
-  },[products])
+    setProducts(
+      products.map((prdct) => ({
+        id: prdct._id,
+        name: prdct.name,
+        category: prdct.category?.name || "Uncategorized",
+        brand: prdct.brand?.name || "No Brand", // it's just a string ID for now
+        salePrice: prdct.salePrice,
+        regularPrice: prdct.regularPrice,
+        imageUrl: prdct.images?.[0] || "", // first image as main image
+        createdAt: prdct.createdAt,
+        customLabel: prdct.customLabel,
+        slug: prdct.slug,
+      }))
+    );
+  }, [products]);
+
 
 
   return (
     <div>
-           <TitleWithSort Title="Products" setProducts={setProducts}/>
+      <TitleWithSort Title="Products" setProducts={setProducts} />
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
         {
-         product && product?.map((product, idx) =>
+          product && product?.map((product, idx) =>
             <ProductCard key={idx}
-            Id={product.id}
-            Title={product?.name}
-            Category={product?.category}
-            Brand={product?.brand}
-            SalePrice={product?.salePrice}
-            RegularPrice={product?.regularPrice}
-            ImageUrl={product?.imageUrl}
-            createdAt={product?.createdAt}
-            Slug={product?.slug}
-            CustomLabel={product.customLabel}
+              Id={product.id}
+              Title={product?.name}
+              Category={product?.category}
+              Brand={product?.brand}
+              SalePrice={product?.salePrice}
+              RegularPrice={product?.regularPrice}
+              ImageUrl={`${productUrl}/${product?.imageUrl}`}
+              createdAt={product?.createdAt}
+              Slug={product?.slug}
+              CustomLabel={product.customLabel}
             />
           )
         }

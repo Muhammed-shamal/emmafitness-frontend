@@ -21,10 +21,10 @@ function Page() {
 
   useEffect(() => {
     setLoading(true)
-    fetchApi({ URI: `products?${filter({ params })}&populate=custom_label&populate=Feature_Photo,category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
+    fetchApi({ URI: `public/products?${filter({ params })}&populate=customLabel&populate=category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
       .then(res => {
+        console.log("res is in fetch products with filter",res)
         setResult(res)
-
         setLoading(false)
       })
       .catch(e => {

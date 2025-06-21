@@ -16,7 +16,7 @@ function Page() {
   const terms = router.get('term')
   useEffect(() => {
     setLoading(true)
-    fetchApi({ URI: `products?filters[$or][0][Name][$containsi]=${terms}&filters[$or][1][Full_Description][$containsi]=${terms}&filters[$or][2][Short_Description][$containsi]=${terms}&populate=custom_label&populate=category&populate=Feature_Photo&populate=brand&sort[createdAt]=desc&&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
+    fetchApi({ URI: `products?filters[$or][0][Name][$containsi]=${terms}&filters[$or][1][Full_Description][$containsi]=${terms}&filters[$or][2][Short_Description][$containsi]=${terms}&populate=customLabel&populate=category&populate=Feature_Photo&populate=brand&sort[createdAt]=desc&&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
       .then((data) => {
         setProducts(data)
 

@@ -9,7 +9,7 @@ import { addBulkWishlist } from "./redux/wishListSlice"
 const useSignOut = () => {
     const dispatch = useDispatch()
     const signOut = () => {
-        sessionStorage.clear()
+        localStorage.clear()
         dispatch(loggedIn({}))
     }
     return signOut
@@ -20,7 +20,8 @@ const useSignIn = () => {
     const dispatch = useDispatch()
 
     const signIn = async ({ token, userId, fullName }) => {
-        sessionStorage.setItem('token', token)
+        // sessionStorage.setItem('token', token)
+        localStorage.setItem('token', token);
         dispatch(loggedIn({ userId, fullName, token }))
 
         //  if have, move it into db and remove from local storage

@@ -28,7 +28,7 @@ function Header() {
 
     useEffect(() => {
 
-        const token = sessionStorage.getItem('token')
+        const token = localStorage.getItem('token')
         const checkUser = async () => {
 
             if (token) {

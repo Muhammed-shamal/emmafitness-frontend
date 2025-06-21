@@ -25,11 +25,11 @@ function Page() {
   useEffect(() => {
     setLoading(true)
 
-    fetchApi({URI: `custom-labels?filter[$eq][slug]=${params?.custom_label}&populate=Banner_1440x250`}).then(({data})=>{
+    fetchApi({URI: `custom-labels?filter[$eq][slug]=${params?.customLabel}&populate=Banner_1440x250`}).then(({data})=>{
       setBanner(data[0])
     })
     
-    fetchApi({ URI: `products?${filter({ params: searchparams })}&filters[custom_label][slug][$eq]=${params?.custom_label}&populate=custom_label&populate=Feature_Photo,category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo || 1}&pagination[pageSize]=${pagination?.pageSize || 20}` })
+    fetchApi({ URI: `products?${filter({ params: searchparams })}&filters[customLabel][slug][$eq]=${params?.customLabel}&populate=customLabel&populate=Feature_Photo,category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo || 1}&pagination[pageSize]=${pagination?.pageSize || 20}` })
     .then(res => {
       setProducts(res)
       

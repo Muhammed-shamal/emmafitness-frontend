@@ -19,9 +19,7 @@ function Login({ Close }) {
         URI: 'auth/customer/login',
         Data: e,
         isTop: true,
-      });
-
-      console.log("user is",user)
+      });      
 
       if (user.error) throw new Error(user.message);
 

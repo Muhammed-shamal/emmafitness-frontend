@@ -7,8 +7,10 @@ const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN = null }) => {
       'Content-Type': 'application/json',
     };
 
-    if (API_TOKEN) {
-      headers['Authorization'] = `Bearer ${API_TOKEN}`;
+    const token = localStorage.getItem('token')
+
+    if (API_TOKEN || token) {
+      headers['Authorization'] = `Bearer ${API_TOKEN || token}`;
     }
 
     const body = JSON.stringify(isTop ? Data : { data: Data });
@@ -18,8 +20,6 @@ const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN = null }) => {
       headers,
       body,
     });
-
-    console.log('result when posting is', result);
 
     if (!result.ok) {
       const errorData = await result.json();

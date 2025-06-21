@@ -1,6 +1,6 @@
 import { baseUrl } from "./constant";
 
-const deleteApi = async ({ URI, token }) => {
+const deleteApi = async ({ URI, token=localStorage.getItem("token") }) => {
   try {
     if (!token) throw new Error("Invalid token");
 

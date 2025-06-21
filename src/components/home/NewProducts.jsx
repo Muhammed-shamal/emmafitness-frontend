@@ -22,7 +22,7 @@ function NewProducts() {
         regularPrice: prdct?.attributes?.Regular_Price,
         imageUrl: prdct?.attributes?.Feature_Photo?.data?.attributes?.url,
         createdAt: prdct?.attributes?.createdAt,
-        customLabel : prdct?.attributes?.custom_label?.data?.attributes?.Name,
+        customLabel : prdct?.attributes?.customLabel?.data?.attributes?.Name,
         slug: prdct?.attributes?.Slug
       })))
     }

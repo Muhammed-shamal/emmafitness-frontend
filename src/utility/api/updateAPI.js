@@ -1,6 +1,6 @@
 import { baseUrl } from "./constant";
 
-const updateApi = async ({ URI, Data = {}, isTop = false, token }) => {
+const updateApi = async ({ URI, Data = {}, isTop = false, token = localStorage.getItem("token") }) => {
   try {
     if (!token) throw new Error("Invalid token");
 

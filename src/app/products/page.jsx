@@ -8,6 +8,7 @@ import Filter from '../../components/products/Filter'
 import {useSearchParams} from 'next/navigation'
 import useFilter from '../../utility/useFilter'
 import CustomSpinner from "../../components/global/CustomSpinner"
+import { productUrl } from "../../utility/api/constant"
 
 
 function Page() {
@@ -27,21 +28,20 @@ function Page() {
     const fetch = async () => {
       try{
         setLoading(true)
-        const result = await fetchApi({ URI: `products?${filter({params})}&populate=custom_label&populate=category.name,Feature_Photo.url,brand.Name&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
+        const result = await fetchApi({ URI: `public/products?${filter({params})}&populate=customLabel&populate=category.name,brand.Name&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
         setPagination(prv=>({...prv, pageCount: result?.meta?.pagination?.pageCount , element: <Pagination onChange={handlePagination} responsive={true} pageSize={result?.meta?.pagination?.pageSize} showSizeChanger={false}   total={result?.meta?.pagination?.total} />}))
   
         setProducts(result?.data?.map(prdct => ({
-          id: prdct?.id,
-          name: prdct?.attributes?.Name,
-          category: prdct?.attributes?.category?.data?.attributes?.Name,
-          brand: prdct?.attributes?.brand?.data?.attributes?.Name,
-          salePrice: prdct?.attributes?.Sale_Price,
-          regularPrice: prdct?.attributes?.Regular_Price,
-          imageUrl: prdct?.attributes?.Feature_Photo?.data?.attributes?.url,
-          createdAt: prdct?.attributes?.createdAt,
-          customLabel : prdct?.attributes?.custom_label?.data?.attributes?.Name,
-          brand: prdct?.attributes?.brand?.data?.attributes?.Name,
-          slug: prdct?.attributes?.Slug
+          id: prdct._id,
+        name: prdct.name,
+        category: prdct.category?.name || "Uncategorized",
+        brand: prdct.brand?.name || "No Brand", // it's just a string ID for now
+        salePrice: prdct.salePrice,
+        regularPrice: prdct.regularPrice,
+        imageUrl: prdct.images?.[0] || "", // first image as main image
+        createdAt: prdct.createdAt,
+        customLabel: prdct.customLabel,
+        slug: prdct.slug,
         })))
 
         
@@ -65,11 +65,6 @@ function Page() {
     fetch()
   }, [reload, params])
 
-  useEffect(()=>{
-
-  },)
-
- 
 
   const handlePagination = (pageNo)=>{
     setPagination(prv=>({...prv, pageNo}))
@@ -77,9 +72,6 @@ function Page() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
   }
-
-
-
 
 
   return (
@@ -104,7 +96,7 @@ function Page() {
                 Category={product?.category}
                 SalePrice={product?.salePrice}
                 RegularPrice={product?.regularPrice}
-                ImageUrl={product?.imageUrl}
+                ImageUrl={`${productUrl}/${product?.imageUrl}`}
                 createdAt={product?.createdAt}
                 Slug={product?.slug}
                 CustomLabel={product.customLabel}

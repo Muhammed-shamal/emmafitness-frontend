@@ -7,9 +7,9 @@ const fetchApi = async ({ URI, API_TOKEN = null, revalidate = 3 }) => {
       'Accept': '*/*',
     };
 
-    // Only add Authorization if API_TOKEN is provided
-    if (API_TOKEN || process.env.NEXT_PUBLIC_API_TOKEN) {
-      headers['Authorization'] = `Bearer ${API_TOKEN || process.env.NEXT_PUBLIC_API_TOKEN}`;
+    // Only add Authorization if API_TOKEN islog provided
+    if (API_TOKEN) {
+      headers['Authorization'] = `Bearer ${API_TOKEN}`;
     }
 
     const result = await fetch(`${baseUrl}/api/${URI}`, {

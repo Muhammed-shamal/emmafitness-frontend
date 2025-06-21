@@ -23,7 +23,7 @@ function Page() {
 
   useEffect(() => {
     setLoading(true)
-    fetchApi({ URI: `products?${filter({ params: searchparams })}&populate=custom_label&filters[category][slug][$eq]=${params?.category_name}&populate=Feature_Photo,category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo || 1}&pagination[pageSize]=${pagination?.pageSize || 20}` })
+    fetchApi({ URI: `products?${filter({ params: searchparams })}&populate=customLabel&filters[category][slug][$eq]=${params?.category_name}&populate=Feature_Photo,category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo || 1}&pagination[pageSize]=${pagination?.pageSize || 20}` })
       .then(res => {
         setProducts(res)
 
