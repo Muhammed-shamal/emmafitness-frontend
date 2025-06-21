@@ -23,7 +23,7 @@ function Search() {
     currentValue = value;
     const fake = () => {
 
-      fetchApi({ URI: `products?filters[$or][0][Name][$containsi]=${value}&filters[$or][1][Full_Description][$containsi]=${value}&filters[$or][2][Short_Description][$containsi]=${value}&sort[createdAt]=desc` })
+      fetchApi({ URI: `public/products?filters[$or][0][Name][$containsi]=${value}&filters[$or][1][Full_Description][$containsi]=${value}&filters[$or][2][Short_Description][$containsi]=${value}&sort[createdAt]=desc` })
         .then((d) => {
           if (currentValue === value) {
             const { data } = d;

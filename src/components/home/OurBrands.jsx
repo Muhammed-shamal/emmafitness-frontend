@@ -5,16 +5,13 @@ import ScrollButton from '../global/ScrollButton'
 import Image from "next/legacy/image";
 import fetchApi from "../../utility/api/fetchApi";
 import Link from "next/link";
+import { brandUrl } from "../../utility/api/constant";
 
 function OurBrands() {
-
   const ref = useRef(null)
   const [data, setData] = useState([])
   const [isMouseDown, setIsMouseDown] = useState(false)
   const [startX, setStartX] = useState(null)
-
-
-  
 
   const handleMouseDown = (e) => {
       setIsMouseDown(true);
@@ -39,23 +36,22 @@ function OurBrands() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetchApi({ URI: 'brands?populate=*&sort=updatedAt&pagination[limit]=100' }).catch(e=>console.log(e))
+      const result = await fetchApi({ URI: 'public/brands?populate=*&sort=updatedAt&pagination[limit]=100' }).catch(e=>console.log(e))
       setData(result?.data?.map(brand => (
         {
-          url: brand?.attributes?.Photo?.data?.attributes?.url,
-          alt: brand?.attributes?.Name,
-          slug: "/brand/"+brand?.attributes?.slug
+          url:brandUrl + '/' + brand?.logo,
+          alt: brand?.name,
+          slug: "/brand/"+brand?.slug
         }
       )))
     }
 
     fetchData()
   }, [])
+
   return (
     <div className="relative ">
       <ScrollButton Ref={ref} />
-
-
       <div ref={ref} 
        onMouseDown={handleMouseDown}
        onMouseUp={handleMouseUp}

@@ -22,7 +22,7 @@ function Page() {
 
   useEffect(() => {
     setLoading(true)
-    fetchApi({ URI: `products?${filter({ params: searchparams })}&filters[brand][slug][$eq]=${params?.brand_name}&populate=Feature_Photo,category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
+    fetchApi({ URI: `public/products?${filter({ params: searchparams })}&filters[brand][slug][$eq]=${params?.brand_name}&populate=category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
       .then(res => {
         setProducts(res)
 

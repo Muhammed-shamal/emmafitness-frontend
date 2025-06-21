@@ -29,7 +29,7 @@ function Page() {
       setBanner(data[0])
     })
     
-    fetchApi({ URI: `products?${filter({ params: searchparams })}&filters[customLabel][slug][$eq]=${params?.customLabel}&populate=customLabel&populate=Feature_Photo,category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo || 1}&pagination[pageSize]=${pagination?.pageSize || 20}` })
+    fetchApi({ URI: `public/products?${filter({ params: searchparams })}&filters[customLabel][slug][$eq]=${params?.customLabel}&populate=customLabel&populate=category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo || 1}&pagination[pageSize]=${pagination?.pageSize || 20}` })
     .then(res => {
       setProducts(res)
       

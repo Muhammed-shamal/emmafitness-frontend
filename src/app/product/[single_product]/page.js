@@ -15,9 +15,9 @@ async function Page({ params }) {
 
   let product, relatedProducts
   try {
-    product = await fetchApi({ URI: `products?filters[Slug][$eq]=${params?.single_product}&populate=category,Feature_Photo,brand.Photo,Photos` })
+    product = await fetchApi({ URI: `public/products?filters[Slug][$eq]=${params?.single_product}&populate=category,brand.Photo,Photos` })
 
-    relatedProducts = await fetchApi({ URI: `products?filters[category][id][$eq]=${product?.data?.[0]?.attributes?.category?.data?.[0]?.id}&sort[0]=createdAt:asc&populate=Feature_Photo,category` })
+    relatedProducts = await fetchApi({ URI: `public/products?filters[category][id][$eq]=${product?.data?.[0]?.attributes?.category?.data?.[0]?.id}&sort[0]=createdAt:asc&populate=category` })
   } catch (err) {
     console.log(err)
   }

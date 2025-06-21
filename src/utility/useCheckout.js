@@ -18,7 +18,7 @@ const useCheckout = ()=>{
 
         
         const res =  filter?.length > 0 &&
-        await fetchApi({ URI: `products?${filter?.join('')}&populate=Feature_Photo,brand` })
+        await fetchApi({ URI: `public/products?${filter?.join('')}&populate=Feature_Photo,brand` })
         const cartProducts = res?.data?.map(item => ({
             products: item?.id,
             name: item?.attributes?.Name,

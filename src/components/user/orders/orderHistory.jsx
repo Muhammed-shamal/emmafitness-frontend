@@ -14,7 +14,7 @@ function OrderHistory() {
     useEffect(() => {
         const bring = async () => {
 
-            const order = user?.userId &&   await fetchApi({ URI: `orders?filters[user]=${user?.userId}&populate=order_items.product.Feature_Photo&sort[updatedAt]=desc`, API_TOKEN: user?.token })
+            const order = user?.userId &&   await fetchApi({ URI: `orders?filters[user]=${user?.userId}sort[updatedAt]=desc`, API_TOKEN: user?.token })
             setOrders([...order?.data])
         }
         bring()

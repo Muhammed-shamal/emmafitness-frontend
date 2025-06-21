@@ -24,7 +24,7 @@ function WishLists() {
         const fectData = async () => {
             setLoading(true)
             try {
-                const result = await fetchApi({ URI: `wishlists?filters[users][id][$eq]=${user?.userId}&populate=users,product.Feature_Photo`, API_TOKEN: user?.token }).catch(e=>console.log(e))
+                const result = await fetchApi({ URI: `wishlists?filters[users][id][$eq]=${user?.userId}`, API_TOKEN: user?.token }).catch(e=>console.log(e))
                 setData([...result?.data])
             } catch (err) {
                 console.log(err)

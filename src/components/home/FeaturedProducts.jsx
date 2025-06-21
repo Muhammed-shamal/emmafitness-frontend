@@ -11,7 +11,7 @@ import CustomSpinner from "../global/CustomSpinner"
   useEffect(() => {
     const fetch = async () => {
       setLoading(true)
-      const result = await fetchApi({ URI: 'products?filters[Featured][$eq]=true&pagination[limit]=24&populate=*&sort=createdAt:Desc' })
+      const result = await fetchApi({ URI: 'public/products?filters[Featured][$eq]=true&pagination[limit]=24&populate=*&sort=createdAt:Desc' })
       .finally(()=>setLoading(false))
       setProducts(result?.data?.map(prdct => ({
         id: prdct?.id,

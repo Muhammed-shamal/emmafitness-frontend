@@ -11,7 +11,7 @@ function NewProducts() {
   useEffect(() => {
     setLoading(true)
     const fetch = async () => {
-      const result = await fetchApi({ URI: 'products?sort[createdAt]=desc&pagination[limit]=18&populate=*' })
+      const result = await fetchApi({ URI: 'public/products?sort[createdAt]=desc&pagination[limit]=18&populate=*' })
       .finally(()=>setLoading(false))
       setProducts(result?.data?.map(prdct => ({
         id: prdct?.id,

@@ -19,14 +19,10 @@ import CustomSpinner from "../../components/global/CustomSpinner"
   const filter = useFilter()
   const searchparams = useSearchParams()
 
-
-
-  // const result = await fetchApi({ URI: "products?populate=Feature_Photo,category" }).catch(e=>console.log(e)) || null
-
   
     useEffect(() => {
     setLoading(true)
-    fetchApi({ URI: `products?${filter({ params: searchparams })}&populate=Feature_Photo,category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
+    fetchApi({ URI: `public/products?${filter({ params: searchparams })}&populate=category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
       .then(res => {
         setResult(res)
 
