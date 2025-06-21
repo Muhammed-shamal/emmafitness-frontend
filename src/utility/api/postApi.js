@@ -7,10 +7,10 @@ const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN = null }) => {
       'Content-Type': 'application/json',
     };
 
-    const token = localStorage.getItem('token')
+    // const token = localStorage.getItem('token')
 
-    if (API_TOKEN || token) {
-      headers['Authorization'] = `Bearer ${API_TOKEN || token}`;
+    if (API_TOKEN) {
+      headers['Authorization'] = `Bearer ${API_TOKEN}`;
     }
 
     const body = JSON.stringify(isTop ? Data : { data: Data });
