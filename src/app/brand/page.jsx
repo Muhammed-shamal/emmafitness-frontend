@@ -11,7 +11,6 @@ import CustomSpinner from "../../components/global/CustomSpinner"
 
  function Page() {
 
-
   const [result, setResult] = useState({})
   const [pagination, setPagination] = useState({ pageCount: 0, pageNo: 1, pageSize: 30 })
   const [reload, setReload] = useState(false)

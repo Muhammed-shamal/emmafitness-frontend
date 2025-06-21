@@ -3,6 +3,7 @@ import ProductCard from "../global/ProductCard"
 import { useEffect, useState } from "react"
 import fetchApi from "../../utility/api/fetchApi"
 import CustomSpinner from "../global/CustomSpinner"
+import { productUrl } from "../../utility/api/constant"
 function NewProducts() {
 
   const [product, setProducts] = useState([])
@@ -14,16 +15,16 @@ function NewProducts() {
       const result = await fetchApi({ URI: 'public/products?sort[createdAt]=desc&pagination[limit]=18&populate=*' })
       .finally(()=>setLoading(false))
       setProducts(result?.data?.map(prdct => ({
-        id: prdct?.id,
-        name: prdct?.attributes?.Name,
-        category: prdct?.attributes?.category?.data?.attributes?.Name,
-        brand: prdct?.attributes?.brand?.data?.attributes?.Name,
-        salePrice: prdct?.attributes?.Sale_Price,
-        regularPrice: prdct?.attributes?.Regular_Price,
-        imageUrl: prdct?.attributes?.Feature_Photo?.data?.attributes?.url,
-        createdAt: prdct?.attributes?.createdAt,
-        customLabel : prdct?.attributes?.customLabel?.data?.attributes?.Name,
-        slug: prdct?.attributes?.Slug
+         id: prdct._id,
+        name: prdct.name,
+        category: prdct.category?.name || "Uncategorized",
+        brand: prdct.brand?.name || "No Brand", // it's just a string ID for now
+        salePrice: prdct.salePrice,
+        regularPrice: prdct.regularPrice,
+        imageUrl: prdct.images?.[0] || "", // first image as main image
+        createdAt: prdct.createdAt,
+        customLabel: prdct.customLabel,
+        slug: prdct.slug,
       })))
     }
     fetch()
@@ -41,7 +42,7 @@ function NewProducts() {
       <ProductCard 
       Brand={prd?.brand} 
       Id={prd?.id} 
-      ImageUrl={prd?.imageUrl} 
+      ImageUrl={`${productUrl}/${prd?.imageUrl}`}
       createdAt={prd?.createdAt} 
       RegularPrice={prd?.regularPrice} 
       SalePrice={prd?.salePrice} 

@@ -12,15 +12,15 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const data = await fetchApi({ URI: "home-slider?populate=*" });
-   console.log('result are ', data);
+  // const data = await fetchApi({ URI: "home-slider?populate=*" });
+  //  console.log('result are ', data);
 
   return (
     <main className='container space-y-2 md:space-y-4'>
       <Banner />
-      <CategorySlider />
+      {/* <CategorySlider /> */}
       <TrendingSection />
-      {(data?.data?.attributes?.Main_Slider_1500x450?.data.length > 0 ||
+      {/* {(data?.data?.attributes?.Main_Slider_1500x450?.data.length > 0 ||
         data?.data?.attributes?.Mobile_Main_Slider_1368x550?.data.length > 0) && (
         <section className='max-h-96 overflow-hidden mt-4'>
           <MainSlider
@@ -28,34 +28,34 @@ export default async function Page() {
             Mobile={data?.data?.attributes?.Mobile_Main_Slider_1368x550?.data}
           />
         </section>
-      )}
+      )} */}
 
       <Title titlePart1={'Deals'} titlePart2={'For You'} viewAllUrl='/products' />
 
-      {data?.data?.attributes?.small_banners?.data && (
+      {/* {data?.data?.attributes?.small_banners?.data && (
         <section>
           <SmallBanners BannerImage={data?.data?.attributes?.small_banners?.data} />
         </section>
-      )}
+      )} */}
 
       <section><OurBrands /></section>
       <section><FeaturedProducts /></section>
 
-      {data?.data?.attributes?.Banner_1440x200?.data && (
+      {/* {data?.data?.attributes?.Banner_1440x200?.data && (
         <section>
           <FeaturedBanner
             BigScreen={data?.data?.attributes?.Banner_1440x200?.data}
             Mobile={data?.data?.attributes?.Banner_Mobile_1440x350?.data}
           />
         </section>
-      )}
+      )} */}
 
       <Title titlePart1={'Prime'} titlePart2={'Brand Deals'} viewAllUrl='/products' />
-      {data?.data?.attributes?.small_banners_bottum?.data?.length > 0 && (
+      {/* {data?.data?.attributes?.small_banners_bottum?.data?.length > 0 && (
         <section>
           <SmallBanners BannerImage={data?.data?.attributes?.small_banners_bottum?.data} />
         </section>
-      )}
+      )} */}
 
       <Title titlePart1={'New'} titlePart2={'Products'} viewAllUrl='/products' />
       <section><NewProducts /></section>
