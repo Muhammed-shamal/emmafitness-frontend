@@ -12,10 +12,10 @@ function NewProducts() {
   useEffect(() => {
     setLoading(true)
     const fetch = async () => {
-      const result = await fetchApi({ URI: 'public/products?sort[createdAt]=desc&pagination[limit]=18&populate=*' })
-      .finally(()=>setLoading(false))
+      const result = await fetchApi({ URI: 'public/products/new' })
+        .finally(() => setLoading(false))
       setProducts(result?.data?.map(prdct => ({
-         id: prdct._id,
+        id: prdct._id,
         name: prdct.name,
         category: prdct.category?.name || "Uncategorized",
         brand: prdct.brand?.name || "No Brand", // it's just a string ID for now
@@ -30,31 +30,31 @@ function NewProducts() {
     fetch()
   }, [])
 
-  
+
 
   return (
     <CustomSpinner spinning={loading}>
 
-<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
 
-  {
-    product?.map((prd,idx)=>
-      <ProductCard 
-      Brand={prd?.brand} 
-      Id={prd?.id} 
-      ImageUrl={`${productUrl}/${prd?.imageUrl}`}
-      createdAt={prd?.createdAt} 
-      RegularPrice={prd?.regularPrice} 
-      SalePrice={prd?.salePrice} 
-      Slug={prd?.slug} 
-      CustomLabel={product.customLabel}
-      Title={prd?.name} 
-      key={idx}/>
-      )
-  }
-</div>
+        {
+          product?.map((prd, idx) =>
+            <ProductCard
+              Brand={prd?.brand}
+              Id={prd?.id}
+              ImageUrl={`${productUrl}/${prd?.imageUrl}`}
+              createdAt={prd?.createdAt}
+              RegularPrice={prd?.regularPrice}
+              SalePrice={prd?.salePrice}
+              Slug={prd?.slug}
+              CustomLabel={product.customLabel}
+              Title={prd?.name}
+              key={idx} />
+          )
+        }
+      </div>
 
-</CustomSpinner>
+    </CustomSpinner>
   )
 }
 
