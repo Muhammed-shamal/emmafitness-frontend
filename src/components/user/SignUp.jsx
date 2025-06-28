@@ -2,31 +2,39 @@
 import { Button, Form, Input, Select } from "antd"
 import postApi from "../../utility/api/postApi";
 import { useState } from "react";
-import {useSignIn} from '../../utility/userHandle'
+import { useSignIn } from '../../utility/userHandle'
+import { showToast } from "../../utility/redux/toastSlice";
+import { useDispatch } from "react-redux";
 
-function SignUp({ Close=()=>{} }) {
+
+const phoneNumberRegex = /^[6-9]\d{9}$/;  // ✅ Matches 10-digit Indian mobile numbers
+
+function SignUp({ Close = () => { } }) {
 
   const signIn = useSignIn()
+  const dispatch = useDispatch();
 
-  const [result, setResult] = useState({
-    loading: false, err: false, msg: ""
-  })
+  const [loading, setLoading] = useState(false);
 
   async function formHandle(e) {
-    try{
-      setResult({...result, loading: true})
-      const user =  await postApi({URI: 'auth/customer/new-register', Data: e, isTop: true})
-      if(user.error) throw user
+    try {
+      setLoading(true);
+      const user = await postApi({ URI: 'auth/customer/new-register', Data: e, isTop: true })
+      console.log('user is', user);
+      if (user.error) throw user
 
-      signIn({token:user.jwt, userId:user?.user?.id, fullName: user?.user?.FullName })
-      // setResult({err: false, msg: "Successfully saved", loading: false})
-      dispatch(showToast({ type: 'success', message: 'Registered Successfully' }));
+      signIn({
+        token: user.token, userId: user?.customer?._id,
+        fullName: user?.customer?.name,
+      })
+      dispatch(showToast({ type: 'success', message: user?.message || 'Registered Successfully' }));
       Close && Close(true)
 
-    }catch(err){
-      console.log(err)
-      setResult({err: true, msg: err?.error?.message, loading: false})
-    
+    } catch (error) {
+      console.log('err in catch', error)
+      dispatch(showToast({ type: 'error', message: error?.message || 'Something went wrong' }));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -71,7 +79,7 @@ function SignUp({ Close=()=>{} }) {
           ]}
         >
           <label>User Name
-            <Input  className="h-12"/>
+            <Input className="h-12" />
           </label>
         </Form.Item>
 
@@ -100,12 +108,15 @@ function SignUp({ Close=()=>{} }) {
               required: true,
               message: 'Please input your phone number!',
             },
-
+            {
+              pattern: phoneNumberRegex,
+              message: 'Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9',
+            },
           ]}
         >
           <label >
             Phone Number
-            <Input addonBefore={prefixSelector} style={{ width: '100%' }}  />
+            <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
           </label>
         </Form.Item>
 
@@ -121,7 +132,7 @@ function SignUp({ Close=()=>{} }) {
         >
           <label>
             Password
-            <Input.Password  className="h-12"/>
+            <Input.Password className="h-12" />
           </label>
         </Form.Item>
 
@@ -146,7 +157,7 @@ function SignUp({ Close=()=>{} }) {
         >
           <label>
             Confirm Password
-            <Input.Password  className="h-12"/>
+            <Input.Password className="h-12" />
           </label>
         </Form.Item>
 
@@ -159,15 +170,15 @@ function SignUp({ Close=()=>{} }) {
           ]}
         >
           <label>Address
-            <Input  className="h-12"/>
+            <Input className="h-12" />
           </label>
         </Form.Item>
 
 
         <Form.Item>
-        <p className={`${result.err ? "text-red-500" : "text-green-500"} text-center`}>{result.msg}</p>
+          {/* <p className={`${result.err ? "text-red-500" : "text-green-500"} text-center`}>{result.msg}</p> */}
 
-          <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={result.loading}>
+          <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={loading} disabled={loading}>
             Submit
           </Button>
         </Form.Item>

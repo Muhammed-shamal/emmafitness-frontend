@@ -20,8 +20,7 @@ const useSignIn = () => {
     const dispatch = useDispatch()
 
     const signIn = async ({ token, userId, fullName }) => {
-        // sessionStorage.setItem('token', token)
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('token', token)
         dispatch(loggedIn({ userId, fullName, token }))
 
         //  if have, move it into db and remove from local storage

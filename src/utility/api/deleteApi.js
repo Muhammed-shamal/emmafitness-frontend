@@ -1,6 +1,6 @@
 import { baseUrl } from "./constant";
 
-const deleteApi = async ({ URI, token }) => {
+const deleteApi = async ({ URI, token = sessionStorage.getItem('token') }) => {
   try {
     if (!token) throw new Error("Invalid token");
 
@@ -13,8 +13,8 @@ const deleteApi = async ({ URI, token }) => {
     });
 
     if (!result.ok) {
-      const errorData = await result.json().catch(() => ({}));
-      throw new Error(errorData?.error?.message || `Bad response: ${result.status}`);
+      const errorData = await result.json();
+      throw new Error(errorData?.message || result.statusText);
     }
 
     return await result.json();

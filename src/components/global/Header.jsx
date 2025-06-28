@@ -17,7 +17,7 @@ import CategoryNav from './CategoryNav'
 
 
 function Header() {
-    const dispatcher = useDispatch()
+    const dispatch = useDispatch()
     const cart = useSelector(state => state.cart)
     const wishList = useSelector(state => state.wishList)
     const user = useSelector(state => state.user)
@@ -25,35 +25,65 @@ function Header() {
 
     const [popup, setPopup] = useState(false)
 
-    useEffect(() => {
+   useEffect(() => {
+    const token = sessionStorage.getItem('token');
 
-        const token = localStorage.getItem('token')
-        const checkUser = async () => {
+    const restoreUser = async () => {
+      try {
+        if (token) {
+          const response = await fetchApi({
+            URI: 'auth/customer/me',
+            API_TOKEN: token,
+          });
 
-            if (token) {
+          if (response?.customer) {
+            dispatch(
+              loggedIn({
+                userId: response.customer._id,
+                fullName: response.customer.name,
+                token,
+              })
+            );
 
-                const users = await fetchApi({ URI: 'users/me?populate=carts.product,wishlists.product', API_TOKEN: token }).catch(e => console.log(e))
-                dispatcher(loggedIn({ userId: users?.id, fullName: users?.FullName, token }))
-                dispatcher(bulkReplaceCart(users?.carts?.map(pd => ({ quantity: pd?.quantity, productId: pd?.product.id }))))
-                dispatcher(addBulkWishlist(users?.wishlists?.map((item) => (
-                    {
-                        id: item?.id,
-                        ProductId: item?.product?.id
-                    }
-                ))))
-
-            } else if (typeof localStorage !== 'undefined') {
-                dispatcher(bulkReplaceCart(JSON.parse(localStorage?.getItem('cart'))))
+            if (Array.isArray(response.carts)) {
+              dispatch(
+                bulkReplaceCart(
+                  response.carts.map((pd) => ({
+                    quantity: pd.quantity,
+                    productId: pd.product?.id,
+                  }))
+                )
+              );
             }
 
+            if (Array.isArray(response.wishlists)) {
+              dispatch(
+                addBulkWishlist(
+                  response.wishlists.map((item) => ({
+                    id: item?.id,
+                    ProductId: item?.product?.id,
+                  }))
+                )
+              );
+            }
+          }
+        } else {
+          // Restore from local storage if not logged in
+          const localCart = localStorage?.getItem('cart');
+          if (localCart) {
+            dispatch(bulkReplaceCart(JSON.parse(localCart)));
+          }
         }
+      } catch (error) {
+        console.error("❌ Error restoring user:", error);
+      }
+    };
 
-        checkUser()
+    restoreUser();
+  }, [dispatch]);
 
 
-    }, [])
-
-
+    console.log("user?.userId",user)
 
     const items = user?.userId ?
         [{

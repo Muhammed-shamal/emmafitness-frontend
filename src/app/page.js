@@ -30,7 +30,7 @@ export default async function Page() {
         </section>
       )} */}
 
-      <Title titlePart1={'Deals'} titlePart2={'For You'} viewAllUrl='/products' />
+      <Title titlePart1={'Shop by brands'} titlePart2={'For You'} viewAllUrl='/products' />
 
       {/* {data?.data?.attributes?.small_banners?.data && (
         <section>

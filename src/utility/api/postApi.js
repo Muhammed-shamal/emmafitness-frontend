@@ -1,7 +1,7 @@
 import { baseUrl } from "./constant";
 
 
-const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN = null }) => {
+const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN = localStorage.getItem('token') }) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN = null }) => {
     if (!result.ok) {
       const errorData = await result.json();
       console.log('errorData',errorData)
-      throw new Error(errorData?.error?.message || result.statusText);
+      throw new Error(errorData?.message || result.statusText);
     }
 
     return await result.json();

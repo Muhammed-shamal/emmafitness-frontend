@@ -1,6 +1,6 @@
 import { baseUrl } from "./constant";
 
-const updateApi = async ({ URI, Data = {}, isTop = false, token }) => {
+const updateApi = async ({ URI, Data = {}, isTop = false, token=sessionStorage.getItem('token')}) => {
   try {
     if (!token) throw new Error("Invalid token");
 
@@ -14,8 +14,8 @@ const updateApi = async ({ URI, Data = {}, isTop = false, token }) => {
     });
 
     if (!result.ok) {
-      const errorData = await result.json().catch(() => ({}));
-      throw new Error(errorData?.error?.message || `Bad response: ${result.status}`);
+      const errorData = await result.json();
+      throw new Error(errorData?.message || result.statusText);
     }
 
     return await result.json();
