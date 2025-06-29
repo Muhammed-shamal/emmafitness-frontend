@@ -8,11 +8,11 @@ function DeleteAddress({ addressId, close }) {
         loading: false, err: false, msg: ""
     });
 
-    const user = useSelector(state=>state.user)
+    const user = useSelector(state => state.user)
 
     async function formHandle() {
         try {
-            const result = await deleteApi({ URI: `addresses/${addressId}`, token: user.token});
+            const result = await deleteApi({ URI: `address/${addressId}`, token: user.token });
             setResult({ err: false, msg: "Successfully deleted", loading: false });
             close && close()
         } catch (error) {
@@ -28,10 +28,10 @@ function DeleteAddress({ addressId, close }) {
             <p className="py-5">Are you sure to delete this address?</p>
             <p className={`${result.err ? "text-red-500" : "text-green-500"} text-center`}>{result.msg}</p>
             <div className="text-center">
-            <Button onClick={formHandle} type="primary" className="bg-red-500 w-1/4" loading={result.loading}>
-                Delete
-            </Button>
-            </div>   
+                <Button onClick={formHandle} type="primary" className="bg-red-500 w-1/4" loading={result.loading}>
+                    Delete
+                </Button>
+            </div>
         </div>
     );
 }

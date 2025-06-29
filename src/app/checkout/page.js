@@ -39,7 +39,7 @@ function Page() {
   useEffect(() => {
     const ready = async () => {
       setLoading(true)
-      const address = await fetchApi({ URI: `addresses?filters[user][id][$eq]=${user?.userId}`, API_TOKEN: user?.token })
+      const address = await fetchApi({ URI: `address?filters[user][id][$eq]=${user?.userId}`, API_TOKEN: user?.token })
       setAddress([...address?.data])
       setLoading(false)
     }

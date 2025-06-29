@@ -38,7 +38,7 @@ function EditAddress({ Data , close}) {
 
             setResult({ ...result, loading: true });
 
-            await updateAPI({ URI: `addresses/${data.id}`, Data: data, token: user?.token });
+            await updateAPI({ URI: `address/${data.id}`, Data: data, token: user?.token });
             setResult({ err: false, msg: "Successfully updated", loading: false });
             close && close()
 

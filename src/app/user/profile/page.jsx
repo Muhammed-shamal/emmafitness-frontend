@@ -56,8 +56,6 @@ const Page = () => {
         token: user?.token
       })
 
-      console.log("update response", response)
-
       signIn({
         token:user?.token,
         userId: response?.updated?._id,

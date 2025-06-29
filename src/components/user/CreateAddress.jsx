@@ -5,7 +5,7 @@ import PostAPI from "../../utility/api/postApi";
 import fetchApi from "../../utility/api/fetchApi";
 import { useSelector } from "react-redux";
 
-function CreateAddress({close}) {
+function CreateAddress({ close }) {
     const [result, setResult] = useState({
         loading: false, err: false, msg: ""
     });
@@ -15,11 +15,11 @@ function CreateAddress({close}) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await fetchApi({ URI: 'states' }).catch(e=>console.log(e));
+            const result = await fetchApi({ URI: 'public/emirates/getAll'});
             setState(result?.data?.map(state => (
                 {
-                    emirateName: state?.attributes?.emirate_name,
-                    id: state?.id
+                    emirateName: state?.emirate_name,
+                    id: state?._id
                 }
             )));
         };
@@ -33,22 +33,21 @@ function CreateAddress({close}) {
     async function formHandle(e) {
         try {
             const data = {
-                
-                    user: userDetails.userId,
-                    buildingOrOffice: e.buildingOrOffice,
-                    contactNo: e.contactNo,
-                    flatNumber: e.flatNumber,
-                    userName: e.userName,
-                    street: e.street,
-                    isOffice: e.isOffice,
-                    emirate: e.emirate
-                
+                user: userDetails.userId,
+                buildingOrOffice: e.buildingOrOffice,
+                contactNo: e.contactNo,
+                flatNumber: e.flatNumber,
+                userName: e.userName,
+                street: e.street,
+                isOffice: e.isOffice,
+                emirate: e.emirate
+
             };
 
             setResult({ ...result, loading: true });
-    
 
-             await PostAPI({ URI: 'addresses', Data: data, token: userDetails.token });
+
+            await PostAPI({ URI: 'address', Data: data, token: userDetails.token });
             setResult({ err: false, msg: "Successfully saved", loading: false });
             close && close(false)
             form.resetFields()
@@ -75,7 +74,7 @@ function CreateAddress({close}) {
                 autoComplete="off"
                 className="space-y-1"
             >
-                <Form.Item name="isOffice"  className="font-semibold">
+                <Form.Item name="isOffice" className="font-semibold">
                     <Radio.Group required>
                         <Radio.Button value={false}>Home</Radio.Button>
                         <Radio.Button value={true}>Office</Radio.Button>
@@ -94,7 +93,7 @@ function CreateAddress({close}) {
                 >
                     <label  >
                         Full Name
-                        <Input placeholder="Full Name"/>
+                        <Input placeholder="Full Name" />
                     </label>
                 </Form.Item>
 
@@ -124,7 +123,7 @@ function CreateAddress({close}) {
                 >
                     <label  >
                         Building / Office Name
-                        <Input placeholder="building name"/>
+                        <Input placeholder="building name" />
                     </label>
                 </Form.Item>
 
@@ -139,7 +138,7 @@ function CreateAddress({close}) {
                 >
                     <label  >
                         Flat No.
-                        <Input placeholder="Flat No."/>
+                        <Input placeholder="Flat No." />
                     </label>
                 </Form.Item>
                 Emirates
@@ -154,7 +153,7 @@ function CreateAddress({close}) {
                     ]}
                 >
                     {/* Emirates */}
-                    <Select placeholder="Select the emirate"   className="h-10">
+                    <Select placeholder="Select the emirate" className="h-10">
 
                         {state?.map((item, idx) => (
                             <Select.Option key={idx} value={item?.id}>
