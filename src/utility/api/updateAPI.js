@@ -1,28 +1,32 @@
 import { baseUrl } from "./constant";
 
-const updateApi = async ({ URI, Data = {}, isTop = false, token=sessionStorage.getItem('token')}) => {
-  try {
-    if (!token) throw new Error("Invalid token");
+const updateApi = async ({ URI, Data = {}, isTop = false, token }) => {
+  if (!token) throw new Error("Invalid token");
 
-    const result = await fetch(`${baseUrl}/api/${URI}`, {
-      method: "PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(isTop ? Data : { data: Data })
-    });
+  const result = await fetch(`${baseUrl}/api/${URI}`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(isTop ? Data : { data: Data }),
+  });
 
-    if (!result.ok) {
+  if (!result.ok) {
+    let message = "Something went wrong.";
+    try {
       const errorData = await result.json();
-      throw new Error(errorData?.message || result.statusText);
+      message = errorData?.message || result.statusText;
+      console.log('Error response:', errorData);
+    } catch (_) {
+      message = result.statusText;
+      consle.log('Error parsing response:', _);
     }
-
-    return await result.json();
-  } catch (err) {
-    console.error("updateApi error:", err);
-    throw err;
+    throw new Error(message);
   }
+
+  console.log('Update API response:', result);
+  return await result.json();
 };
 
-export default updateApi
+export default updateApi;

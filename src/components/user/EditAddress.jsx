@@ -69,10 +69,10 @@ function EditAddress({ Data , close}) {
                     </Radio.Group>
                 </Form.Item>
 
-                <Form.Item name="fullName" >
+                <Form.Item name="userName" >
                     <label>
                         Full Name
-                        <Input name="fullName" value={data?.fullName} onChange={inputHandle} />
+                        <Input name="userName" value={data?.userName} onChange={inputHandle} />
                     </label>
                 </Form.Item>
 

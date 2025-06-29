@@ -1,27 +1,29 @@
 import { baseUrl } from "./constant";
 
-const deleteApi = async ({ URI, token = sessionStorage.getItem('token') }) => {
-  try {
-    if (!token) throw new Error("Invalid token");
+const deleteApi = async ({ URI, token }) => {
+  if (!token) throw new Error("Invalid token");
 
-    const result = await fetch(`${baseUrl}/api/${URI}`, {
-      method: "DELETE",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      }
-    });
-
-    if (!result.ok) {
-      const errorData = await result.json();
-      throw new Error(errorData?.message || result.statusText);
+  const result = await fetch(`${baseUrl}/api/${URI}`, {
+    method: "DELETE",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     }
+  });
 
-    return await result.json();
-  } catch (err) {
-    console.error("deleteApi error:", err);
-    throw err;
+  if (!result.ok) {
+    let message = "Something went wrong.";
+    try {
+      const errorData = await result.json();
+      message = errorData?.message || result.statusText;
+    } catch (_) {
+      message = result.statusText;
+    }
+    throw new Error(message);
   }
+
+  console.log('Delete API response:', result);
+  return await result.json();
 };
 
-export default deleteApi
+export default deleteApi;

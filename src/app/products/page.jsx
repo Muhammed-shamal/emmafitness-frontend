@@ -29,6 +29,7 @@ function Page() {
       try {
         setLoading(true)
         const result = await fetchApi({ URI: `public/products?${filter({ params })}&populate=customLabel&populate=category.name,brand.Name&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
+        console.log('result in products page',result)
         setPagination(prv => ({ ...prv, pageCount: result?.meta?.pagination?.pageCount, element: <Pagination onChange={handlePagination} responsive={true} pageSize={result?.meta?.pagination?.pageSize} showSizeChanger={false} total={result?.meta?.pagination?.total} /> }))
 
         setProducts(result?.data?.map(prdct => ({

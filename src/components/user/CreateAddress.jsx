@@ -38,7 +38,7 @@ function CreateAddress({close}) {
                     buildingOrOffice: e.buildingOrOffice,
                     contactNo: e.contactNo,
                     flatNumber: e.flatNumber,
-                    fullName: e.fullName,
+                    userName: e.userName,
                     street: e.street,
                     isOffice: e.isOffice,
                     emirate: e.emirate
@@ -84,7 +84,7 @@ function CreateAddress({close}) {
 
 
                 <Form.Item
-                    name="fullName"
+                    name="userName"
                     rules={[
                         {
                             required: true,

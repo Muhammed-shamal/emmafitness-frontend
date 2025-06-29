@@ -38,7 +38,7 @@ function DeliveryAddress({ address = [], selected, reload }) {
 
                 <div>
 
-                  <h3 className='font-bold  truncate'>{attributes?.fullName} {attributes?.isOffice ? "(Office)" : "(Home)"}</h3>
+                  <h3 className='font-bold  truncate'>{attributes?.userName} {attributes?.isOffice ? "(Office)" : "(Home)"}</h3>
                   <p className='text-sm truncate'>{`${attributes?.buildingOrOffice}, ${attributes?.flatNumber}`}</p>
                 </div>
               </div>

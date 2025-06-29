@@ -12,8 +12,6 @@ export const metadata = {
 };
 
 export default async function Page() {
-  // const data = await fetchApi({ URI: "home-slider?populate=*" });
-  //  console.log('result are ', data);
 
   return (
     <main className='container space-y-2 md:space-y-4'>

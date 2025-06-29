@@ -25,7 +25,9 @@ function SignUp({ Close = () => { } }) {
 
       signIn({
         token: user.token, userId: user?.customer?._id,
-        fullName: user?.customer?.name,
+        userName: user?.customer?.name,
+        phone: user?.customer?.phone,
+        email: user?.customer?.email,
       })
       dispatch(showToast({ type: 'success', message: user?.message || 'Registered Successfully' }));
       Close && Close(true)

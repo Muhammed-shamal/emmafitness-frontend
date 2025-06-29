@@ -32,11 +32,11 @@ export async function POST(request) {
 
 
     // get customer detials 
-    const user = await fetchApi({ URI: `users/me`, API_TOKEN: data?.token })
+    const user = await fetchApi({ URI: `auth/customer/me`, API_TOKEN: data?.token })
 
     if (data?.type == 'order-placed') orderPlaced({
       email: user?.email,
-      client: user?.FullName,
+      client: user?.userName,
       contact: user?.Mobile,
       orderId: data?.orderId,
       items: data?.items,

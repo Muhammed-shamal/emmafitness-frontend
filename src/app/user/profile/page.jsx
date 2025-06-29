@@ -1,56 +1,101 @@
 'use client'
-import { Button, Input } from 'antd'
-import Card from 'antd/es/card/Card'
+
+import { Button, Input, Spin, Card } from 'antd'
 import fetchApi from '../../../utility/api/fetchApi'
-import { useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
 import updateApi from '../../../utility/api/updateAPI'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { showToast } from '../../../utility/redux/toastSlice'
+import { useSignIn } from "../../../utility/userHandle"
 
-function Page() {
-
+const Page = () => {
+  const dispatch = useDispatch();
+  const signIn = useSignIn()
   const user = useSelector(state => state.user)
-  const [data, setData] = useState({ FullName: '', username: '', Mobile: '', email: '' })
-  const [result, setResult] = useState({ loading: false, err: false, msg: '' })
 
+  const [data, setData] = useState({ name: '', phone: '', email: '' })
+  const [loadingData, setLoadingData] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
 
+  // 🟡 Fetch customer profile
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchApi({ URI: 'users/me', API_TOKEN: user?.token }).catch(e => console.log(e))
-      setData({
-        FullName: data?.FullName, username: data?.username, Mobile: data?.Mobile, email: data?.email
-      })
+      setLoadingData(true)
+      try {
+        const response = await fetchApi({ URI: 'customers/me', API_TOKEN: user?.token })
+        console.log("response in fetch", response)
+        setData({
+          name: response?.customer.name || '',
+          phone: response?.customer.phone || '',
+          email: response?.customer.email || ''
+        })
+      } catch (error) {
+        console.error('Fetch error:', error.message);
+        dispatch(showToast({ type: 'error', message: error.message || 'Failed to fetch profile data' }))
+      } finally {
+        setLoadingData(false)
+      }
     }
-    fetchData()
-  }, [user?.token])
+    if (user?.token) fetchData()
+  }, [dispatch, user?.token])
 
-
+  // 🔵 Input change handler
   const inputHandle = (e) => {
     setData({ ...data, [e.target.name]: e.target.value })
   }
 
+  // 🟢 Form submit
   const formHandle = async (e) => {
     e.preventDefault()
+    setSubmitting(true)
     try {
-      setResult({ ...result, loading: true })
-      await updateApi({ URI: `users/${user?.userId}`, isTop: true, Data: data, token: user?.token })
-      setResult({ ...result, loading: false, err: false, msg: "Updated successfully!" })
-    } catch (err) {
+      let response = await updateApi({
+        URI: `customer/account/update/${user?.userId}`,
+        isTop: true,
+        Data: data,
+        token: user?.token
+      })
 
-      setResult({ ...result, loading: false, err: true, msg: err?.error?.message || err?.error || err?.message || err?.toString() })
+      console.log("update response", response)
+
+      signIn({
+        token:user?.token,
+        userId: response?.updated?._id,
+        userName: response?.updated?.name,
+        phone: response?.updated?.phone,
+        email: response?.updated?.email,
+      })
+
+      dispatch(showToast({ type: 'success', message: 'Updated successfully' }))
+    } catch (error) {
+      console.error("❌ Profile Update failed:", error.message);
+      dispatch(showToast({ type: 'error', message: error.message }));
+    } finally {
+      setSubmitting(false)
     }
   }
 
+  // ✅ UI rendering
   return (
-    <div>
+    <div className='p-4'>
       <Card>
-        <form onSubmit={formHandle} className='flex flex-col gap-2 justify-center'>
-          <InputFeild onChange={inputHandle} value={data?.FullName} Name='FullName' Label={"Full Name"} />
-          <InputFeild onChange={inputHandle} value={data?.username} Name='username' Label={"User Name"} />
-          <InputFeild onChange={inputHandle} value={data?.Mobile} Name='Mobile' Label={"Mobile No"} />
-          <InputFeild onChange={inputHandle} value={data?.email} Name='email' Label={"Email Id"} />
-          {result.msg && <p className={result?.err ? 'text-secondary text-sm text-center' : "text-green-500 text-sm text-center"}>{result?.msg}</p>}
-          <button><Button type='primary' loading={result?.loading} className='bg-blue-500 w-28'>Save</Button></button>
-        </form>
+        <Spin spinning={loadingData}>
+          <form onSubmit={formHandle} className='flex flex-col gap-4 justify-center'>
+            <InputField onChange={inputHandle} value={data?.name} Name='name' Label={"User Name"} />
+            <InputField onChange={inputHandle} value={data?.phone} Name='phone' Label={"Phone No"} />
+            <InputField onChange={inputHandle} value={data?.email} Name='email' Label={"Email Id"} />
+
+            {/* {resultMsg.msg && (
+              <p className={`${resultMsg.err ? 'text-red-500' : 'text-green-500'} text-sm text-center`}>
+                {resultMsg.msg}
+              </p>
+            )} */}
+
+            <Button htmlType='submit' type='primary' loading={submitting} className='w-28 self-center bg-blue-500'>
+              Save
+            </Button>
+          </form>
+        </Spin>
       </Card>
     </div>
   )
@@ -58,11 +103,10 @@ function Page() {
 
 export default Page
 
-
-const InputFeild = ({ onChange, Label, Name, value }) => (
-  <label>
+// 🧩 Reusable Input
+const InputField = ({ onChange, Label, Name, value }) => (
+  <label className='flex flex-col text-sm gap-1'>
     {Label}
-    <Input value={value} className='rounded' onChange={onChange} name={Name} placeholder={Label} />
+    <Input value={value} onChange={onChange} name={Name} placeholder={Label} className='rounded' />
   </label>
 )
-

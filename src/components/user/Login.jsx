@@ -7,7 +7,7 @@ import { showToast } from "../../utility/redux/toastSlice"
 
 function Login({ Close }) {
   const dispatch = useDispatch()
-  // const [result, setResult] = useState({ loading: false, err: false, msg: "" })
+  
   const [loading, setLoading] = useState(false);
   const signIn = useSignIn()
 
@@ -28,7 +28,9 @@ function Login({ Close }) {
       signIn({
         token: user.token,
         userId: user?.customer?._id,
-        fullName: user?.customer?.name,
+        userName: user?.customer?.name,
+        phone: user?.customer?.phone,
+        email: user?.customer?.email,
       });
 
       dispatch(showToast({ type: 'success', message: 'Successfully logged in!' }));

@@ -1,37 +1,36 @@
 import { baseUrl } from "./constant";
 
+const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN }) => {
+  const headers = {
+    'Content-Type': 'application/json',
+  };
 
-const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN = localStorage.getItem('token') }) => {
-  try {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-
-    // const token = localStorage.getItem('token')
-
-    if (API_TOKEN) {
-      headers['Authorization'] = `Bearer ${API_TOKEN}`;
-    }
-
-    const body = JSON.stringify(isTop ? Data : { data: Data });
-
-    const result = await fetch(`${baseUrl}/api/${URI}`, {
-      method: 'POST',
-      headers,
-      body,
-    });
-
-    if (!result.ok) {
-      const errorData = await result.json();
-      console.log('errorData',errorData)
-      throw new Error(errorData?.message || result.statusText);
-    }
-
-    return await result.json();
-  } catch (err) {
-    console.error("postApi error:", err);
-    return { error: true, message: err.message }; // return better error object
+  if (API_TOKEN) {
+    headers['Authorization'] = `Bearer ${API_TOKEN}`;
   }
+
+  const body = JSON.stringify(isTop ? Data : { data: Data });
+
+  const result = await fetch(`${baseUrl}/api/${URI}`, {
+    method: 'POST',
+    headers,
+    body,
+  });
+
+  // 🔴 Throw error if not OK
+  if (!result.ok) {
+    let errorMessage = 'Something went wrong.';
+    try {
+      const errorData = await result.json();
+      errorMessage = errorData?.message || result.statusText;
+    } catch (_) {
+      errorMessage = result.statusText;
+    }
+    throw new Error(errorMessage);
+  }
+
+  console.log('Post API response:', result);
+  return await result.json();
 };
 
-export default PostAPI
+export default PostAPI;

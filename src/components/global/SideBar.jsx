@@ -36,7 +36,7 @@ function SideBar() {
 
         <div className="md:flex flex-col justify-center items-center mb-4 hidden">
           <Avatar size={40} icon={<UserOutlined />} />
-          Hi, {user?.fullName}
+          Hi, {user?.userName}
         </div>
         {
           userNavTab?.map((tab, idx) =>

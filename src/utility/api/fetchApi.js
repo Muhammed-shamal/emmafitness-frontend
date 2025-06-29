@@ -1,34 +1,29 @@
 import { baseUrl } from './constant';
 
 const fetchApi = async ({ URI, API_TOKEN = null, revalidate = 3 }) => {
-  try {
-    const headers = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-    };
+  const headers = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*',
+  };
 
-    // Only add Authorization if API_TOKEN islog provided
-    if (API_TOKEN) {
-      headers['Authorization'] = `Bearer ${API_TOKEN}`;
-    }
-
-    const result = await fetch(`${baseUrl}/api/${URI}`, {
-      method: "GET",
-      next: { revalidate },
-      headers,
-    });
-
-    console.log("Result:", result);
-
-    if (!result.ok) {
-      throw new Error(`Fetch failed: ${result.statusText}`);
-    }
-
-    return await result.json();
-  } catch (err) {
-    console.error("fetchApi error:", err);
-    return null;
+  if (API_TOKEN) {
+    headers['Authorization'] = `Bearer ${API_TOKEN}`;
   }
+
+  const res = await fetch(`${baseUrl}/api/${URI}`, {
+    method: "GET",
+    next: { revalidate },
+    headers,
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({}));
+    const message = errorBody.message || res.statusText;
+    throw new Error(`Fetch failed: ${message}`);
+  }
+
+  console.log('Fetch API response:', res);
+  return await res.json();
 };
 
 export default fetchApi;

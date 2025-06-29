@@ -19,13 +19,13 @@ const useSignIn = () => {
 
     const dispatch = useDispatch()
 
-    const signIn = async ({ token, userId, fullName }) => {
+    const signIn = async ({ token, userId, userName,phone,email }) => {
         sessionStorage.setItem('token', token)
-        dispatch(loggedIn({ userId, fullName, token }))
+        dispatch(loggedIn({ userId, userName, token,phone,email }))
 
         //  if have, move it into db and remove from local storage
         const localCart = JSON.parse(localStorage.getItem('cart'))
-        const serverCart = await fetchApi({ URI: 'users/me?populate=carts.product,wishlist.product', API_TOKEN: token }).catch(e=>console.log(e))
+        const serverCart = await fetchApi({ URI: 'customers/me?populate=carts.product,wishlist.product', API_TOKEN: token }).catch(e=>console.log(e))
         if (serverCart?.carts?.length > 0) {
             dispatch(bulkReplaceCart(serverCart?.carts?.map(it=>({productId: it?.product?.id, quantity: it?.quantity }))))
         }

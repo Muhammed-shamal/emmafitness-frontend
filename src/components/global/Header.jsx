@@ -14,6 +14,7 @@ import { useSignOut } from '../../utility/userHandle'
 import UserSession from '../user/userSessions'
 import { addBulkWishlist } from '../../utility/redux/wishListSlice'
 import CategoryNav from './CategoryNav'
+import { showToast } from '../../utility/redux/toastSlice'
 
 
 function Header() {
@@ -32,15 +33,17 @@ function Header() {
       try {
         if (token) {
           const response = await fetchApi({
-            URI: 'auth/customer/me',
+            URI: 'customers/me',
             API_TOKEN: token,
           });
+
+          console.log("response from auth me is",response);
 
           if (response?.customer) {
             dispatch(
               loggedIn({
                 userId: response.customer._id,
-                fullName: response.customer.name,
+                userName: response.customer.name,
                 token,
               })
             );
@@ -76,6 +79,7 @@ function Header() {
         }
       } catch (error) {
         console.error("❌ Error restoring user:", error);
+        dispatch(showToast({ type: 'error', message: error.message || 'Error restoring user' }))
       }
     };
 
@@ -88,7 +92,7 @@ function Header() {
     const items = user?.userId ?
         [{
             key: '1',
-            label: (<Link rel="noreferrer" href="/user"> Hi, {user?.fullName} </Link>),
+            label: (<Link rel="noreferrer" href="/user"> Hi, {user?.userName} </Link>),
         },
         {
             key: '2',

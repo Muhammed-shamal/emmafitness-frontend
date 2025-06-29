@@ -21,12 +21,12 @@ function Page() {
     const fetchData = async () => {
       try {
         const result = await fetchApi({
-          URI: `addresses?populate=emirate&filters[user]=${userId}`, API_TOKEN: userDetails?.token
+          URI: `customers/addresses/${userId}`, API_TOKEN: userDetails?.token
         });
         if (result) {
           setAddressData(
             result?.data?.map((state) => ({
-              fullName: state?.attributes?.fullName,
+              userName: state?.attributes?.userName,
               buildingOrOffice: state?.attributes?.buildingOrOffice,
               street: state?.attributes?.street,
               flatNumber: state?.attributes?.flatNumber,
@@ -78,7 +78,7 @@ function Page() {
       {addressData?.map((item, idx) => (
         <Card key={idx}>
           <div className="flex flex-row justify-between border-b border-gray-200 font-semibold">
-            <div>{item?.fullName}</div>
+            <div>{item?.userName}</div>
             <div className="text-green-500"> {item?.isOffice ? "Offce" : "Home"}</div>
           </div>
           <div className="flex flex-row gap-4 p-2 relative">
