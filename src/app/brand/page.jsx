@@ -6,7 +6,7 @@ import ProductsList from "../../components/products/ProductsList"
 import fetchApi from "../../utility/api/fetchApi"
 import PaginationButton from "../../components/products/PaginationButton"
 import useFilter from "../../utility/useFilter"
-import { useParams, useSearchParams } from "next/navigation"
+import {  useSearchParams } from "next/navigation"
 import CustomSpinner from "../../components/global/CustomSpinner"
 
  function Page() {

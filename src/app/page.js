@@ -47,7 +47,7 @@ export default async function Page() {
         </section>
       )} */}
 
-      <Title titlePart1={'Prime'} titlePart2={'Brand Deals'} viewAllUrl='/products' />
+      {/* <Title titlePart1={'Prime'} titlePart2={'Brand Deals'} viewAllUrl='/products' /> */}
       {/* {data?.data?.attributes?.small_banners_bottum?.data?.length > 0 && (
         <section>
           <SmallBanners BannerImage={data?.data?.attributes?.small_banners_bottum?.data} />
