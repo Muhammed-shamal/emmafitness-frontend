@@ -12,7 +12,7 @@ function FeaturedProducts() {
   useEffect(() => {
     const fetch = async () => {
       setLoading(true)
-      const result = await fetchApi({ URI: 'public/products?filters[Featured][$eq]=true&pagination[limit]=24&populate=*&sort=createdAt:Desc' })
+      const result = await fetchApi({ URI: 'public/products/featured' })
         .finally(() => setLoading(false))
       setProducts(result?.data?.map(prdct => ({
         id: prdct._id,

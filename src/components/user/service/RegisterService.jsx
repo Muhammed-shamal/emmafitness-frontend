@@ -18,8 +18,6 @@ function RegisterService({ close }) {
 
 
     useEffect(() => {
-
-
         fetchApi({ URI: `orders?filters[user][id][$eq]=${userDetails?.userId}&filters[createdAt][$between]=${moment().subtract(1, 'year').toISOString()}&filters[createdAt][$between]=${moment().toISOString()}`, API_TOKEN: userDetails?.token })
             .then((res) => {
                 setOrders(res?.data?.map(state => (
@@ -51,7 +49,7 @@ function RegisterService({ close }) {
 
             setResult({ ...result, loading: true });
 
-              await PostAPI({ URI: 'service-requests', Data: data, token: userDetails.token }).catch(e=>console.log(e))
+            await PostAPI({ URI: 'service-requests', Data: data, token: userDetails.token }).catch(e => console.log(e))
             setResult({ err: false, msg: "Successfully saved", loading: false });
             close && close()
             form.resetFields()

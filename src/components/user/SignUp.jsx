@@ -14,11 +14,13 @@ function SignUp({ Close = () => { } }) {
   const signIn = useSignIn()
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState({
+    loading: false, err: false, msg: ""
+  });  
 
   async function formHandle(e) {
     try {
-      setLoading(true);
+      setResult({ ...result, loading: true });
       const user = await postApi({ URI: 'auth/customer/new-register', Data: e, isTop: true })
       console.log('user is', user);
       if (user.error) throw user
@@ -30,13 +32,15 @@ function SignUp({ Close = () => { } }) {
         email: user?.customer?.email,
       })
       dispatch(showToast({ type: 'success', message: user?.message || 'Registered Successfully' }));
+      setResult({ err: false, msg: "Registered Successfully", loading: false });
       Close && Close(true)
 
     } catch (error) {
-      console.log('err in catch', error)
       dispatch(showToast({ type: 'error', message: error?.message || 'Something went wrong' }));
+      setResult({ err: true, msg: error?.message || "Unable to register", loading: false });
+      console.error('Error during registration:', error);
     } finally {
-      setLoading(false);
+      setResult({ ...result, loading: false });
     }
   }
 
@@ -69,7 +73,6 @@ function SignUp({ Close = () => { } }) {
         name="signUpForm"
         initialValues={initialValues}
         onFinish={formHandle}
-        // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item name="name"
@@ -178,9 +181,12 @@ function SignUp({ Close = () => { } }) {
 
 
         <Form.Item>
-          {/* <p className={`${result.err ? "text-red-500" : "text-green-500"} text-center`}>{result.msg}</p> */}
-
-          <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={loading} disabled={loading}>
+          {result.msg && (
+            <p className={`${result.err ? 'text-red-500' : 'text-green-500'} text-sm text-center`}>
+              {result.msg}
+            </p>
+          )}
+          <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={result.loading} disabled={result.loading}>
             Submit
           </Button>
         </Form.Item>

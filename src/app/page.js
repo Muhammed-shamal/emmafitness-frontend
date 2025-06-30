@@ -1,7 +1,6 @@
 
 import Title from '../components/global/Title'
 import { NewProducts, FeaturedBanner, FeaturedProducts, MainSlider, SmallBanners, OurBrands } from '../components/home/index'
-import fetchApi from '../utility/api/fetchApi'
 import Banner from '../components/Banner.jsx'
 import CategorySlider from '../components/categorySlider.jsx'
 import TrendingSection from '../components/TrendingSection.jsx'

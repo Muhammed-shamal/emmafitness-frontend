@@ -7,14 +7,16 @@ import { showToast } from "../../utility/redux/toastSlice"
 
 function Login({ Close }) {
   const dispatch = useDispatch()
-  
-  const [loading, setLoading] = useState(false);
+
+  const [result, setResult] = useState({
+    loading: false, err: false, msg: ""
+  });
   const signIn = useSignIn()
 
   const formHandle = async (e) => {
 
     try {
-      setLoading(true)
+      setResult({ ...result, loading: true });
 
       const user = await PostAPI({
         URI: 'auth/customer/login',
@@ -34,14 +36,16 @@ function Login({ Close }) {
       });
 
       dispatch(showToast({ type: 'success', message: 'Successfully logged in!' }));
+      setResult({ err: false, msg: "Successfully logged in!", loading: false });
 
       if (Close) Close(true);
 
     } catch (error) {
-      console.error(error);
       dispatch(showToast({ type: 'error', message: `Login failed: ${error.message}` }));
+      setResult({ err: true, msg: error.message || "Login failed", loading: false });
+      console.error('Error during login:', error);
     } finally {
-      setLoading(false)
+      setResult({ ...result, loading: false });
     }
   };
 
@@ -81,9 +85,13 @@ function Login({ Close }) {
 
 
         <Form.Item>
-          {/* <p className={`${result.err ? "text-red-500" : "text-green-500"} text-center`}>{result.msg}</p> */}
+          {result.msg && (
+            <p className={`${result.err ? 'text-red-500' : 'text-green-500'} text-sm text-center`}>
+              {result.msg}
+            </p>
+          )}
 
-          <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={loading} disabled={loading}>
+          <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={result.loading} disabled={result.loading}>
             Submit
           </Button>
         </Form.Item>

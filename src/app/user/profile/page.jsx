@@ -13,17 +13,18 @@ const Page = () => {
   const signIn = useSignIn()
   const user = useSelector(state => state.user)
 
+  const [result, setResult] = useState({
+        loading: false, err: false, msg: ""
+    });
   const [data, setData] = useState({ name: '', phone: '', email: '' })
-  const [loadingData, setLoadingData] = useState(true)
   const [submitting, setSubmitting] = useState(false)
 
   // 🟡 Fetch customer profile
   useEffect(() => {
     const fetchData = async () => {
-      setLoadingData(true)
+      setResult({ ...result, loading: true })
       try {
         const response = await fetchApi({ URI: 'customers/me', API_TOKEN: user?.token })
-        console.log("response in fetch", response)
         setData({
           name: response?.customer.name || '',
           phone: response?.customer.phone || '',
@@ -33,11 +34,11 @@ const Page = () => {
         console.error('Fetch error:', error.message);
         dispatch(showToast({ type: 'error', message: error.message || 'Failed to fetch profile data' }))
       } finally {
-        setLoadingData(false)
+        setResult({ ...result, loading: false })
       }
     }
     if (user?.token) fetchData()
-  }, [dispatch, user?.token])
+  }, [dispatch, user?.token,result])
 
   // 🔵 Input change handler
   const inputHandle = (e) => {
@@ -67,7 +68,8 @@ const Page = () => {
       dispatch(showToast({ type: 'success', message: 'Updated successfully' }))
     } catch (error) {
       console.error("❌ Profile Update failed:", error.message);
-      dispatch(showToast({ type: 'error', message: error.message }));
+      dispatch(showToast({ type: 'error', message: error.message || 'Failed to update profile data' }));
+      setResult({ err: true, msg: error.message || 'Failed to update profile data', loading: false })
     } finally {
       setSubmitting(false)
     }
@@ -83,11 +85,11 @@ const Page = () => {
             <InputField onChange={inputHandle} value={data?.phone} Name='phone' Label={"Phone No"} />
             <InputField onChange={inputHandle} value={data?.email} Name='email' Label={"Email Id"} />
 
-            {/* {resultMsg.msg && (
-              <p className={`${resultMsg.err ? 'text-red-500' : 'text-green-500'} text-sm text-center`}>
-                {resultMsg.msg}
+            {result.msg && (
+              <p className={`${result.err ? 'text-red-500' : 'text-green-500'} text-sm text-center`}>
+                {result.msg}
               </p>
-            )} */}
+            )}
 
             <Button htmlType='submit' type='primary' loading={submitting} className='w-28 self-center bg-blue-500'>
               Save
