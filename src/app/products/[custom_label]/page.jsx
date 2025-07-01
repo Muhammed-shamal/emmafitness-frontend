@@ -25,22 +25,22 @@ function Page() {
   useEffect(() => {
     setLoading(true)
 
-    fetchApi({URI: `custom-labels?filter[$eq][slug]=${params?.customLabel}&populate=Banner_1440x250`}).then(({data})=>{
+    fetchApi({ URI: `custom-labels?filter[$eq][slug]=${params?.customLabel}&populate=Banner_1440x250` }).then(({ data }) => {
       setBanner(data[0])
     })
-    
+
     fetchApi({ URI: `public/products?${filter({ params: searchparams })}&filters[customLabel][slug][$eq]=${params?.customLabel}&populate=customLabel&populate=category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo || 1}&pagination[pageSize]=${pagination?.pageSize || 20}` })
-    .then(res => {
-      setProducts(res)
-      
-      setLoading(false)
-    })
-    .catch(e => {
-      setLoading(false)
-      console.log(e)
-    })
+      .then(res => {
+        setProducts(res)
+
+        setLoading(false)
+      })
+      .catch(e => {
+        setLoading(false)
+        console.log(e)
+      })
   }, [searchparams, reload])
-  
+
 
 
   return (
@@ -51,7 +51,7 @@ function Page() {
       <CustomSpinner spinning={loading}>
         {
           banner?.attributes?.Banner_1440x250?.data &&
-        <FeaturedBanner BigScreen={banner?.attributes?.Banner_1440x250?.data}/>
+          <FeaturedBanner BigScreen={banner?.attributes?.Banner_1440x250?.data} />
         }
 
         <ProductsList products={products?.data} />

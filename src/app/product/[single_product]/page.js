@@ -1,26 +1,45 @@
+'use client';
+
 import Price from "../../../components/global/Price"
 import OffLabel from "../../../components/global/label/OffLabel"
 import CartButton from "../../../components/global/CartButton"
 import BuyNow from "../../../components/global/BuyNowButton"
 import WishLIstButton from '../../../components/global/WishListButton'
-import { Divider, Tag } from "antd"
+import { Divider, Tag,Spin } from "antd"
 import ImageSection from '../../../components/singleProduct/ImageSection'
 import DescriptionSection from '../../../components/singleProduct/descriptionSection'
 import SingleRowProducts from '../../../components/global/SingleRowProducts'
 import fetchApi from "../../../utility/api/fetchApi"
 import Image from "next/legacy/image"
 import MarkDownText from "../../../components/global/MarkDownText"
+import { brandUrl, productUrl } from "../../../utility/api/constant"
+import { useEffect, useState } from "react";
 
-async function Page({ params }) {
+function Page({ params }) {
 
-  let product, relatedProducts
-  try {
-    product = await fetchApi({ URI: `public/products?filters[Slug][$eq]=${params?.single_product}&populate=category,brand.Photo,Photos` })
+  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
-    relatedProducts = await fetchApi({ URI: `public/products?filters[category][id][$eq]=${product?.data?.[0]?.attributes?.category?.data?.[0]?.id}&sort[0]=createdAt:asc&populate=category` })
-  } catch (err) {
-    console.log(err)
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetchApi({ URI: `public/products/getBy/${params.single_product}`});
+        setProduct(res);
+
+        const catId = res?.category?._id;
+        const productId = res?._id;
+        const related = await fetchApi({URI: `public/products/related?categoryId=${catId}&excludeId=${productId}`})
+        setRelatedProducts(related);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [params.single_product,product?.category?._id, product?._id]);
 
 
   const specialIcons = [
@@ -31,84 +50,89 @@ async function Page({ params }) {
 
 
   return (
+  <Spin spinning={loading}>
     <div className="container my-4 flex flex-col gap-4">
-      <div className="flex flex-col lg:flex-row bg-white shadow rounded p-4 ">
+    <div className="flex flex-col lg:flex-row bg-white shadow rounded p-4">
 
-        <ImageSection Images={[
+      <ImageSection
+        Images={[
           {
-            url: product?.data?.[0]?.attributes?.Feature_Photo?.data?.attributes?.url,
-            alt: product?.data?.[0]?.attributes?.Feature_Photo?.data?.attributes?.alternativeText,
+            url: `${product?.images?.[0] ? productUrl + '/' + product.images[0] : "/product-placehold.png"}`,
+            alt: product?.name,
           },
-          ...(product?.data?.[0]?.attributes?.Photos?.data?.map(({ attributes }) => ({
-            url: attributes?.url,
-            alt: attributes?.alternativeText,
-          })) || [])
-        ]} />
+        ]}
+      />
 
-        <div className="lg:border-l  pl-4 max-w-md flex flex-col gap-4 ">
+      <div className="lg:border-l pl-4 max-w-md flex flex-col gap-4">
+        <div className="mt-4">
+          <h1 className="text-xl font-bold">{product?.name}</h1>
 
-          <div className="mt-4">
+          <Image
+            src={`${product?.brand?.logo ? brandUrl + '/' + product?.brand.logo : "/product-placehold.png"}`}
+            className="object-cover"
+            width={120}
+            height={40}
+            alt="brand-logo"
+          />
 
-            <h1 className="text-xl font-bold">{product?.data?.[0]?.attributes?.Name}</h1>
-            <Image
-              src={product?.data?.[0]?.attributes?.brand?.data?.attributes?.Photo?.data?.attributes?.url ? product?.data?.[0]?.attributes?.brand?.data?.attributes?.Photo?.data?.attributes?.url : "/product-placehold.png"}
-              className="object-cover"
-              width={120}
-              height={40} />
+          <Divider />
 
-            <Divider />
-            <div className="flex gap-2 md:gap-4 ">
-              {
-                specialIcons?.map(it =>
-                  <div key={it.url} className="flex flex-col items-center justify-center">
-                    <div className="border flex border-gray-200 items-center justify-center  rounded-full h-10 w-10 md:h-12 md:w-12">
-                      <Image src={it.url} width={30} height={30} alt={it.alt} />
-                    </div>
-                    <span className="text-xs text-gray-600 text-center">{it.title}</span>
-                  </div>
-                )
-              }
-            </div>
-            <Divider />
-
-            <Price salePrice={product?.data?.[0]?.attributes?.Sale_Price}
-              regularPrice={product?.data?.[0]?.attributes?.Regular_Price} />
-            <OffLabel RegularPrice={product?.data?.[0]?.attributes?.Regular_Price}
-              SalePrice={product?.data?.[0]?.attributes?.Sale_Price} />
-            <div className="mt-2 text-xs">
-              
-              <Tag color="cyan" className="rounded-none">{product?.data?.[0]?.attributes?.Condition}</Tag>
-
-              {
-                product?.data?.[0]?.attributes?.Stock < 3 && product?.data?.[0]?.attributes?.Stock > 0 ?
-                <span className=" text-orange-500 font-semibold">Stock - {product?.data?.[0]?.attributes?.Stock} left</span>
-                : product?.data?.[0]?.attributes?.Stock < 1 ?
-                <span className=" text-red-600 font-semibold">Out of stock</span>
-                : <span className=" text-green-700 font-semibold">In stock</span>
-              }
-
-
-            </div>
-            <Divider />
-            <div className="text-sm">
-              <MarkDownText text={product?.data?.[0]?.attributes?.ShortDescription} />
-            </div>
+          <div className="flex gap-2 md:gap-4">
+            {specialIcons.map((it) => (
+              <div key={it.url} className="flex flex-col items-center justify-center">
+                <div className="border flex border-gray-200 items-center justify-center rounded-full h-10 w-10 md:h-12 md:w-12">
+                  <Image src={it.url} width={30} height={30} alt={it.alt} />
+                </div>
+                <span className="text-xs text-gray-600 text-center">{it.title}</span>
+              </div>
+            ))}
           </div>
 
-          <div className="flex flex-row gap-4">
+          <Divider />
 
-            <CartButton ProductId={product?.data?.[0]?.id} />
-            <BuyNow ProductId={product?.data?.[0]?.id} />
-            <WishLIstButton ProductId={product?.data?.[0]?.id} />
+          <Price salePrice={product?.salePrice} regularPrice={product?.regularPrice} />
+          <OffLabel RegularPrice={product?.regularPrice} SalePrice={product?.salePrice} />
+
+          <div className="mt-2 text-xs">
+            <Tag color="cyan" className="rounded-none">{product?.status}</Tag>
+
+            {product?.stockQty < 3 && product?.stockQty > 0 ? (
+              <span className="text-orange-500 font-semibold">Stock - {product?.stockQty} left</span>
+            ) : product?.stockQty < 1 ? (
+              <span className="text-red-600 font-semibold">Out of stock</span>
+            ) : (
+              <span className="text-green-700 font-semibold">In stock</span>
+            )}
+          </div>
+
+          <Divider />
+
+          <div className="text-sm">
+            <MarkDownText text={product?.description} />
           </div>
         </div>
+
+        <div className="flex flex-row gap-4">
+          <CartButton ProductId={product?._id} />
+          <BuyNow ProductId={product?._id} />
+          <WishLIstButton ProductId={product?._id} />
+        </div>
       </div>
-
-      <DescriptionSection fullDescription={product?.data?.[0]?.attributes?.Full_Description} />
-
-      <SingleRowProducts Products={relatedProducts?.data} />
     </div>
-  )
+
+    <DescriptionSection fullDescription={product?.description} />
+    {relatedProducts && relatedProducts.length > 0 ? (
+  <SingleRowProducts Products={relatedProducts} />
+   ) : (
+     <div className="bg-white text-center p-6 border rounded shadow-sm">
+       <p className="text-gray-500 text-sm">No related products found in this category.</p>
+     </div>
+   )}
+
+  </div>
+  </Spin>
+);
+
 }
 
 export default Page

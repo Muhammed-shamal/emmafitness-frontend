@@ -14,7 +14,6 @@ function NewProducts() {
     const fetch = async () => {
       const result = await fetchApi({ URI: 'public/products/new' })
         .finally(() => setLoading(false))
-        console.log("result in new products", result)
       setProducts(result?.map(prdct => ({
         id: prdct._id,
         name: prdct.name,

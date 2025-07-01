@@ -36,6 +36,8 @@ export default async function Page() {
       )} */}
 
       <section><OurBrands /></section>
+
+      <Title titlePart1={'Featured Products'} titlePart2={'For You'} />
       <section><FeaturedProducts /></section>
 
       {/* {data?.data?.attributes?.Banner_1440x200?.data && (
