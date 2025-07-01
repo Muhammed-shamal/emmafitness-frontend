@@ -1,8 +1,13 @@
+'use client';
+
+import { Spin } from 'antd';
 
 function Loading() {
   return (
-    <div>Loading...</div>
-  )
+    <div className="flex items-center justify-center min-h-screen">
+      <Spin size="large" tip="Loading..." />
+    </div>
+  );
 }
 
-export default Loading
+export default Loading;

@@ -50,8 +50,11 @@ function Page({ params }) {
 
 
   return (
-  <Spin spinning={loading}>
-    <div className="container my-4 flex flex-col gap-4">
+  // <Spin spinning={loading}>
+    
+  // </Spin>
+
+  <div className="container my-4 flex flex-col gap-4">
     <div className="flex flex-col lg:flex-row bg-white shadow rounded p-4">
 
       <ImageSection
@@ -130,7 +133,6 @@ function Page({ params }) {
    )}
 
   </div>
-  </Spin>
 );
 
 }
