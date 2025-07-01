@@ -79,7 +79,7 @@ const Page = () => {
   return (
     <div className='p-4'>
       <Card>
-        <Spin spinning={loadingData}>
+        <Spin spinning={result.loading}>
           <form onSubmit={formHandle} className='flex flex-col gap-4 justify-center'>
             <InputField onChange={inputHandle} value={data?.name} Name='name' Label={"User Name"} />
             <InputField onChange={inputHandle} value={data?.phone} Name='phone' Label={"Phone No"} />
