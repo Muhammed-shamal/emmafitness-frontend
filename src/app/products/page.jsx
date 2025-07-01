@@ -2,13 +2,13 @@
 import { useState, useEffect } from "react"
 import fetchApi from "../../utility/api/fetchApi"
 import { Pagination } from "antd"
-import ProductCard from '../../components/global/ProductCard'
 import TitleWithSort from '../../components/products/TitleWithSort'
 import Filter from '../../components/products/Filter'
 import { useSearchParams } from 'next/navigation'
 import useFilter from '../../utility/useFilter'
 import CustomSpinner from "../../components/global/CustomSpinner"
 import { productUrl } from "../../utility/api/constant"
+import ProductCard2 from '../../components/global/ProductCard2'
 
 
 function Page() {
@@ -89,7 +89,7 @@ function Page() {
             <TitleWithSort Title="Products" setProducts={setProducts} />
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
               {products?.map((product, idx) => (
-                <ProductCard
+                <ProductCard2
                   key={idx}
                   Id={product.id}
                   Brand={product?.brand}

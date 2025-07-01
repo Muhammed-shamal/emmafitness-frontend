@@ -8,8 +8,6 @@ import WishListButton from "./WishListButton"
 import { Tag } from "antd"
 
 function ProductCard({ Id, Title = "", Category, SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, Featured = false, Brand }) {
-
-
     return (
         <div className=" border border-gray-200 p-2 md:p-3 lg:p-4  bg-gray-100 flex flex-col justify-between gap-2">
             <Link href={`/product/${encodeURIComponent(Slug)}`} className="relative">
