@@ -1,64 +1,63 @@
-
+import Banner from '../components/Banner'
+import CategorySlider from '../components/categorySlider'
+import TrendingSection from '../components/TrendingSection'
+import OurBrands from '../components/home/OurBrands'
+import FeaturedProducts from '../components/home/FeaturedProducts'
+import NewProducts from '../components/home/NewProducts'
 import Title from '../components/global/Title'
-import { NewProducts, FeaturedBanner, FeaturedProducts, MainSlider, SmallBanners, OurBrands } from '../components/home/index'
-import Banner from '../components/Banner.jsx'
-import CategorySlider from '../components/categorySlider.jsx'
-import TrendingSection from '../components/TrendingSection.jsx'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export const metadata = {
   title: 'Top Fitness Brands at Competitive Prices: Shop Now at Emma Fitness in Dubai & Sharjah',
   description: 'Emma Fitness provides premium fitness equipment for homes and gyms in Dubai & Sharjah. Shop top brands, get expert advice, and enjoy exceptional service.',
-};
+}
+
+// 👇 Server-side data fetching
+async function fetchSafeApi(endpoint) {
+  try {
+    const res = await fetch(`http://localhost:1000/api/${endpoint}`, {
+      cache: 'no-store',
+    });
+    if (!res.ok) throw new Error('Failed to fetch');
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(`API fetch failed: ${endpoint}`, err.message);
+    return []; // return empty array as fallback
+  }
+}
 
 export default async function Page() {
+  // 👇 fetch server-side before render
+  const [featuredProducts, newArrivals] = await Promise.all([
+    fetchSafeApi('public/products/featured'),
+    fetchSafeApi('public/products/new'),
+  ])
 
   return (
     <main className='container space-y-2 md:space-y-4'>
       <Banner />
       <CategorySlider />
       <TrendingSection />
-      {/* {(data?.data?.attributes?.Main_Slider_1500x450?.data.length > 0 ||
-        data?.data?.attributes?.Mobile_Main_Slider_1368x550?.data.length > 0) && (
-        <section className='max-h-96 overflow-hidden mt-4'>
-          <MainSlider
-            BigScreen={data?.data?.attributes?.Main_Slider_1500x450?.data}
-            Mobile={data?.data?.attributes?.Mobile_Main_Slider_1368x550?.data}
-          />
-        </section>
-      )} */}
 
       <Title titlePart1={'Shop by brands'} titlePart2={'For You'} viewAllUrl='/products' />
-
-      {/* {data?.data?.attributes?.small_banners?.data && (
-        <section>
-          <SmallBanners BannerImage={data?.data?.attributes?.small_banners?.data} />
-        </section>
-      )} */}
-
       <section><OurBrands /></section>
 
-      <Title titlePart1={'Featured Products'} titlePart2={'For You'} />
-      <section><FeaturedProducts /></section>
+      {featuredProducts.length > 0 && (
+        <>
+          <Title titlePart1={'Featured Products'} titlePart2={'For You'}  viewAllUrl='/featured/products'/>
+       <section>
+        <FeaturedProducts products={featuredProducts} />
+      </section>
+        </>
+      )}
 
-      {/* {data?.data?.attributes?.Banner_1440x200?.data && (
-        <section>
-          <FeaturedBanner
-            BigScreen={data?.data?.attributes?.Banner_1440x200?.data}
-            Mobile={data?.data?.attributes?.Banner_Mobile_1440x350?.data}
-          />
-        </section>
-      )} */}
-
-      {/* <Title titlePart1={'Prime'} titlePart2={'Brand Deals'} viewAllUrl='/products' /> */}
-      {/* {data?.data?.attributes?.small_banners_bottum?.data?.length > 0 && (
-        <section>
-          <SmallBanners BannerImage={data?.data?.attributes?.small_banners_bottum?.data} />
-        </section>
-      )} */}
-
-      <Title titlePart1={'New'} titlePart2={'Products'} viewAllUrl='/products' />
-      <section><NewProducts /></section>
+      {newArrivals.length > 0 && (<>
+      <Title titlePart1={'New'} titlePart2={'Products'} />
+      <section>
+        <NewProducts products={newArrivals} />
+      </section>
+      </>)}
     </main>
-  );
+  )
 }
-

@@ -18,7 +18,12 @@ function SingleRowProducts({ Products = [] }) {
               RegularPrice={product?.regularPrice}
               ImageUrl={product?.images?.[0] ? productUrl + '/' + product.images[0] : "/product-placehold.png"}
               createdAt={product?.createdAt}
-              Slug={product?.slug} />
+              Slug={product?.slug}
+              isNewArrival={product?.isNewArrival}
+              isTrending={product?.isTrending}
+              isFeatured={product?.isFeatured}
+              isBestSeller={product?.isBestSeller}
+            />
           )
         }
       </div>

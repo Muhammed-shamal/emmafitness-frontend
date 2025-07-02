@@ -7,7 +7,7 @@ import WishListButton from "./WishListButton"
 
 import { Tag } from "antd"
 
-function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, Featured = false, Brand }) {
+function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, Brand, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, }) {
 
     const isNew = moment().diff(createdAt, 'days') < 30;
 
@@ -17,17 +17,25 @@ function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUr
                 {/* Tags - Top Right */}
                 <div className="absolute top-2 right-2 z-20 flex flex-col gap-1 items-end text-xs font-semibold">
                     <WishListButton ProductId={Id} />
-                    {isNew && <Tag color="red" className="!rounded">New</Tag>}
+
+                    {isNewArrival && <Tag color="red" className="!rounded">New</Tag>}
+                    {isTrending && <Tag color="purple" className="!rounded">Trending</Tag>}
+                    {isBestSeller && <Tag color="green" className="!rounded">Best Seller</Tag>}
                     {CustomLabel && <Tag color="yellow" className="text-black !rounded">{CustomLabel}</Tag>}
                 </div>
+
 
                 {/* Product Image */}
                 <div className="relative w-full aspect-[4/3] bg-gray-50 flex items-center justify-center overflow-hidden">
                     <Image
-                        src={ImageUrl || '/product-placehold.png'}
+                        src={ImageUrl }
                         width={350}
                         height={750}
                         alt={Title}
+                         onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/product-placehold.png";
+                        }}
                         fill
                         className="object-contain mix-blend-darken group-hover:scale-105 transition-transform duration-300"
                     />
@@ -36,8 +44,9 @@ function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUr
                 {/* Off Label + Featured - Bottom Left */}
                 <div className="absolute bottom-2 left-2 z-20 flex items-center gap-2">
                     <OffLabel SalePrice={SalePrice} RegularPrice={RegularPrice} />
-                    {Featured && <Tag color="gold" className="!rounded">Featured</Tag>}
+                    {isFeatured && <Tag color="gold" className="!rounded">Featured</Tag>}
                 </div>
+
             </Link>
 
             {/* Product Info */}

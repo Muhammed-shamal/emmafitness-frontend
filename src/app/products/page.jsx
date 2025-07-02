@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react"
 import fetchApi from "../../utility/api/fetchApi"
-import { Pagination } from "antd"
+import { Pagination, Spin } from "antd"
 import TitleWithSort from '../../components/products/TitleWithSort'
 import Filter from '../../components/products/Filter'
 import { useSearchParams } from 'next/navigation'
@@ -29,7 +29,7 @@ function Page() {
       try {
         setLoading(true)
         const result = await fetchApi({ URI: `public/products?${filter({ params })}&populate=customLabel&populate=category.name,brand.Name&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
-        console.log('result in products page',result)
+        console.log('result in products page', result)
         setPagination(prv => ({ ...prv, pageCount: result?.meta?.pagination?.pageCount, element: <Pagination onChange={handlePagination} responsive={true} pageSize={result?.meta?.pagination?.pageSize} showSizeChanger={false} total={result?.meta?.pagination?.total} /> }))
 
         setProducts(result?.data?.map(prdct => ({
@@ -85,31 +85,37 @@ function Page() {
       </div>
       <div className='flex-1'>
         <div>
-          <CustomSpinner spinning={loading} >
-            <TitleWithSort Title="Products" setProducts={setProducts} />
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
-              {products?.map((product, idx) => (
-                <ProductCard2
-                  key={idx}
-                  Id={product.id}
-                  Brand={product?.brand}
-                  Title={product?.name}
-                  Category={product?.category}
-                  SalePrice={product?.salePrice}
-                  RegularPrice={product?.regularPrice}
-                  ImageUrl={`${productUrl}/${product?.imageUrl}`}
-                  createdAt={product?.createdAt}
-                  Slug={product?.slug}
-                  CustomLabel={product.customLabel}
+          <Spin spinning={loading}>
+            <div>
+              <TitleWithSort Title="Products" setProducts={setProducts} />
 
-                />
-              ))}
-            </div>
-            <div className="flex flex-row justify-end mt-2 md:mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
+                {products?.map((product, idx) => (
+                  <ProductCard2
+                    key={idx}
+                    Id={product.id}
+                    Brand={product?.brand}
+                    Title={product?.name}
+                    Category={product?.category}
+                    SalePrice={product?.salePrice}
+                    RegularPrice={product?.regularPrice}
+                    ImageUrl={`${productUrl}/${product?.imageUrl}`}
+                    createdAt={product?.createdAt}
+                    Slug={product?.slug}
+                    CustomLabel={product.customLabel}
+                    isNewArrival={product?.isNewArrival}
+                    isTrending={product?.isTrending}
+                    isFeatured={product?.isFeatured}
+                    isBestSeller={product?.isBestSeller}
+                  />
+                ))}
+              </div>
 
-              {pagination?.element}
+              <div className="flex flex-row justify-end mt-2 md:mt-4">
+                {pagination?.element}
+              </div>
             </div>
-          </CustomSpinner>
+          </Spin>
         </div>
       </div>
     </div>

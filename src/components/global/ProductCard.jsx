@@ -7,49 +7,57 @@ import WishListButton from "./WishListButton"
 
 import { Tag } from "antd"
 
-function ProductCard({ Id, Title = "", Category, SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, Featured = false, Brand }) {
+function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, Brand }) {
     return (
-        <div className=" border border-gray-200 p-2 md:p-3 lg:p-4  bg-gray-100 flex flex-col justify-between gap-2">
-            <Link href={`/product/${encodeURIComponent(Slug)}`} className="relative">
-                <div className="absolute top-0 right-0 flex justify-between w-full gap-1 text-xs z-20 font-bold">
+        <div className="bg-white border border-gray-200 rounded-lg p-3 flex flex-col gap-2 shadow-sm hover:shadow-md transition-all">
+            <Link href={`/product/${encodeURIComponent(Slug)}`} className="relative block group">
+
+                {/* Top Right Tags + Wishlist */}
+                <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1 text-xs font-bold">
                     <WishListButton ProductId={Id} />
-                    <div className="flex flex-col items-end gap-2">
-
-                        {
-                            (moment().diff(createdAt, 'days') < 30) &&
-                            <Tag className="rounded-none" color="red-inverse">
-
-                                New
-                            </Tag>
-
-                        }
-                        {CustomLabel &&
-                            <Tag color="yellow-inverse" className="text-black">
-
-                                {CustomLabel}
-                            </Tag>
-                        }
-                    </div>
-
+                    {isNewArrival && <Tag color="red" className="!rounded">New</Tag>}
+                    {isTrending && <Tag color="purple" className="!rounded">Trending</Tag>}
+                    {isBestSeller && <Tag color="green" className="!rounded">Best Seller</Tag>}
+                    {CustomLabel && (
+                        <Tag color="yellow-inverse" className="text-black rounded">{CustomLabel}</Tag>
+                    )}
                 </div>
-                <Image className="object-contain h-40 w-80 mix-blend-darken" src={ImageUrl ? ImageUrl : "/product-placehold.png"} width={350} height={550} alt={Title} />
-                <div className="absolute left-0 bottom-0 flex justify-between  w-full">
+
+                {/* Image Section */}
+                <div className="aspect-[4/3] w-full bg-gray-50 flex items-center justify-center overflow-hidden rounded">
+                    <Image
+                        src={ImageUrl}
+                        width={350}
+                        height={350}
+                        alt={Title}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/product-placehold.png";
+                        }}
+                        className="object-contain mix-blend-darken transition-transform group-hover:scale-105 duration-300"
+                    />
+                </div>
+
+                {/* Bottom Left Tags */}
+                <div className="absolute bottom-2 left-2 z-10 flex items-center gap-2">
                     <OffLabel SalePrice={SalePrice} RegularPrice={RegularPrice} />
-                    {
-                        Featured &&
-                        <Tag color="gold">Featured</Tag>
-                    }
+                    {isFeatured && <Tag color="gold" className="!rounded">Featured</Tag>}
                 </div>
             </Link>
-            <span className="text-xs text-gray-500">{Brand}</span>
+
+            {/* Brand */}
+            <span className="text-xs text-gray-500 truncate">{Brand}</span>
+
+            {/* Product Title */}
             <Link href={`/product/${encodeURIComponent(Slug)}?a=2`}>
-                <h3 className="text-sm font-bold line-clamp-2"> {Title}</h3>
+                <h3 className="text-sm font-bold line-clamp-2 hover:text-primary transition">{Title}</h3>
             </Link>
 
+            {/* Price */}
             <Price salePrice={SalePrice} regularPrice={RegularPrice} />
-
         </div>
     )
+
 }
 
 export default ProductCard

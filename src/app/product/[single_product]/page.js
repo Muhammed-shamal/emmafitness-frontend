@@ -50,11 +50,8 @@ function Page({ params }) {
 
 
   return (
-  // <Spin spinning={loading}>
-    
-  // </Spin>
-
-  <div className="container my-4 flex flex-col gap-4">
+  <Spin spinning={loading}>
+     <div className="container my-4 flex flex-col gap-4">
     <div className="flex flex-col lg:flex-row bg-white shadow rounded p-4">
 
       <ImageSection
@@ -69,7 +66,6 @@ function Page({ params }) {
       <div className="lg:border-l pl-4 max-w-md flex flex-col gap-4">
         <div className="mt-4">
           <h1 className="text-xl font-bold">{product?.name}</h1>
-
           <Image
             src={`${product?.brand?.logo ? brandUrl + '/' + product?.brand.logo : "/product-placehold.png"}`}
             className="object-cover"
@@ -93,20 +89,27 @@ function Page({ params }) {
 
           <Divider />
 
-          <Price salePrice={product?.salePrice} regularPrice={product?.regularPrice} />
-          <OffLabel RegularPrice={product?.regularPrice} SalePrice={product?.salePrice} />
+<Price salePrice={product?.salePrice} regularPrice={product?.regularPrice} />
+<OffLabel RegularPrice={product?.regularPrice} SalePrice={product?.salePrice} />
 
-          <div className="mt-2 text-xs">
-            <Tag color="cyan" className="rounded-none">{product?.status}</Tag>
+<div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+  {/* <Tag color="cyan" className="rounded-none">{product?.status}</Tag> */}
 
-            {product?.stockQty < 3 && product?.stockQty > 0 ? (
-              <span className="text-orange-500 font-semibold">Stock - {product?.stockQty} left</span>
-            ) : product?.stockQty < 1 ? (
-              <span className="text-red-600 font-semibold">Out of stock</span>
-            ) : (
-              <span className="text-green-700 font-semibold">In stock</span>
-            )}
-          </div>
+  {product?.stockQty < 10 && product?.stockQty > 0 ? (
+    <span className="text-orange-500 font-semibold">Stock - {product?.stockQty} left</span>
+  ) : product?.stockQty < 1 ? (
+    <span className="text-red-600 font-semibold">Out of stock</span>
+  ) : (
+    <span className="text-green-700 font-semibold">In stock</span>
+  )}
+
+  {product?.isNewArrival && <Tag color="red">New Arrival</Tag>}
+  {product?.isFeatured && <Tag color="gold">Featured</Tag>}
+  {product?.isTrending && <Tag color="purple">Trending</Tag>}
+  {product?.isBestSeller && <Tag color="green">Best Seller</Tag>}
+  {product?.customLabel && <Tag color="yellow" className="text-black">{product?.customLabel}</Tag>}
+</div>
+
 
           <Divider />
 
@@ -133,6 +136,7 @@ function Page({ params }) {
    )}
 
   </div>
+  </Spin>
 );
 
 }

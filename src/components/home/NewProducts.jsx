@@ -1,60 +1,35 @@
 'use client'
 import ProductCard from "../global/ProductCard"
-import { useEffect, useState } from "react"
-import fetchApi from "../../utility/api/fetchApi"
-import CustomSpinner from "../global/CustomSpinner"
 import { productUrl } from "../../utility/api/constant"
-function NewProducts() {
-
-  const [product, setProducts] = useState([])
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setLoading(true)
-    const fetch = async () => {
-      const result = await fetchApi({ URI: 'public/products/new' })
-        .finally(() => setLoading(false))
-      setProducts(result?.map(prdct => ({
-        id: prdct._id,
-        name: prdct.name,
-        category: prdct.category?.name || "Uncategorized",
-        brand: prdct.brand?.name || "No Brand", // it's just a string ID for now
-        salePrice: prdct.salePrice,
-        regularPrice: prdct.regularPrice,
-        imageUrl: prdct.images?.[0] || "", // first image as main image
-        createdAt: prdct.createdAt,
-        customLabel: prdct.customLabel,
-        slug: prdct.slug,
-      })))
-    }
-    fetch()
-  }, [])
-
-
+import SkeletonGrid from '../global/SkeletonGrid'
+function NewProducts({ products = [] }) {
+  const loading = products.length === 0;
 
   return (
-    <CustomSpinner spinning={loading}>
+    <div>
+      {loading ? <SkeletonGrid /> : <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
-
-        {
-          product?.map((prd, idx) =>
-            <ProductCard
-              Brand={prd?.brand}
-              Id={prd?.id}
-              ImageUrl={`${productUrl}/${prd?.imageUrl}`}
-              createdAt={prd?.createdAt}
-              RegularPrice={prd?.regularPrice}
-              SalePrice={prd?.salePrice}
-              Slug={prd?.slug}
-              CustomLabel={product.customLabel}
-              Title={prd?.name}
-              key={idx} />
-          )
-        }
-      </div>
-
-    </CustomSpinner>
+      {
+        products.map((prd, idx) =>
+          <ProductCard
+            key={idx}
+            Brand={prd?.brand?.name}
+            Id={prd?._id}
+            ImageUrl={productUrl + '/' + prd?.images?.[0]}
+            createdAt={prd?.createdAt}
+            RegularPrice={prd?.regularPrice}
+            SalePrice={prd?.salePrice}
+            Slug={prd?.slug}
+            CustomLabel={prd?.customLabel}
+            Title={prd?.name}
+            isNewArrival={prd?.isNewArrival}
+            isTrending={prd?.isTrending}
+            isFeatured={prd?.isFeatured}
+            isBestSeller={prd?.isBestSeller} />
+        )
+      }
+    </div>}
+    </div>
   )
 }
 
