@@ -15,9 +15,9 @@ export default function ToastListener() {
       else if (type === 'error') toast.error(message);
       else if (type === 'loading') toast.loading(message);
 
-      setTimeout(() => dispatch(clearToast()), 1000); // clear after showing
+      setTimeout(() => dispatch(clearToast()), 1000);
     }
-  }, [type, message]);
+  }, [type, message,dispatch]);
 
   return null;
 }

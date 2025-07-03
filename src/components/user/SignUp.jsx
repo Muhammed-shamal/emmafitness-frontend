@@ -39,8 +39,6 @@ function SignUp({ Close = () => { } }) {
       dispatch(showToast({ type: 'error', message: error?.message || 'Something went wrong' }));
       setResult({ err: true, msg: error?.message || "Unable to register", loading: false });
       console.error('Error during registration:', error);
-    } finally {
-      setResult({ ...result, loading: false });
     }
   }
 

@@ -14,7 +14,6 @@ function Login({ Close }) {
   const signIn = useSignIn()
 
   const formHandle = async (e) => {
-
     try {
       setResult({ ...result, loading: true });
 
@@ -26,7 +25,6 @@ function Login({ Close }) {
 
       if (user.error) throw new Error(user.message);
 
-      console.log('user is', user);
       signIn({
         token: user.token,
         userId: user?.customer?._id,
@@ -44,10 +42,11 @@ function Login({ Close }) {
       dispatch(showToast({ type: 'error', message: `Login failed: ${error.message}` }));
       setResult({ err: true, msg: error.message || "Login failed", loading: false });
       console.error('Error during login:', error);
-    } finally {
-      setResult({ ...result, loading: false });
     }
   };
+
+
+  console.log('result is ', result)
 
 
   return (
@@ -62,7 +61,7 @@ function Login({ Close }) {
             },
           ]}
         >
-          <label> Email Id
+          <label> Email ID
             <Input className="h-12" />
           </label>
         </Form.Item>

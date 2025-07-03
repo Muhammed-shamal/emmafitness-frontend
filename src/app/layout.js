@@ -15,7 +15,6 @@ import ToastListener from '../components/ToastListner'
 // const inter = Gothic_A1({ subsets: ['latin'], weight: ['400'] });
 
 
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
