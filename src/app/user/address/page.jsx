@@ -30,16 +30,18 @@ function Page() {
           API_TOKEN: userDetails?.token,
         });
 
-        if (result?.data) {
-          const formatted = result.data.map((state) => ({
-            userName: state?.attributes?.userName,
-            buildingOrOffice: state?.attributes?.buildingOrOffice,
-            street: state?.attributes?.street,
-            flatNumber: state?.attributes?.flatNumber,
-            isOffice: state?.attributes?.isOffice,
-            contactNo: state?.attributes?.contactNo,
-            emirate: state?.attributes?.emirate?.data?.id,
-            id: state?.id,
+        console.log("addres rsult",result)
+
+        if (result) {
+          const formatted = result.map((state) => ({
+            userName: state?.userName,
+            buildingOrOffice: state?.buildingOrOffice,
+            street: state?.street,
+            flatNumber: state?.flatNumber,
+            isOffice: state?.isOffice,
+            contactNo: state?.contactNo,
+            emirate: state?.emirate?._id,
+            id: state?._id,
           }));
           setAddressData(formatted);
         }
@@ -66,7 +68,7 @@ function Page() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="min-h-screen overflow-y-auto">
       {/* Modals */}
       <Modal footer={false} open={popup} onCancel={() => setPopup(false)}>
         <CreateAddress close={() => setPopup(false)} />
@@ -99,7 +101,7 @@ function Page() {
           <Card key={item.id}>
             <div className="flex flex-row justify-between border-b border-gray-200 font-semibold">
               <div>{item?.userName}</div>
-              <div className="text-green-500">{item?.isOffice ? "Office" : "Home"}</div>
+              <div className="text-green-500">{item?.isOffice ? "Office Address" : "Home Address"}</div>
             </div>
             <div className="flex flex-row gap-4 p-2 relative">
               <div className="mt-4">

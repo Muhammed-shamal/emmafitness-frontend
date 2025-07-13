@@ -8,6 +8,7 @@ const PostAPI = async ({ URI, Data = {}, isTop = false, API_TOKEN }) => {
   if (API_TOKEN) {
     headers['Authorization'] = `Bearer ${API_TOKEN}`;
   }
+  console.log("api tooken s",API_TOKEN);
   console.log('data sending to server',Data)
 
   const body = JSON.stringify(isTop ? Data : { data: Data });

@@ -29,14 +29,15 @@ async function fetchSafeApi(endpoint) {
 
 export default async function Page() {
   // 👇 fetch server-side before render
-  const [featuredProducts, newArrivals] = await Promise.all([
+  const [featuredProducts, newArrivals,banner] = await Promise.all([
     fetchSafeApi('public/products/featured'),
     fetchSafeApi('public/products/new'),
+    fetchSafeApi('public/banner'),
   ])
 
   return (
     <main className='container space-y-2 md:space-y-4'>
-      <Banner />
+      {banner && <Banner title={banner.title} description={banner.description} image={banner.image}/>}
       <CategorySlider />
       <TrendingSection />
 

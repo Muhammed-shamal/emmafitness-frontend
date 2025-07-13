@@ -1,87 +1,93 @@
 'use client'
 
-import { useSelector } from "react-redux"
-import fetchApi from "./api/fetchApi"
+import { useSelector } from 'react-redux'
+import fetchApi from './api/fetchApi'
 
-const useCheckout = ()=>{
+const useCheckout = () => {
+  const cartItem = useSelector((state) => state.cart)
 
-    const cartItem = useSelector(state => state.cart)
+  const getProductData = async ({ discount = 0 }) => {
+    if (!Array.isArray(cartItem) || cartItem.length === 0) return null
 
-    
-    // cart detials
-    const getProductData = async({discount=0})=>{
-        
-        const filter = cartItem?.map((item, idx) => {
-            if (idx < 1) return `filters[id][$in][${idx}]=${item?.productId}`
-            else return `&filters[id][$in][${idx}]=${item?.productId}`
-        })
+    // 📦 Prepare filter query
+    const query = cartItem
+      .map((item, idx) => `filters[id][$in][${idx}]=${item.productId}`)
+      .join('&')
 
-        
-        const res =  filter?.length > 0 &&
-        await fetchApi({ URI: `public/products?${filter?.join('')}&populate=Feature_Photo,brand` })
-        const cartProducts = res?.data?.map(item => ({
-            products: item?.id,
-            name: item?.attributes?.Name,
-            Short_Description: item?.attributes?.Short_Description,
-            Regular_Price: item?.attributes?.Regular_Price,
-            Sale_Price: item?.attributes?.Sale_Price,
-            price : item?.attributes?.Sale_Price || item?.attributes?.Regular_Price,
-            Stock: item?.attributes?.Stock,
-            UOM: item?.attributes?.UOM,
-            Brand: item?.attributes?.brand?.data?.attributes?.Name,
-            photo: item?.attributes?.Feature_Photo?.data?.attributes?.url,
-            quantity: cartItem?.map(cartitemel => {
-                if (cartitemel?.productId == item?.id) return cartitemel?.quantity
-            }).join('')
-        }
-        ))
-   
-   
-   
-   
-   
-        // getshpping charge and tax detials from backend
-   
-        const companyRes = await Promise.all([
-            fetchApi({ URI: 'shipping-cost' }),
-            fetchApi({ URI: 'taxes' }),
-        ])
-   
-        const taxName = companyRes?.[1]?.data?.[0]?.attributes?.Tax_name
-        const taxId = companyRes?.[1]?.data?.[0]?.id
-        const taxPers = companyRes?.[1]?.data?.[0]?.attributes?.Tax_rate
-        const shippingTermLessthan = companyRes?.[0]?.data?.attributes?.Lesserthan_price
-        const shippingCharge = companyRes?.[0]?.data?.attributes?.Charge
-   
-    
-   
-   
-        // account summery
-        const total = cartProducts?.reduce((prev, current) => {
-            const price = current?.Sale_Price || current?.Regular_Price;
-            const quantity = parseInt(current?.quantity);
-            return prev + price * quantity;
-        }, 0)
+    const productRes = await fetchApi({
+      URI: `public/products?${query}&populate=Feature_Photo,brand`,
+    })
 
-        const shipping = (total <= shippingTermLessthan) ? shippingCharge : 0
-        const subTotal = total + shipping - (discount ? discount : 0)
-        // const taxAmount = (subTotal * taxPers) / 100
-        const withoutTax = (subTotal /(1+(taxPers/100)) ) .toFixed(2)
-        const taxAmount = (subTotal -withoutTax).toFixed(2)
-       const totalSummary = {
-            total,
-            shipping,
-            taxAmount,
-            discount,
-            subTotal: withoutTax,
-            grandTotal: (parseFloat(withoutTax) +  parseFloat(taxAmount) - (discount ? discount : 0))
-        }
-    
-        return {totalSummary, taxDetials: {taxName, taxId, taxPers}, cartProducts}
-     }
+    const productData = productRes?.data || []
 
- return getProductData
+    // 🔄 Map to match product and quantity
+    const cartProducts = productData.map((item) => {
+      const productId = item._id || item.id
+      const quantity =
+        cartItem.find((ci) => ci.productId == productId)?.quantity || 1
+
+      const attrs = item || {}
+      console.log("attr",attrs)
+      return {
+        products: productId,
+        name: attrs?.Name,
+        Short_Description: attrs?.Short_Description,
+        Regular_Price: attrs?.Regular_Price,
+        Sale_Price: attrs?.Sale_Price,
+        price: attrs?.Sale_Price || attrs?.Regular_Price,
+        Stock: attrs?.Stock,
+        UOM: attrs?.UOM || "20",
+        Brand: attrs?.brand?.Name,
+        // photo: attrs?.Feature_Photo?.data?.attributes?.url,
+        photo: attrs?.images?.[0] || "", 
+        quantity,
+      }
+    })
+
+    // 🧾 Fetch tax & shipping
+    const [shippingRes, taxRes] = await Promise.all([
+      fetchApi({ URI: 'shipping-cost' }),
+      fetchApi({ URI: 'taxes' }),
+    ])
+
+    const taxAttr = taxRes?.data?.[0]?.attributes
+    const shippingAttr = shippingRes?.data?.attributes
+
+    const taxName = taxAttr?.Tax_name
+    const taxId = taxRes?.data?.[0]?.id
+    const taxPers = taxAttr?.Tax_rate || 0
+    const shippingThreshold = shippingAttr?.Lesserthan_price || 0
+    const shippingCharge = shippingAttr?.Charge || 0
+
+    // 💰 Calculate totals
+    const total = cartProducts.reduce((sum, p) => {
+      return sum + parseFloat(p.price) * parseInt(p.quantity)
+    }, 0)
+
+    const shipping = total <= shippingThreshold ? shippingCharge : 0
+    const subTotal = total + shipping - discount
+    const subTotalExclTax = (subTotal / (1 + taxPers / 100)).toFixed(2)
+    const taxAmount = (subTotal - subTotalExclTax).toFixed(2)
+    const grandTotal =
+      parseFloat(subTotalExclTax) + parseFloat(taxAmount) - discount
+
+    const totalSummary = {
+      total,
+      shipping,
+      taxAmount,
+      discount,
+      subTotal: parseFloat(subTotalExclTax),
+      grandTotal: parseFloat(grandTotal.toFixed(2)),
+    }
+
+    return {
+      cartProducts,
+      totalSummary,
+      taxDetials: { taxName, taxId, taxPers },
+    }
+  }
+
+  return getProductData
 }
-
 
 export default useCheckout

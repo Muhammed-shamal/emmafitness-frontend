@@ -3,20 +3,22 @@ import { Button, Form, Input, Radio, Select } from "antd";
 import { useState, useEffect } from "react";
 import PostAPI from "../../utility/api/postApi";
 import fetchApi from "../../utility/api/fetchApi";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 
 function CreateAddress({ close }) {
     const [result, setResult] = useState({
         loading: false, err: false, msg: ""
     });
     const [state, setState] = useState([]);
-
+    const [emiratesLoading,setEmiratesLoading] = useState(false);
     const userDetails = useSelector(state => state.user)
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        setEmiratesLoading(true);
         const fetchData = async () => {
             const result = await fetchApi({ URI: 'public/emirates/getAll'});
-            setState(result?.data?.map(state => (
+            setState(result?.map(state => (
                 {
                     emirateName: state?.emirate_name,
                     id: state?._id
@@ -25,6 +27,7 @@ function CreateAddress({ close }) {
         };
 
         fetchData();
+        setEmiratesLoading(false);
     }, []);
 
 
@@ -33,7 +36,7 @@ function CreateAddress({ close }) {
     async function formHandle(e) {
         try {
             const data = {
-                user: userDetails.userId,
+                userId: userDetails.userId,
                 buildingOrOffice: e.buildingOrOffice,
                 contactNo: e.contactNo,
                 flatNumber: e.flatNumber,
@@ -45,13 +48,14 @@ function CreateAddress({ close }) {
             };
 
             setResult({ ...result, loading: true });
+            console.log("user details",userDetails)
 
-
-            await PostAPI({ URI: 'address', Data: data, token: userDetails.token });
-            setResult({ err: false, msg: "Successfully saved", loading: false });
+            await PostAPI({ URI: 'address/create', Data: data,isTop:true, API_TOKEN: userDetails.token });
+            dispatch(showToast({ type: 'success', message: 'Successfully saved new address' }));
             close && close(false)
             form.resetFields()
         } catch (err) {
+            console.log("err in add ",err)
             setResult({ err: true, msg: "Unable to save address", loading: false });
         }
     }
@@ -151,6 +155,7 @@ function CreateAddress({ close }) {
 
                         },
                     ]}
+                    hidden={emiratesLoading}
                 >
                     {/* Emirates */}
                     <Select placeholder="Select the emirate" className="h-10">

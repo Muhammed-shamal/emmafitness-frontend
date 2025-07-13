@@ -14,9 +14,17 @@ import Image from "next/legacy/image"
 import MarkDownText from "../../../components/global/MarkDownText"
 import { brandUrl, productUrl } from "../../../utility/api/constant"
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  FaFacebookSquare,
+  FaTwitter,
+  FaLinkedin,
+  FaWhatsapp,
+  FaLink,
+} from "react-icons/fa";
 
 function Page({ params }) {
-
+  const user = useSelector(state => state.user)
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -112,6 +120,83 @@ function Page({ params }) {
 
 
           <Divider />
+
+{/* Support Buttons */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full text-sm">
+  <a
+    href={`https://wa.me/971551187470?text=Hello, I'm interested in ${product?.name}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center justify-between border rounded-md px-4 py-3 shadow hover:shadow-md transition"
+  >
+    <span>Need More Details or Assistance? Chat with our specialist</span>
+    <Image src="/icons/tiktok.svg" width={24} height={24} alt="WhatsApp" />
+  </a>
+
+  <a
+    href="tel:+971551187470"
+    className="flex items-center justify-between border rounded-md px-4 py-3 shadow hover:shadow-md transition"
+  >
+    <span>Request a Callback</span>
+    <Image src="/icons/phone.svg" width={24} height={24} alt="Callback" />
+  </a>
+</div>
+
+{/* Delivery Estimate */}
+<div className="text-sm mt-4 text-gray-600 font-medium">
+  <p>🚚 Expected Delivery in <span className="text-black font-semibold">3–5 Business Days</span></p>
+</div>
+
+{/* Social Share Section */}
+<div className="mt-4">
+  <p className="text-sm font-semibold mb-2">Share this product</p>
+  <div className="flex items-center gap-4 text-xl">
+  <a
+    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 hover:opacity-80"
+  >
+    <FaFacebookSquare />
+  </a>
+
+  <a
+    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-400 hover:opacity-80"
+  >
+    <FaTwitter />
+  </a>
+
+  <a
+    href={`https://www.linkedin.com/shareArticle?url=${encodeURIComponent(window.location.href)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-700 hover:opacity-80"
+  >
+    <FaLinkedin />
+  </a>
+
+  <a
+    href={`https://wa.me/?text=${encodeURIComponent(window.location.href)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-green-500 hover:opacity-80"
+  >
+    <FaWhatsapp />
+  </a>
+
+  <button
+    onClick={() => navigator.clipboard.writeText(window.location.href)}
+    title="Copy link"
+    className="text-gray-600 hover:text-black"
+  >
+    <FaLink />
+  </button>
+</div>
+</div>
+
 
           <div className="text-sm">
             <MarkDownText text={product?.description} />
