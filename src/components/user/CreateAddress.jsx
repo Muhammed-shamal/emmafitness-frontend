@@ -3,21 +3,21 @@ import { Button, Form, Input, Radio, Select } from "antd";
 import { useState, useEffect } from "react";
 import PostAPI from "../../utility/api/postApi";
 import fetchApi from "../../utility/api/fetchApi";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function CreateAddress({ close }) {
     const [result, setResult] = useState({
         loading: false, err: false, msg: ""
     });
     const [state, setState] = useState([]);
-    const [emiratesLoading,setEmiratesLoading] = useState(false);
+    const [emiratesLoading, setEmiratesLoading] = useState(false);
     const userDetails = useSelector(state => state.user)
     const dispatch = useDispatch();
 
     useEffect(() => {
         setEmiratesLoading(true);
         const fetchData = async () => {
-            const result = await fetchApi({ URI: 'public/emirates/getAll'});
+            const result = await fetchApi({ URI: 'public/emirates/getAll' });
             setState(result?.map(state => (
                 {
                     emirateName: state?.emirate_name,
@@ -48,14 +48,14 @@ function CreateAddress({ close }) {
             };
 
             setResult({ ...result, loading: true });
-            console.log("user details",userDetails)
+            console.log("user details", userDetails)
 
-            await PostAPI({ URI: 'address/create', Data: data,isTop:true, API_TOKEN: userDetails.token });
+            await PostAPI({ URI: 'address/create', Data: data, isTop: true, API_TOKEN: userDetails.token });
             dispatch(showToast({ type: 'success', message: 'Successfully saved new address' }));
             close && close(false)
             form.resetFields()
         } catch (err) {
-            console.log("err in add ",err)
+            console.log("err in add ", err)
             setResult({ err: true, msg: "Unable to save address", loading: false });
         }
     }
@@ -89,9 +89,10 @@ function CreateAddress({ close }) {
                 <Form.Item
                     name="userName"
                     rules={[
+                        { required: true, message: 'Please input your full name!' },
                         {
-                            required: true,
-                            message: 'Please input your full name!',
+                            pattern: /^[A-Za-z]{2,}(?:\s[A-Za-z]{2,})+$/,
+                            message: 'Please enter your full name (at least first and last name)',
                         },
                     ]}
                 >
@@ -171,9 +172,10 @@ function CreateAddress({ close }) {
                 <Form.Item
                     name="contactNo"
                     rules={[
+                        { required: true, message: 'Please input your contact number!' },
                         {
-                            required: true,
-                            message: 'Please input contact no.!',
+                            pattern: /^05[0-9]{8}$/,
+                            message: 'Please enter a valid UAE phone number (e.g. 0501234567)',
                         },
                     ]}
                 >

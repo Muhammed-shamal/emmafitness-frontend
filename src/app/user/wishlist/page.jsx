@@ -8,11 +8,9 @@ export const metadata = {
 }
 
 async function Page() {
-
-
   return (
     <div>
-      <WishLists/>
+      <WishLists />
     </div>
   )
 }

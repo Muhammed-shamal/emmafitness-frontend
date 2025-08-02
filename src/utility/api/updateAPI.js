@@ -20,7 +20,7 @@ const updateApi = async ({ URI, Data = {}, isTop = false, token }) => {
       console.log('Error response:', errorData);
     } catch (_) {
       message = result.statusText;
-      consle.log('Error parsing response:', _);
+      console.log('Error parsing response:', _);
     }
     throw new Error(message);
   }

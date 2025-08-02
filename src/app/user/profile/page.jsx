@@ -14,17 +14,18 @@ const Page = () => {
   const user = useSelector(state => state.user)
 
   const [result, setResult] = useState({
-        loading: false, err: false, msg: ""
-    });
+    loading: false, err: false, msg: ""
+  });
   const [data, setData] = useState({ name: '', phone: '', email: '' })
   const [submitting, setSubmitting] = useState(false)
 
   // 🟡 Fetch customer profile
   useEffect(() => {
     const fetchData = async () => {
-      setResult({ ...result, loading: true })
+      setResult(prev => ({ ...prev, loading: true }))
       try {
-        const response = await fetchApi({ URI: 'customers/me', API_TOKEN: user?.token })
+        const response = await fetchApi({ URI: `customers/account/profile/${user?.userId}`, API_TOKEN: user?.token })
+        console.log("response from me", response)
         setData({
           name: response?.customer.name || '',
           phone: response?.customer.phone || '',
@@ -34,11 +35,15 @@ const Page = () => {
         console.error('Fetch error:', error.message);
         dispatch(showToast({ type: 'error', message: error.message || 'Failed to fetch profile data' }))
       } finally {
-        setResult({ ...result, loading: false })
+        setResult(prev => ({ ...prev, loading: false }))
       }
     }
+
     if (user?.token) fetchData()
-  }, [dispatch, user?.token,result])
+
+    // ✅ Don't include `result` in dependencies!
+  }, [dispatch, user?.token])
+
 
   // 🔵 Input change handler
   const inputHandle = (e) => {
@@ -51,14 +56,14 @@ const Page = () => {
     setSubmitting(true)
     try {
       let response = await updateApi({
-        URI: `customer/account/update/${user?.userId}`,
+        URI: `customers/account/update/${user?.userId}`,
         isTop: true,
         Data: data,
         token: user?.token
       })
 
       signIn({
-        token:user?.token,
+        token: user?.token,
         userId: response?.updated?._id,
         userName: response?.updated?.name,
         phone: response?.updated?.phone,
@@ -75,7 +80,6 @@ const Page = () => {
     }
   }
 
-  // ✅ UI rendering
   return (
     <div className='p-4'>
       <Card>
@@ -107,6 +111,6 @@ export default Page
 const InputField = ({ onChange, Label, Name, value }) => (
   <label className='flex flex-col text-sm gap-1'>
     {Label}
-    <Input value={value} onChange={onChange} name={Name} placeholder={Label} className='rounded' />
+    <Input value={value} onChange={onChange} name={Name} placeholder={Label} className='rounded'/>
   </label>
 )

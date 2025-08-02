@@ -9,30 +9,28 @@ import { Tag } from "antd"
 
 function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, Brand, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, }) {
 
-    const isNew = moment().diff(createdAt, 'days') < 30;
-
     return (
         <div className="relative flex flex-col rounded-xl shadow-sm border border-gray-200 bg-white transition hover:shadow-md overflow-hidden">
+            {/* Tags - Top Right */}
+            <div className="absolute top-2 right-2 z-20 flex flex-col gap-1 items-end text-xs font-semibold">
+                <WishListButton ProductId={Id} />
+
+                {isNewArrival && <Tag color="red" className="!rounded">New</Tag>}
+                {isTrending && <Tag color="purple" className="!rounded">Trending</Tag>}
+                {isBestSeller && <Tag color="green" className="!rounded">Best Seller</Tag>}
+                {CustomLabel && <Tag color="yellow" className="text-black !rounded">{CustomLabel}</Tag>}
+            </div>
+
             <Link href={`/product/${encodeURIComponent(Slug)}`} className="relative block group">
-                {/* Tags - Top Right */}
-                <div className="absolute top-2 right-2 z-20 flex flex-col gap-1 items-end text-xs font-semibold">
-                    <WishListButton ProductId={Id} />
-
-                    {isNewArrival && <Tag color="red" className="!rounded">New</Tag>}
-                    {isTrending && <Tag color="purple" className="!rounded">Trending</Tag>}
-                    {isBestSeller && <Tag color="green" className="!rounded">Best Seller</Tag>}
-                    {CustomLabel && <Tag color="yellow" className="text-black !rounded">{CustomLabel}</Tag>}
-                </div>
-
 
                 {/* Product Image */}
                 <div className="relative w-full aspect-[4/3] bg-gray-50 flex items-center justify-center overflow-hidden">
                     <Image
-                        src={ImageUrl }
+                        src={ImageUrl}
                         width={350}
                         height={750}
                         alt={Title}
-                         onError={(e) => {
+                        onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = "/product-placehold.png";
                         }}

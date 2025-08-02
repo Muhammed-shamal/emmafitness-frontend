@@ -12,7 +12,7 @@ function DeleteAddress({ addressId, close }) {
 
     async function formHandle() {
         try {
-            const result = await deleteApi({ URI: `address/${addressId}`, token: user.token });
+            const result = await deleteApi({ URI: `customers/address/delete/${addressId}`, token: user.token });
             setResult({ err: false, msg: "Successfully deleted", loading: false });
             close && close()
         } catch (error) {

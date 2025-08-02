@@ -46,9 +46,6 @@ function Login({ Close }) {
   };
 
 
-  console.log('result is ', result)
-
-
   return (
     <>
       <h2 className="font-semibold text-lg">Login</h2>

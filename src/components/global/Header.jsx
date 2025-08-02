@@ -12,7 +12,7 @@ import { Modal } from 'antd'
 import fetchApi from '../../utility/api/fetchApi'
 import { useSignOut } from '../../utility/userHandle'
 import UserSession from '../user/userSessions'
-import { addBulkWishlist } from '../../utility/redux/wishListSlice'
+import { addBulkWishlist, setWishList } from '../../utility/redux/wishListSlice'
 import CategoryNav from './CategoryNav'
 import { showToast } from '../../utility/redux/toastSlice'
 
@@ -24,6 +24,7 @@ function Header() {
     const user = useSelector(state => state.user)
     const signOut = useSignOut()
 
+    const [loading,setLoading] = useState(false);
     const [popup, setPopup] = useState(false)
 
    useEffect(() => {
@@ -86,8 +87,27 @@ function Header() {
     restoreUser();
   }, [dispatch]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchApi({
+          URI: `customers/wishlist/getBy/${user?.userId}`,
+          API_TOKEN: user?.token
+        });
+        console.log('wishistare', result);
+        dispatch(setWishList(result.items || []));
+      } catch (error) {
+        dispatch(showToast({ type: 'error', message: error.message || 'Failed to fetch wishlist' }));
+      }
+      setLoading(false);
+    };
 
-    console.log("user?.userId",user)
+    if (user?.userId && user?.token) {
+      fetchData();
+    }
+  }, [user?.userId, user?.token, dispatch]);
+
 
     const items = user?.userId ?
         [{
@@ -161,7 +181,7 @@ function Header() {
                             <div className='relative'>
                                 <HeartOutlined className='text-red-500' />
                                 <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
-                                    {wishList?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0)}
+                                    {wishList.items?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0)}
                                 </div>
                             </div>
                         </Link>

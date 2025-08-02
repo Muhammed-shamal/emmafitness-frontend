@@ -1,124 +1,170 @@
 'use client'
-import { Button, Form, Input, Radio, Select } from "antd";
+import { Alert, Button, Form, Input, Radio, Select } from "antd";
 import { useState, useEffect } from "react";
 import updateAPI from "../../utility/api/updateAPI";
 import fetchApi from "../../utility/api/fetchApi";
 import { useSelector } from "react-redux";
 
-function EditAddress({ Data , close}) {
-    const [result, setResult] = useState({
-        loading: false, err: false, msg: ""
-    });
-    const [state, setState] = useState([])
-    const [data, setData] = useState({})
-    const user = useSelector(state => state?.user)
+function EditAddress({ Data, close }) {
+    console.log('data is ', Data)
+    const [result, setResult] = useState({ loading: false, err: false, msg: '' });
+    const [emirates, setEmirates] = useState([]);
+    const [emiratesLoading, setEmiratesLoading] = useState(false);
+    const [form] = Form.useForm();
+    const user = useSelector(state => state?.user);
 
-
+    // 🔄 Fetch emirates
     useEffect(() => {
         const fetchData = async () => {
-            const result = await fetchApi({ URI: 'states?populate=*' }).catch(e => console.log(e));
-            setState(result?.data?.map(state => (
-                {
-                    emirateName: state?.attributes?.emirate_name,
-                    id: state?.id
-                }
-            )));
-            setData({ ...Data })
+            setEmiratesLoading(true);
+            const result = await fetchApi({ URI: 'public/emirates/getAll' });
+            const mapped = result?.map(state => ({
+                label: state?.emirate_name,
+                value: state?._id
+            })) || [];
+            setEmirates(mapped);
+            setEmiratesLoading(false);
         };
-
         fetchData();
-
     }, []);
 
+    // ⬅️ Set initial form values from `Data` prop
+    useEffect(() => {
+        if (Data) {
+            form.setFieldsValue({
+                isOffice: Data?.isOffice,
+                userName: Data?.userName,
+                street: Data?.street,
+                buildingOrOffice: Data?.buildingOrOffice,
+                flatNumber: Data?.flatNumber,
+                emirate: Data?.emirate,
+                contactNo: Data?.contactNo
+            });
+        }
+    }, [Data, form]);
 
-    const [form] = Form.useForm();
-
-    async function formHandle(e) {
+    // 🧠 Submit handler
+    const formHandle = async (values) => {
         try {
+            setResult({ loading: true, err: false, msg: '' });
 
-            setResult({ ...result, loading: true });
+            await updateAPI({
+                URI: `address/update/${Data?.id}`,
+                Data: values,
+                token: user?.token,
+                isTop: true
+            });
 
-            await updateAPI({ URI: `address/${data.id}`, Data: data, token: user?.token });
-            setResult({ err: false, msg: "Successfully updated", loading: false });
-            close && close()
-
+            setResult({ err: false, msg: 'Successfully updated', loading: false });
+            close?.(); // Close if available
         } catch (err) {
-            setResult({ err: true, msg: "Unable to save address", loading: false });
+            setResult({ err: true, msg: 'Unable to save address', loading: false });
             console.error('Error while updating address:', err);
         }
-    }
-
-    const inputHandle = (e) => {
-        setData({ ...data, [e.target.name]: e.target.value })
-    }
-
+    };
 
     return (
         <div className="flex flex-col justify-center">
             <h2 className="font-semibold text-lg">Edit Address</h2>
+
             <Form
                 form={form}
-                name="addressForm"
+                layout="vertical"
                 onFinish={formHandle}
                 autoComplete="off"
             >
-                <Form.Item name="isOffice" >
-                    <Radio.Group required onChange={inputHandle}>
-                        <Radio.Button checked={!data?.isOffice} value={false}>Home</Radio.Button>
-                        <Radio.Button checked={data?.isOffice} value={true}>Office</Radio.Button>
+                <Form.Item name="isOffice" label="Address Type">
+                    <Radio.Group>
+                        <Radio.Button value={false}>Home</Radio.Button>
+                        <Radio.Button value={true}>Office</Radio.Button>
                     </Radio.Group>
                 </Form.Item>
 
-                <Form.Item name="userName" >
-                    <label>
-                        Full Name
-                        <Input name="userName" value={data?.userName} onChange={inputHandle} />
-                    </label>
+                <Form.Item
+                    name="userName"
+                    label="Full Name"
+                    rules={[
+                        { required: true, message: 'Please input your full name!' },
+                        {
+                            pattern: /^[A-Za-z]{2,}(?:\s[A-Za-z]{2,})+$/,
+                            message: 'Please enter your full name (at least first and last name)',
+                        },
+                    ]}
+                >
+                    <Input />
                 </Form.Item>
 
-                <Form.Item name="street">
-                    <label>
-                        Street
-                        <Input name="street" value={data?.street} onChange={inputHandle} />
-                    </label>
+
+                <Form.Item name="street" label="Street" rules={[
+                    {
+                        required: true,
+                        message: 'Please input street!',
+                    },
+                ]}>
+                    <Input />
                 </Form.Item>
 
-                <Form.Item name="buildingOrOffice" >
-                    <label>
-                        Building / Office Name
-                        <Input name="buildingOrOffice" value={data?.buildingOrOffice} onChange={inputHandle} />
-                    </label>
+                <Form.Item name="buildingOrOffice" label="Building / Office Name" rules={[
+                    {
+                        required: true,
+                        message: 'Please input Building / Office Name!',
+                    },
+                ]}>
+                    <Input />
                 </Form.Item>
 
-                <Form.Item name="flatNumber" >
-                    <label>
-                        Flat No.
-                        <Input name="flatNumber" value={data?.flatNumber} onChange={inputHandle} />
-                    </label>
-                </Form.Item>
-                Emirates
-                <Form.Item name="emirate" >
-                    {/* Emirates */}
-                    <Select onChange={(e) => inputHandle({ target: { name: 'emirate', value: e } })} value={data.emirate}>
-                        {state?.map((item, idx) => (
-                            <Select.Option key={idx} value={item?.id}>
-                                {item?.emirateName}
-                            </Select.Option>
-                        ))}
-                    </Select>
+                <Form.Item name="flatNumber" label="Flat No." rules={[
+                    {
+                        required: true,
+                        message: 'Please input flat number!',
+                    },
+                ]}>
+                    <Input />
                 </Form.Item>
 
-                <Form.Item name="contact" >
-                    <label>
-                        Contact No.
-                        <Input type="number" name="emirate" value={data?.contactNo} onChange={inputHandle} />
-                    </label>
+                <Form.Item
+                    name="emirate"
+                    label="Emirate"
+                    rules={[{ required: true, message: 'Please select your emirate!' }]}
+                >
+                    <Select
+                        loading={emiratesLoading}
+                        placeholder="Select the emirate"
+                        options={emirates}
+                    />
                 </Form.Item>
+
+                <Form.Item
+                    name="contactNo"
+                    label="Contact No."
+                    rules={[
+                        { required: true, message: 'Please input your contact number!' },
+                        {
+                            pattern: /^05[0-9]{8}$/,
+                            message: 'Please enter a valid UAE phone number (e.g. 0501234567)',
+                        },
+                    ]}
+                >
+                    <Input maxLength={10} />
+                </Form.Item>
+
+                {result.msg && (
+                    <Form.Item>
+                        <Alert
+                            message={result.msg}
+                            type={result.err ? 'error' : 'success'}
+                            showIcon
+                        />
+                    </Form.Item>
+                )}
 
                 <Form.Item>
-                    <p className={`${result.err ? "text-red-500" : "text-green-500"} text-center`}>{result.msg}</p>
-
-                    <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={result.loading}>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="bg-blue-500 w-full"
+                        loading={result.loading}
+                    >
                         Submit
                     </Button>
                 </Form.Item>

@@ -115,7 +115,6 @@ function Page() {
       {
         paymentStatus &&
         <Modal open cancelButtonProps={false}
-          
           title="Order Placed!"
           okButtonProps={{ className: 'bg-blue-500' }}
           okText="Go to home"
