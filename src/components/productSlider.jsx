@@ -1,67 +1,103 @@
 'use client'
 
-import React from 'react';
-import { Card, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Typography } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import { Autoplay } from 'swiper/modules'; // For Swiper v9+
 import SeasonalHeader from './seasonalHeader'
+import fetchApi from '../utility/api/fetchApi';
+import { productUrl } from '../utility/api/constant';
 
-const { Title } = Typography;
-
-const products = [
-    {
-        name: 'GX LE Upright Bike',
-        brand: 'NordicTrack',
-        image: '/images/upright-bike.jpg',
-        price: 3495,
-    },
-    {
-        name: 'Home XBR25 Recumbent Bike',
-        brand: 'SPIRIT',
-        image: '/images/recumbent-bike.jpg',
-        price: 5485,
-    },
-    {
-        name: '800IC Indoor Cycling Bike',
-        brand: 'SCHWINN',
-        image: '/images/indoor-cycling.jpg',
-        price: 4985,
-    },
-    {
-        name: 'T Series 7 Treadmill',
-        brand: 'NordicTrack',
-        image: '/images/treadmill.jpg',
-        price: 4995,
-    },
-    {
-        name: 'Cherry Rowing Machine With S4 Monitor',
-        brand: 'WaterRower',
-        image: '/images/rowing-machine.jpg',
-        price: 5750,
-    },
-];
+const { Title, Text } = Typography;
 
 const ProductSlider = () => {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchTopProducts = async () => {
+            try {
+                const response = await fetchApi({ URI: 'public/products/top10' });
+                setProducts(response);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchTopProducts();
+    }, []);
+
+
+    const getImage = (product) => {
+        console.log("product image",product)
+        return product.images && product.images.length > 0
+            ? `${productUrl}/${product.images[0]}` // adjust this path as per your backend
+            : '/product-placehold.png'; // fallback image
+    };
+
     return (
-        <div style={{ padding: '2rem' }}>
+        <div style={{ padding: '2rem', backgroundColor: '#fff' }}>
             {/* Mini Banner */}
             <SeasonalHeader />
 
-            <Swiper spaceBetween={20} slidesPerView={3} breakpoints={{
-                640: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-                1280: { slidesPerView: 4 },
-            }}>
+            <Swiper
+                modules={[Autoplay]}
+                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                loop={true}
+                style={{ marginTop: '2rem' }}
+                spaceBetween={24}
+                slidesPerView={3}
+                breakpoints={{
+                    640: { slidesPerView: 1 },
+                    768: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
+                    1280: { slidesPerView: 4 },
+                }}
+            >
                 {products.map((product, index) => (
-                    <SwiperSlide key={index}>
-                        <Card
-                            hoverable
-                            cover={<img alt={product.name} src={product.image} style={{ height: 200, objectFit: 'cover' }} />}
+                    <SwiperSlide key={product._id || index}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                background: '#f9f9f9',
+                                borderRadius: '8px',
+                                overflow: 'hidden',
+                                height: '100%',
+                            }}
                         >
-                            <Title level={5}>{product.brand}</Title>
-                            <p>{product.name}</p>
-                            <Title level={4}>AED {product.price}</Title>
-                        </Card>
+                            <img
+                                alt={product.name}
+                                src={getImage(product)}
+                                style={{
+                                    width: '100%',
+                                    height: '200px',
+                                    objectFit: 'cover',
+                                }}
+                            />
+                            <div style={{ padding: '1rem' }}>
+                                <Title level={5} style={{ marginBottom: 4 }}>
+                                    {product.customLabel || product.name}
+                                </Title>
+                                <Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>
+                                    Brand: {product.brand.name || 'N/A'}
+                                </Text>
+                                {product.salePrice && product.salePrice < product.regularPrice ? (
+                                    <div>
+                                        <Title level={4} style={{ margin: 0, color: '#d32f2f' }}>
+                                            AED {product.salePrice}
+                                        </Title>
+                                        <Text delete type="secondary" style={{ fontSize: 14 }}>
+                                            AED {product.regularPrice}
+                                        </Text>
+                                    </div>
+                                ) : (
+                                    <Title level={4} style={{ margin: 0 }}>
+                                        AED {product.regularPrice}
+                                    </Title>
+                                )}
+                            </div>
+                        </div>
                     </SwiperSlide>
                 ))}
             </Swiper>

@@ -12,7 +12,7 @@ export default function Banner({ image, title, description }) {
         alt="Fitness Banner"
         fill
         priority
-        className="object-cover brightness-75"
+        className="object-center object-cover brightness-75 transition-all duration-300 hover:brightness-100"
       />
 
       {/* Overlay Content */}
@@ -25,7 +25,7 @@ export default function Banner({ image, title, description }) {
             {description}
           </p>
           <Link href="/products">
-            <button className="bg-secondary hover:bg-white hover:text-secondary transition-all px-6 py-3 text-white font-semibold rounded-full">
+            <button className="bg-secondary hover:bg-white hover:text-secondary transition-all px-6 py-3 mt-5 text-white font-semibold rounded-full">
               Shop Now
             </button>
           </Link>

@@ -6,8 +6,12 @@ import OurBrands from '../components/home/OurBrands'
 import FeaturedProducts from '../components/home/FeaturedProducts'
 import NewProducts from '../components/home/NewProducts'
 import Title from '../components/global/Title'
+import SubBanner from '../components/subBanner'
+import MovingBanner from '../components/movingBanner'
+import FilteredCategories from '../components/filteredCategories'
+import FAQ from '../components/faq'
+import Reviews from '../components/googleReviews'
 import 'react-loading-skeleton/dist/skeleton.css'
-import 'swiper/css';
 
 export const metadata = {
   title: 'Top Fitness Brands at Competitive Prices: Shop Now at Emma Fitness in Dubai & Sharjah',
@@ -70,6 +74,28 @@ export default async function Page() {
           <NewProducts products={newArrivals} />
         </section>
       </>)}
+
+      <SubBanner />
+
+      <FilteredCategories />
+      <MovingBanner />
+      <Reviews />
+
+      <div className='p-5'>
+        <h2 className='text-center font-sans text-2xl'>
+          We Are Active Fitness Store
+        </h2>
+        <p>
+          With over a decade of experience powering the UAE’s fitness movement, Active Fitness Store has become more than just a retailer — we’re a trusted partner in how the nation trains.
+        </p>
+        <p>
+          From compact home setups to full-scale commercial gyms, we’ve helped thousands across Dubai, Abu Dhabi, Sharjah, Al Ain, and beyond build workout spaces that perform. What started as a focused online fitness store has evolved into one of the UAE’s most respected fitness equipment brands — driven by expertise, service, and a deep understanding of what it means to move better.
+        </p>
+        <div style={{ maxWidth: 600, margin: '50px auto', lineHeight: '1.6' }}>
+          <h1>Frequently Asked Questions</h1>
+          <FAQ />
+        </div>
+      </div>
     </main>
   )
 }
