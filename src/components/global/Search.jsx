@@ -12,9 +12,9 @@ function Search() {
 
   const router = useRouter()
 
-
   let timeout;
   let currentValue;
+
   const fetching = (value, callback) => {
     if (timeout) {
       clearTimeout(timeout);
@@ -22,16 +22,31 @@ function Search() {
     }
     currentValue = value;
     const fake = () => {
-
-      fetchApi({ URI: `public/products?filters[$or][0][Name][$containsi]=${value}&filters[$or][1][Full_Description][$containsi]=${value}&filters[$or][2][Short_Description][$containsi]=${value}&sort[createdAt]=desc` })
+      fetchApi({ URI: `public/products/search?q=${encodeURIComponent(value)}&sort=desc` })
         .then((d) => {
           if (currentValue === value) {
             const { data } = d;
-            const MAX_LENGTH= 100
-            const ndata = data?.map((item) => ({
-              value: item?.attributes?.Slug,
-              label: item?.attributes?.Name.length > MAX_LENGTH ? `${item?.attributes?.Name.slice(0, MAX_LENGTH)}...` : item?.attributes?.Name,
+
+            if (!data || data.length === 0) {
+              callback([
+                {
+                  value: '',
+                  label: 'No products found',
+                  isDisabled: true, // optional if using a select component
+                },
+              ]);
+              return;
+            }
+
+            const MAX_LENGTH = 100;
+            const ndata = data.map((item) => ({
+              value: item?.slug,
+              label:
+                item?.name.length > MAX_LENGTH
+                  ? `${item?.name.slice(0, MAX_LENGTH)}...`
+                  : item?.name,
             }));
+
             callback(ndata);
           }
         });
@@ -49,25 +64,21 @@ function Search() {
   }
 
   const changeHandle = (e) => {
-    const a =e
-    router.push('/product/'+ a)
+    const a = e
+    router.push('/product/' + a)
   }
 
-  const searchTermHandle = (e)=>{
+  const searchTermHandle = (e) => {
     setTerms(e.target.value)
     if (e.key === 'Enter') {
       router.push(`/search?term=${terms}`)
     }
   }
 
-  const formHandle = (e)=>{
+  const formHandle = (e) => {
     e.preventDefault()
-
     router.push(`/search?term=${terms}`)
   }
-
-
-
 
   return (
     <form onSubmit={formHandle} className='h-10  flex flex-row'>
@@ -86,8 +97,7 @@ function Search() {
         style={{ borderRadius: 0, borderBottomLeftRadius: 3, borderTopLeftRadius: 3 }}
         placeholder='What are you looking for?'
         className='h-10 rounded-l flex-1 bg-lightPrimary md:bg-white border-none text-white placeholder:text-gray-400 ' >
-     
-        </Select>
+      </Select>
 
       <button onClick={formHandle} className='bg-secondary text-white h-10 border-none rounded-r w-8 md:w-20 text-xl flex justify-center items-center rounded-none hover:bg-darkSecondary '><SearchOutlined /></button>
     </form>

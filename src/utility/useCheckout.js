@@ -15,7 +15,7 @@ const useCheckout = () => {
       .join('&')
 
     const productRes = await fetchApi({
-      URI: `public/products?${query}&populate=Feature_Photo,brand`,
+      URI: `public/products?${query}&populate=brand`,
     })
 
     const productData = productRes?.data || []
@@ -26,20 +26,22 @@ const useCheckout = () => {
       const quantity =
         cartItem.find((ci) => ci.productId == productId)?.quantity || 1
 
-      const attrs = item || {}
-      console.log("attr",attrs)
+        console.log("productId",productId)
+      console.log('quanity', quantity)
       return {
         products: productId,
-        name: attrs?.Name,
-        Short_Description: attrs?.Short_Description,
-        Regular_Price: attrs?.Regular_Price,
-        Sale_Price: attrs?.Sale_Price,
-        price: attrs?.Sale_Price || attrs?.Regular_Price,
-        Stock: attrs?.Stock,
-        UOM: attrs?.UOM || "20",
-        Brand: attrs?.brand?.Name,
-        // photo: attrs?.Feature_Photo?.data?.attributes?.url,
-        photo: attrs?.images?.[0] || "", 
+        name: item?.name,
+        id: item._id,
+        name: item.name,
+        category: item.category?.name || "Uncategorized",
+        brand: item.brand?.name || "No Brand", // it's just a string ID for now
+        salePrice: item.salePrice,
+        regularPrice: item.regularPrice,
+        imageUrl: item.images?.[0] || "", // first image as main image
+        createdAt: item.createdAt,
+        customLabel: item.customLabel,
+        slug: item.slug,
+        UOM: item?.uom || "20",
         quantity,
       }
     })

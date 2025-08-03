@@ -13,7 +13,7 @@ import Link from 'next/link'
 import { DeleteOutlined } from '@ant-design/icons'
 import WishListButton from '../../global/WishListButton'
 import useAddAndRemoveCart from '../../../utility/useAddAndRemoveCart'
-import { Button,  message } from 'antd'
+import { Button, message } from 'antd'
 import CustomSpinner from '../../global/CustomSpinner'
 
 function CartList() {
@@ -34,6 +34,9 @@ function CartList() {
         const ready = async () => {
             setLoading(true)
             const { cartProducts, taxDetials, totalSummary } = await prdoducts({ discount: coupon?.discount })
+            console.log('cart products',cartProduct)
+            console.log('taxDetials',taxDetials)
+            console.log('totalSummary',totalSummary)
             setCartProduct(cartProducts)
             setAccountSummery({ ...accountSummery, ...taxDetials, ...totalSummary })
             setLoading(false)
@@ -70,7 +73,7 @@ function CartList() {
         route.push('/checkout')
     }
     return (
-   <CustomSpinner spinning={loading}>
+        <CustomSpinner spinning={loading}>
 
             <div className='flex flex-col gap-4'>
                 <div className='flex flex-col md:flex-row gap-4 '>
@@ -78,17 +81,17 @@ function CartList() {
                     <div className='flex-1 space-y-4'>
                         {
                             cartProduct ?
-                            cartProduct?.map(item => (
-                                
-                                <CartItem key={item?.products}
-                                Id={item?.products} Title={item?.name}
-                                Photo={item?.photo}
-                                Brand={item?.Brand}
-                                Desc={item?.Short_Description}
-                                SalePrice={item?.Sale_Price}
-                                RegularPrice={item?.Regular_Price}
-                                removeFromCart={removeCartHandle} />
-                                
+                                cartProduct?.map(item => (
+
+                                    <CartItem key={item?.products}
+                                        Id={item?.products} Title={item?.name}
+                                        Photo={item?.photo}
+                                        Brand={item?.Brand}
+                                        Desc={item?.Short_Description}
+                                        SalePrice={item?.Sale_Price}
+                                        RegularPrice={item?.Regular_Price}
+                                        removeFromCart={removeCartHandle} />
+
                                 ))
                                 : <div className='bg-red-200 border border-red-500 p-2 rounded text-sm'>Oops! Your cart is currently empty. <br />
                                     <Link href="/products" className='text-secondary font-semibold'>Click here </Link>to browse products and add items to your cart.</div>
@@ -134,7 +137,7 @@ function CartList() {
                 </div>
 
             </div>
-    </CustomSpinner>
+        </CustomSpinner>
     )
 }
 
@@ -147,8 +150,8 @@ const CartItem = ({ Id, Title, Photo, Desc, SalePrice, RegularPrice, removeFromC
         <div className='flex flex-col justify-between items-start gap-4 w-full'>
             <div>
 
-            <h2 className='font-semibold text-sm line-clamp-1'>{Title}</h2>
-            <p className='text-xs line-clamp-2 text-gray-500'>Brand : {Brand}</p>
+                <h2 className='font-semibold text-sm line-clamp-1'>{Title}</h2>
+                <p className='text-xs line-clamp-2 text-gray-500'>Brand : {Brand}</p>
             </div>
             <p className='text-xs line-clamp-2'>{Desc}</p>
             <Price regularPrice={RegularPrice} salePrice={SalePrice} />

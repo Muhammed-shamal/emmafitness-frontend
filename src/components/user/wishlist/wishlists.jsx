@@ -12,44 +12,31 @@ import { removeWishList, setWishList } from "../../../utility/redux/wishListSlic
 import { showToast } from '../../../utility/redux/toastSlice';
 import useAddAndRemoveCart from "../../../utility/useAddAndRemoveCart";
 import { productUrl } from "../../../utility/api/constant";
+import updateApi from "../../../utility/api/updateAPI";
 
 function WishLists() {
   const dispatch = useDispatch();
-  // const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user);
   const wishlist = useSelector(state => state.wishList);
   const { addCartHandle } = useAddAndRemoveCart();
-
-  // const [data, setData] = useState([]);
-  // const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const result = await fetchApi({
-  //         URI: `customers/wishlist/getBy/${user?.userId}`,
-  //         API_TOKEN: user?.token
-  //       });
-  //       console.log('wishistare', result);
-  //       setData(result.items || []);
-  //       dispatch(setWishList(result.items || []));
-  //     } catch (error) {
-  //       dispatch(showToast({ type: 'error', message: error.message || 'Failed to fetch wishlist' }));
-  //     }
-  //     setLoading(false);
-  //   };
-
-  //   if (user?.userId && user?.token) {
-  //     fetchData();
-  //   }
-  // }, [user?.userId, user?.token, currentWishlist, dispatch]);
 
   const handleButton = async ({ id, cart = false }) => {
     try {
       if (cart) addCartHandle({ ProductId: id });
-      //   await deleteAPI({ URI: `customers/wishlist/${id}`, token: user?.token });
+      let response = await updateApi({
+        URI: `customers/wishlist/remove`,
+        token: user.token,
+        isTop: true,
+        Data: {
+          productId: id,
+          userId: user?.userId
+        }
+      });
 
-      dispatch(removeWishList(id));
+      if (response.message) {
+        dispatch(removeWishList(id));
+        dispatch(showToast({ type: 'success', message: response.message }));
+      }
     } catch (err) {
       dispatch(showToast({ type: 'error', message: err.message || 'Failed to update wishlist' }));
     }
@@ -57,7 +44,7 @@ function WishLists() {
 
   const renderWishlistItem = (item) => {
     console.log("item", item)
-    const product = item?.productId;
+    const product = item?.product;
     if (!product) return null;
 
     return (
@@ -101,8 +88,15 @@ function WishLists() {
 
             <div className="flex flex-row gap-4 justify-end mt-2">
               <div
-                onClick={() => handleButton({ id: product._id, cart: true })}
-                className="hover:text-secondary hover:cursor-pointer"
+                onClick={() =>
+                  product.status !== 'Out of Stock' && product.stockQty > 0
+                    ? handleButton({ id: product._id, cart: true })
+                    : null
+                }
+                className={`${product.status === 'Out of Stock' || product.stockQty === 0
+                    ? 'text-gray-400 cursor-not-allowed'
+                    : 'hover:text-secondary hover:cursor-pointer'
+                  }`}
               >
                 <ShoppingCartOutlined /> Add to cart
               </div>
