@@ -19,7 +19,7 @@ export default function CategorySlider() {
           setSelected(data[0]); // Set default selected category after fetch
         }
       })
-      .catch(e => console.log(e))
+      .catch(e => console.error(e))
       .finally(() => setLoading(false));
   }, []);
 
@@ -35,7 +35,7 @@ export default function CategorySlider() {
             className={`flex flex-col items-center min-w-[80px] p-3 rounded-xl border 
               ${selected.id === cat.id ? 'bg-secondary text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
           >
-            <img src={cat.icon} alt={cat.name} className="w-10 h-10 mb-1" />
+            <img src={`${categoryUrl}/${cat.image}`} alt={cat.name} className="w-10 h-10 mb-1" />
             <span className="text-sm font-medium">{cat.name}</span>
           </button>
         ))}

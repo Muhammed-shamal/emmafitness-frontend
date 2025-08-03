@@ -9,28 +9,32 @@ import { useSelector } from "react-redux"
 import UserSession from "../user/userSessions"
 
 function SideBar() {
+  const [isHydrated, setIsHydrated] = useState(false);
   const [popup, setPopup] = useState(false)
   const routerPath = usePathname()
   const route = useRouter()
-
-
   const user = useSelector(state => state.user)
+
   useEffect(() => {
-    !user.userId ? setPopup(true) : setPopup(false)
-  }, [user])
+    // Simulate hydration delay
+    if (typeof user === 'object') {
+      setIsHydrated(true);
+    }
+  }, [user]);
 
-  const [menuVisible, setMenuVisible] = useState(false);
+  useEffect(() => {
+    if (isHydrated) {
+      setPopup(!user.userId);
+    }
+  }, [isHydrated, user]);
 
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
+  if (!isHydrated) {
+    return <div>Loading...</div>;
+  }
+
 
   return (
     <div>
-
-
-
-
       <Modal open={popup} onCancel={() => route.push('/')} footer={false}><UserSession Close={() => route.push('/user')} /></Modal>
       <div>
 

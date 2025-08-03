@@ -7,7 +7,7 @@ import { showToast } from "./redux/toastSlice"
 
 const useAddAndRemoveCart = () => {
   const cartDispatch = useDispatch()
-  const allCart = useSelector(state => state?.cart)
+  const allCart = useSelector(state => state.cart.items)
   const user = useSelector(state => state.user)
 
   const updateDatabase = async ({ token, userId, cartItem }) => {

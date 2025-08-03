@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { HeartOutlined, PhoneOutlined, ShoppingCartOutlined, UserAddOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { bulkReplaceCart } from '../../utility/redux/cartSlice'
+import { bulkReplaceCart, setCart } from '../../utility/redux/cartSlice'
 import { loggedIn } from '../../utility/redux/userSlice'
 import Dropdown from 'antd/es/dropdown/dropdown'
-import { Modal } from 'antd'
+import { Modal, Skeleton } from 'antd'
 import fetchApi from '../../utility/api/fetchApi'
 import { useSignOut } from '../../utility/userHandle'
 import UserSession from '../user/userSessions'
@@ -37,8 +37,6 @@ function Header() {
             URI: 'customers/me',
             API_TOKEN: token,
           });
-
-          console.log("response from auth me is", response);
 
           if (response?.customer) {
             dispatch(
@@ -88,7 +86,7 @@ function Header() {
   }, [dispatch]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchWishlist = async () => {
       setLoading(true);
       try {
         const result = await fetchApi({
@@ -109,11 +107,33 @@ function Header() {
     };
 
     if (user?.userId && user?.token) {
-      fetchData();
+      fetchWishlist();
     }
   }, [user?.userId, user?.token, dispatch]);
 
 
+  useEffect(() => {
+    const fetchCart = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchApi({
+          URI: `customers/cart/getBy/${user?.userId}`,
+          API_TOKEN: user?.token
+        });
+
+        // Flatten and assign only items
+        const cartItems = result?.items || [];
+        dispatch(setCart(cartItems));
+      } catch (error) {
+        console.error(error.message || 'Failed to fetch cart')
+      }
+      setLoading(false);
+    };
+
+    if (user?.userId && user?.token) {
+      fetchCart();
+    }
+  }, [user?.userId, user?.token, dispatch]);
 
   const items = user?.userId ?
     [{
@@ -183,24 +203,28 @@ function Header() {
             </Dropdown>
 
             {/* Wishlist */}
-            <Link href="/user/wishlist" className='hover:text-secondary'>
-              <div className='relative'>
-                <HeartOutlined className='text-red-500' />
-                <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
-                  {wishList.items?.length || 0}
+            <Skeleton loading={loading} active paragraph={false} title={false}>
+              <Link href="/user/wishlist" className='hover:text-secondary'>
+                <div className='relative'>
+                  <HeartOutlined className='text-red-500' />
+                  <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
+                    {wishList.items?.length || 0}
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </Skeleton>
 
             {/* Cart */}
-            <Link href="/cart" className='hover:text-secondary text-3xl'>
-              <div className='relative'>
-                <ShoppingCartOutlined className='text-red-500' />
-                <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
-                  {cart?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0) || 0}
+            <Skeleton loading={loading} active paragraph={false} title={false}>
+              <Link href="/cart" className='hover:text-secondary text-3xl'>
+                <div className='relative'>
+                  <ShoppingCartOutlined className='text-red-500' />
+                  <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
+                    {cart.items?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0) || 0}
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </Skeleton>
           </div>
         </div>
 

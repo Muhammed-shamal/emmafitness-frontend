@@ -6,7 +6,7 @@ import { useSelector } from "react-redux"
 import useAddAndRemoveCart from "../../utility/useAddAndRemoveCart"
 
 function CartButton({ ProductId }) {
-  const allCart = useSelector(state => state?.cart)
+  const allCart = useSelector(state => state.cart.items)
   const {addCartHandle, removeCartHandle} = useAddAndRemoveCart({ProductId})
   const thisCart = allCart?.filter(itm => itm.productId == ProductId)
   return (

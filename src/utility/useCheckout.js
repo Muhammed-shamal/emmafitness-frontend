@@ -10,12 +10,12 @@ const useCheckout = () => {
     if (!Array.isArray(cartItem) || cartItem.length === 0) return null
 
     // 📦 Prepare filter query
-    const query = cartItem
-      .map((item, idx) => `filters[id][$in][${idx}]=${item.productId}`)
-      .join('&')
+    // const query = cartItem
+    //   .map((item, idx) => `filters[id][$in][${idx}]=${item.productId}`)
+    //   .join('&')
 
     const productRes = await fetchApi({
-      URI: `public/products?${query}&populate=brand`,
+      URI: `public/products`,
     })
 
     const productData = productRes?.data || []

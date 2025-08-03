@@ -17,9 +17,7 @@ function WishListButton({ ProductId, label = false }) {
   const route = useRouter()
 
   const [popup, setPopup] = useState(false)
-  console.log("existingWish", existingWish);
-  console.log("exist", exist);
-
+  
   const wishListHandler = async () => {
     try {
       if (user?.token) {
@@ -47,15 +45,13 @@ function WishListButton({ ProductId, label = false }) {
           });
         }
 
-        // result.data should be the entire updated wishlist: { items: [...] }
         const updatedItems = result?.data?.items || [];
-        console.log('updated items new / old', updatedItems)
         wishlistDispatch(addToWishList(updatedItems));
       } else {
         setPopup(true);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 

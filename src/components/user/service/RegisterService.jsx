@@ -30,9 +30,6 @@ function RegisterService({ close }) {
             .catch(e => console.log(e))
     }, [])
 
-
-
-
     const [form] = Form.useForm();
 
     async function formHandle(e) {
@@ -69,8 +66,6 @@ function RegisterService({ close }) {
                 className="space-y-1"
             >
 
-
-
                 <Form.Item
                     name="Subject"
                     rules={[
@@ -100,10 +95,6 @@ function RegisterService({ close }) {
                         <Input.TextArea rows={4} placeholder="Enter Description" />
                     </label>
                 </Form.Item>
-
-
-
-
 
                 <label  >
                     Order
