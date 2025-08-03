@@ -11,6 +11,8 @@ import MovingBanner from '../components/movingBanner'
 import FilteredCategories from '../components/filteredCategories'
 import FAQ from '../components/faq'
 import Reviews from '../components/googleReviews'
+import HelpStayStrong from '../components/helpStayStrong'
+import StorePage from '../components/stores'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 export const metadata = {
@@ -21,7 +23,7 @@ export const metadata = {
 // 👇 Server-side data fetching
 async function fetchSafeApi(endpoint) {
   try {
-    const res = await fetch(`http://localhost:1000/api/${endpoint}`, {
+    const res = await fetch(`https://emmafitness-server.onrender.com/api/${endpoint}`, {
       cache: 'no-store',
     });
 
@@ -77,8 +79,12 @@ export default async function Page() {
 
       <SubBanner />
 
-      <FilteredCategories />
+      {/* <FilteredCategories /> */}
       <MovingBanner />
+
+      <HelpStayStrong />
+
+      <StorePage />
       <Reviews />
 
       <div className='p-5'>
