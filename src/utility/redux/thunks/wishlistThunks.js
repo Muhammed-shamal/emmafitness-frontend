@@ -28,7 +28,7 @@ export const addWishlistItem = createAsyncThunk(
 export const removeWishlistItem = createAsyncThunk(
   'wishlist/removeItem',
   async ({ userId, productId }, { dispatch }) => {
-    const { data } = await axios.put('/wishlist/remove', { userId, productId });
+    const { data } = await updateApi({ URI: `customers/wishlist/remove`, token: user.token });
     dispatch(setWishList(data.data.items));
   }
 );

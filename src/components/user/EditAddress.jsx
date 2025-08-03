@@ -6,7 +6,6 @@ import fetchApi from "../../utility/api/fetchApi";
 import { useSelector } from "react-redux";
 
 function EditAddress({ Data, close }) {
-    console.log('data is ', Data)
     const [result, setResult] = useState({ loading: false, err: false, msg: '' });
     const [emirates, setEmirates] = useState([]);
     const [emiratesLoading, setEmiratesLoading] = useState(false);

@@ -22,7 +22,6 @@ const deleteApi = async ({ URI, token }) => {
     throw new Error(message);
   }
 
-  console.log('Delete API response:', result);
   return await result.json();
 };
 

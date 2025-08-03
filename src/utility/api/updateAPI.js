@@ -25,7 +25,6 @@ const updateApi = async ({ URI, Data = {}, isTop = false, token }) => {
     throw new Error(message);
   }
 
-  console.log('Update API response:', result);
   return await result.json();
 };
 

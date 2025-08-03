@@ -26,7 +26,15 @@ function WishListButton({ ProductId, label = false }) {
         let result;
 
         if (exist) {
-          result = await updateApi({ URI: `customers/wishlist/remove`, token: user.token });
+          result = await updateApi({
+            URI: `customers/wishlist/remove`,
+            token: user.token,
+            isTop: true,
+            Data: {
+              productId: ProductId,
+              userId: user?.userId
+            }
+          });
         } else {
           result = await PostAPI({
             URI: "customers/wishlist/add",
@@ -39,10 +47,10 @@ function WishListButton({ ProductId, label = false }) {
           });
         }
 
+        // result.data should be the entire updated wishlist: { items: [...] }
         const updatedItems = result?.data?.items || [];
-
-        wishlistDispatch(addToWishList({ items: updatedItems })); // updated reducer
-
+        console.log('updated items new / old', updatedItems)
+        wishlistDispatch(addToWishList(updatedItems));
       } else {
         setPopup(true);
       }
@@ -51,13 +59,17 @@ function WishListButton({ ProductId, label = false }) {
     }
   };
 
+
   return (
     <>
       <Modal open={popup} onCancel={() => setPopup(false)} footer={false}><UserSession Close={() => route.push('/user')} /></Modal>
-      <Button onClick={wishListHandler}
-        className={`text-secondary`}
+      <Button
+        onClick={wishListHandler}
+        className={`text-secondary hover:text-red-500`}
         icon={exist ? <HeartFilled /> : <HeartOutlined />}
-      >{label && "Add to wishlist"}</Button>
+      >
+        {label && "Add to wishlist"}
+      </Button>
     </>
   )
 }

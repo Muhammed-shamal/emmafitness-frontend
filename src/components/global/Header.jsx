@@ -18,16 +18,16 @@ import { showToast } from '../../utility/redux/toastSlice'
 
 
 function Header() {
-    const dispatch = useDispatch()
-    const cart = useSelector(state => state.cart)
-    const wishList = useSelector(state => state.wishList)
-    const user = useSelector(state => state.user)
-    const signOut = useSignOut()
+  const dispatch = useDispatch()
+  const cart = useSelector(state => state.cart)
+  const wishList = useSelector(state => state.wishList)
+  const user = useSelector(state => state.user)
+  const signOut = useSignOut()
 
-    const [loading,setLoading] = useState(false);
-    const [popup, setPopup] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [popup, setPopup] = useState(false)
 
-   useEffect(() => {
+  useEffect(() => {
     const token = sessionStorage.getItem('token');
 
     const restoreUser = async () => {
@@ -38,7 +38,7 @@ function Header() {
             API_TOKEN: token,
           });
 
-          console.log("response from auth me is",response);
+          console.log("response from auth me is", response);
 
           if (response?.customer) {
             dispatch(
@@ -95,10 +95,15 @@ function Header() {
           URI: `customers/wishlist/getBy/${user?.userId}`,
           API_TOKEN: user?.token
         });
-        console.log('wishistare', result);
-        dispatch(setWishList(result.items || []));
+
+        // Flatten and assign only items
+        const wishlistItems = result?.items || [];
+        dispatch(setWishList(wishlistItems));
       } catch (error) {
-        dispatch(showToast({ type: 'error', message: error.message || 'Failed to fetch wishlist' }));
+        dispatch(showToast({
+          type: 'error',
+          message: error.message || 'Failed to fetch wishlist'
+        }));
       }
       setLoading(false);
     };
@@ -109,110 +114,111 @@ function Header() {
   }, [user?.userId, user?.token, dispatch]);
 
 
-    const items = user?.userId ?
-        [{
-            key: '1',
-            label: (<Link rel="noreferrer" href="/user"> Hi, {user?.userName} </Link>),
-        },
-        {
-            key: '2',
-            label: (<Link rel="noreferrer" href="/user/order"> Order History </Link>),
-        },
-        {
-            key: '3',
-            label: (<Link rel="noreferrer" href="/user/address"> Address </Link>),
-        },
-        {
-            key: '4',
-            label: (<Link rel="noreferrer" href="/user/service">Service Request</Link>),
-        },
-        {
-            key: '5',
-            label: (<Link rel="noreferrer" href="/user/profile"> Profile</Link>),
-        },
-        {
-            key: '6',
-            label: (<span onClick={() => signOut()} > Logout</span>),
-        }
-        ] :
-        [{
-            key: '7',
-            label: (<div onClick={() => setPopup(!popup)} className='w-24'> Login </div>),
-        }
-        ]
 
-    return (
-        <>
-            {popup && (
-                <Modal open={true} onCancel={() => setPopup(false)} footer={false}>
-                    <UserSession Close={() => setPopup(false)} />
-                </Modal>
-            )}
+  const items = user?.userId ?
+    [{
+      key: '1',
+      label: (<Link rel="noreferrer" href="/user"> Hi, {user?.userName} </Link>),
+    },
+    {
+      key: '2',
+      label: (<Link rel="noreferrer" href="/user/order"> Order History </Link>),
+    },
+    {
+      key: '3',
+      label: (<Link rel="noreferrer" href="/user/address"> Address </Link>),
+    },
+    {
+      key: '4',
+      label: (<Link rel="noreferrer" href="/user/service">Service Request</Link>),
+    },
+    {
+      key: '5',
+      label: (<Link rel="noreferrer" href="/user/profile"> Profile</Link>),
+    },
+    {
+      key: '6',
+      label: (<span onClick={() => signOut()} > Logout</span>),
+    }
+    ] :
+    [{
+      key: '7',
+      label: (<div onClick={() => setPopup(!popup)} className='w-24'> Login </div>),
+    }
+    ]
 
-            <div className='bg-lightPrimary text-black sticky top-0 z-50 shadow-md'>
-                <div className='container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 py-2'>
+  return (
+    <>
+      {popup && (
+        <Modal open={true} onCancel={() => setPopup(false)} footer={false}>
+          <UserSession Close={() => setPopup(false)} />
+        </Modal>
+      )}
 
-                    {/* Logo */}
-                    <Link href="/">
-                        <Image src="/logos/emma_logo.svg" width={200} height={65} alt='Emma Fitness Logo' />
-                    </Link>
+      <div className='bg-lightPrimary text-black sticky top-0 z-50 shadow-md'>
+        <div className='container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 py-2'>
 
-                    {/* Search bar - Desktop */}
-                    <div className='flex-1 hidden md:block'>
-                        <Search />
-                    </div>
+          {/* Logo */}
+          <Link href="/">
+            <Image src="/logos/emma_logo.svg" width={200} height={65} alt='Emma Fitness Logo' />
+          </Link>
 
-                    {/* Phone number */}
-                    <div className='hidden md:flex items-center gap-2 font-bold text-sm'>
-                        <PhoneOutlined className='text-secondary' />
-                        <Link href="tel:+91 8304912033">
-                            +91 8304912033</Link>
-                    </div>
+          {/* Search bar - Desktop */}
+          <div className='flex-1 hidden md:block'>
+            <Search />
+          </div>
 
-                    {/* Icons */}
-                    <div className='text-xl md:text-2xl font-bold flex flex-row gap-4 cursor-pointer items-center'>
-                        {/* User */}
-                        <Dropdown menu={{ items }} placement='top' arrow>
-                            <UserAddOutlined className='text-red-500' />
-                        </Dropdown>
+          {/* Phone number */}
+          <div className='hidden md:flex items-center gap-2 font-bold text-sm'>
+            <PhoneOutlined className='text-secondary' />
+            <Link href="tel:+91 8304912033">
+              +91 8304912033</Link>
+          </div>
 
-                        {/* Wishlist */}
-                        <Link href="/user/wishlist" className='hover:text-secondary'>
-                            <div className='relative'>
-                                <HeartOutlined className='text-red-500' />
-                                <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
-                                    {wishList.items?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0)}
-                                </div>
-                            </div>
-                        </Link>
+          {/* Icons */}
+          <div className='text-xl md:text-2xl font-bold flex flex-row gap-4 cursor-pointer items-center'>
+            {/* User */}
+            <Dropdown menu={{ items }} placement='top' arrow>
+              <UserAddOutlined className='text-red-500' />
+            </Dropdown>
 
-                        {/* Cart */}
-                        <Link href="/cart" className='hover:text-secondary text-3xl'>
-                            <div className='relative'>
-                                <ShoppingCartOutlined className='text-red-500' />
-                                <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
-                                    {cart?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0) || 0}
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
+            {/* Wishlist */}
+            <Link href="/user/wishlist" className='hover:text-secondary'>
+              <div className='relative'>
+                <HeartOutlined className='text-red-500' />
+                <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
+                  {wishList.items?.length || 0}
                 </div>
+              </div>
+            </Link>
 
-                {/* Mobile View: Search and Phone */}
-                <div className='block md:hidden container pb-2'>
-                    <div className='mb-2'><Search /></div>
-                    <div className='flex items-center gap-2 text-sm'>
-                        <PhoneOutlined className='text-secondary' />
-                        <Link href="tel:+91 8304912033">
-                            +91 8304912033</Link>
-                    </div>
+            {/* Cart */}
+            <Link href="/cart" className='hover:text-secondary text-3xl'>
+              <div className='relative'>
+                <ShoppingCartOutlined className='text-red-500' />
+                <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
+                  {cart?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0) || 0}
                 </div>
+              </div>
+            </Link>
+          </div>
+        </div>
 
-                {/* Category List */}
-                <CategoryNav />
-            </div>
-        </>
-    )
+        {/* Mobile View: Search and Phone */}
+        <div className='block md:hidden container pb-2'>
+          <div className='mb-2'><Search /></div>
+          <div className='flex items-center gap-2 text-sm'>
+            <PhoneOutlined className='text-secondary' />
+            <Link href="tel:+91 8304912033">
+              +91 8304912033</Link>
+          </div>
+        </div>
+
+        {/* Category List */}
+        <CategoryNav />
+      </div>
+    </>
+  )
 
 }
 

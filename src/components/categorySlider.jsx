@@ -14,7 +14,6 @@ export default function CategorySlider() {
     fetchApi({ URI: 'public/banner-categories' })
       .then(res => {
         const data = res?.data || [];
-        console.log("data is",data)
         setBannerCategories(data);
         if (data.length > 0) {
           setSelected(data[0]); // Set default selected category after fetch
