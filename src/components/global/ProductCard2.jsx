@@ -1,7 +1,6 @@
 import Image from "next/legacy/image"
 import Price from "./Price"
 import Link from "next/link"
-import moment from "moment"
 import OffLabel from './label/OffLabel'
 import WishListButton from "./WishListButton"
 
