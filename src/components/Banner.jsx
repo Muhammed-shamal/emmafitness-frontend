@@ -5,12 +5,13 @@ import { bannerUrl } from '../utility/api/constant'
 
 export default function Banner({ image, title, description }) {
   return (
-    <section className="relative w-full h-[400px] md:h-[500px] overflow-hidden mt-2 mb-3">
+    <section className="relative w-full h-[400px] md:h-[600px] overflow-hidden mt-2 mb-3">
       {/* Background Image */}
       <Image
         src={`${bannerUrl}/${image}`}
         alt="Fitness Banner"
-        fill
+        width={1920}
+        height={800}
         priority
         className="object-center object-cover brightness-75 transition-all duration-300 hover:brightness-100"
       />
@@ -26,7 +27,7 @@ export default function Banner({ image, title, description }) {
           </p>
           <Link href="/products">
             <button className="bg-secondary hover:bg-white hover:text-secondary transition-all px-6 py-3 mt-5 text-white font-semibold rounded-full">
-              Shop Now
+              View All Products
             </button>
           </Link>
         </div>

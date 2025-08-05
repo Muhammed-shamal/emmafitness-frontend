@@ -56,7 +56,7 @@ function OurBrands() {
   if (data.length === 1) {
     const brand = data[0];
     return (
-      <div className="w-full bg-gradient-to-r from-gray-100 via-white to-gray-100 py-10 px-4 rounded shadow-md">
+      <div className="w-full bg-gradient-to-r from-gray-100 via-white to-gray-100 py-10 px-4 shadow-md">
         <div className="max-w-5xl mx-auto text-center flex flex-col items-center gap-4">
           <Image
             src={brand.url}

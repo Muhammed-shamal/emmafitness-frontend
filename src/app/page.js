@@ -8,22 +8,25 @@ import NewProducts from '../components/home/NewProducts'
 import Title from '../components/global/Title'
 import SubBanner from '../components/subBanner'
 import MovingBanner from '../components/movingBanner'
-import FilteredCategories from '../components/filteredCategories'
+// import FilteredCategories from '../components/filteredCategories'
+import SmallCards from '../components/smallCards';
 import FAQ from '../components/faq'
 import Reviews from '../components/googleReviews'
 import HelpStayStrong from '../components/helpStayStrong'
 import StorePage from '../components/stores'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { Col, Row } from 'antd'
 
 export const metadata = {
   title: 'Top Fitness Brands at Competitive Prices: Shop Now at Emma Fitness in Dubai & Sharjah',
   description: 'Emma Fitness provides premium fitness equipment for homes and gyms in Dubai & Sharjah. Shop top brands, get expert advice, and enjoy exceptional service.',
 }
 
+
 // 👇 Server-side data fetching
 async function fetchSafeApi(endpoint) {
   try {
-    const res = await fetch(`https://emmafitness-server.onrender.com/api/${endpoint}`, {
+    const res = await fetch(`http://localhost:1000/api/${endpoint}`, {
       cache: 'no-store',
     });
 
@@ -38,13 +41,15 @@ async function fetchSafeApi(endpoint) {
 
 export default async function Page() {
   // 👇 fetch server-side before render
-  const [featuredProducts, newArrivals, banner, trendingProducts] = await Promise.all([
+  const [featuredProducts, newArrivals, banner, trendingProducts, cheapest] = await Promise.all([
     fetchSafeApi('public/products/featured'),
     fetchSafeApi('public/products/new'),
     fetchSafeApi('public/banner'),
     fetchSafeApi('public/products/trending'),
+    fetchSafeApi('public/products/cheapest')
   ])
 
+  console.log('Slug chepest',cheapest)
   return (
     <main className='container space-y-2 md:space-y-4'>
       {banner && <Banner title={banner.title} description={banner.description} image={banner.image} />}
@@ -82,6 +87,17 @@ export default async function Page() {
       {/* <FilteredCategories /> */}
       <MovingBanner />
 
+      {cheapest.length > 0 && <div style={{ padding: '40px 20px' }}>
+        <Title titlePart1={'Small'} titlePart2={'Budget'} />
+        <Row gutter={[24, 24]}>
+          {cheapest.map((product, index) => (
+            <Col key={index} xs={24} sm={12} md={8}>
+              <SmallCards product={product} />
+            </Col>
+          ))}
+        </Row>
+      </div>}
+
       <HelpStayStrong />
 
       <StorePage />
@@ -102,6 +118,9 @@ export default async function Page() {
           <FAQ />
         </div>
       </div>
+
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5872586466508!2d55.4440232!3d25.284466299999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ef5f58681ae533f%3A0x791a34995fa3d39e!2sEmma%20Fitness%20Gym%20Equipments%20Commercial%20and%20Home!5e0!3m2!1sen!2sin!4v1754233183285!5m2!1sen!2sin"
+        width="100%" height="600" style={{ border: 0 }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </main>
   )
 }
