@@ -2,7 +2,7 @@
 
 import { productUrl } from "../../utility/api/constant"
 import ProductCard2 from "../global/ProductCard2"
-import SkeletonGrid from '../global/SkeletonGrid'
+import SkeletonGrid from '../global/skeletons/SkeletonGrid'
 
 function FeaturedProducts({ products = [] }) {
   const loading = products.length === 0;

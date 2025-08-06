@@ -8,10 +8,12 @@ import { Autoplay } from 'swiper/modules'; // For Swiper v9+
 import SeasonalHeader from './seasonalHeader'
 import fetchApi from '../utility/api/fetchApi';
 import { productUrl } from '../utility/api/constant';
+import ProductCardSkeleton from './global/skeletons/productSlider';
 
 const { Title, Text } = Typography;
 
 const ProductSlider = () => {
+    const [loading,setLoading] = useState(true);
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -21,7 +23,7 @@ const ProductSlider = () => {
                 setProducts(response);
             } catch (error) {
                 console.error(error);
-            }
+            }finally{setLoading(false)}
         };
 
         fetchTopProducts();
@@ -29,7 +31,6 @@ const ProductSlider = () => {
 
 
     const getImage = (product) => {
-        console.log("product image",product)
         return product.images && product.images.length > 0
             ? `${productUrl}/${product.images[0]}` // adjust this path as per your backend
             : '/product-placehold.png'; // fallback image
@@ -54,7 +55,7 @@ const ProductSlider = () => {
                     1280: { slidesPerView: 4 },
                 }}
             >
-                {products.map((product, index) => (
+                {loading ? <ProductCardSkeleton /> : products.map((product, index) => (
                     <SwiperSlide key={product._id || index}>
                         <div
                             style={{

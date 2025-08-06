@@ -1,7 +1,7 @@
 'use client'
 import ProductCard from "../global/ProductCard"
 import { productUrl } from "../../utility/api/constant"
-import SkeletonGrid from '../global/SkeletonGrid'
+import SkeletonGrid from '../global/skeletons/SkeletonGrid'
 function NewProducts({ products = [] }) {
   const loading = products.length === 0;
 

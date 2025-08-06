@@ -33,7 +33,7 @@ function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUr
                             e.target.onerror = null;
                             e.target.src = "/product-placehold.png";
                         }}
-                        fill
+                        fill="true"
                         className="object-contain mix-blend-darken group-hover:scale-105 transition-transform duration-300"
                     />
                 </div>

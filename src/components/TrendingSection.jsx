@@ -1,5 +1,6 @@
 
 'use client';
+import SkeletonGrid from './global/skeletons/SkeletonGrid'
 
 export default function TrendingSection({ products = [] }) {
   const loading = products.length === 0;

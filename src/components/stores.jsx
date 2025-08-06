@@ -1,40 +1,30 @@
 'use client';
 
-import { Row, Col, Card, Typography } from 'antd';
+import { Row, Col, Card, Typography, Empty } from 'antd';
+import { useEffect, useState } from 'react';
+import fetchApi from '../utility/api/fetchApi';
+import StoreCardSkeleton from './global/skeletons/store'
 const { Title } = Typography;
 
-const stores = [
-  {
-    id: 1,
-    image: '/stores/store1.jpg',
-    title: 'Muroor Road, Al Falah Street',
-    address: 'Maleha St - Warehouses Land - Industrial Area - Sharjah - United Arab Emirates',
-    phone: '+971 559457419',
-  },
-//   {
-//     id: 2,
-//     image: '/stores/store2.jpg',
-//     title: 'Manama St, Ras Al Khor',
-//     address: 'Hamadi Building, Ras Al Khor Industrial Area 1, Dubai',
-//     phone: '+971 56 737 5433',
-//   },
-//   {
-//     id: 3,
-//     image: '/stores/store3.jpg',
-//     title: 'Al Khobar, Dammam',z
-//     address: 'Naif Bin Rubian Tower, King Khaled Street, Al Khobar Al Shamalia',
-//     phone: '+966 53 218 9990',
-//   },
-//   {
-//     id: 4,
-//     image: '/stores/store4.jpg',
-//     title: 'Al Quoz 3, Sheikh Zayed Road',
-//     address: 'Shop No.1, The Curve Building, Sheikh Zayed Road, Dubai',
-//     phone: '+971 54 581 6298',
-//   },
-];
-
 export default function StorePage() {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchApi({ URI: "public/stores" });
+        console.log("store response", response)
+        setData(response.data);
+      } catch (error) {
+        console.error('Error fetching stores:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [])
   return (
     <div style={{ padding: '40px' }}>
       <Title level={2} style={{ textAlign: 'center', marginBottom: 40 }}>
@@ -42,18 +32,35 @@ export default function StorePage() {
       </Title>
 
       <Row gutter={[24, 24]} justify="center">
-        {stores.map((store) => (
-          <Col xs={24} sm={12} md={8} lg={6} key={store.id}>
-            <Card
-              hoverable
-              cover={<img alt={store.title} src={store.image} style={{ height: 200, objectFit: 'cover' }} />}
-            >
-              <h3>{store.title}</h3>
-              <p>{store.address}</p>
-              <p>📞 {store.phone}</p>
-            </Card>
+        {loading ? (
+          // Show multiple skeletons while loading
+          Array.from({ length: 4 }).map((_, index) => <StoreCardSkeleton key={index} />)
+        ) : data && data.length > 0 ? (
+          // Show actual store cards
+          data.map((store) => (
+            <Col xs={24} sm={12} md={8} lg={6} key={store.id}>
+              <Card
+                hoverable
+                cover={
+                  <img
+                    alt={store.title}
+                    src={store.image}
+                    style={{ height: 200, objectFit: 'cover' }}
+                  />
+                }
+              >
+                <h3>{store.title}</h3>
+                <p>{store.address}</p>
+                <p>📞 {store.phone}</p>
+              </Card>
+            </Col>
+          ))
+        ) : (
+          // Show empty state
+          <Col span={24} style={{ textAlign: 'center', marginTop: 40 }}>
+            <Empty description="No stores found" />
           </Col>
-        ))}
+        )}
       </Row>
     </div>
   );
