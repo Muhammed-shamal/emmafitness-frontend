@@ -7,6 +7,8 @@ import FeaturedProducts from '../components/home/FeaturedProducts'
 import NewProducts from '../components/home/NewProducts'
 import Title from '../components/global/Title'
 import SubBanner from '../components/subBanner'
+import SubBanner2 from '../components/subBanner2'
+import SmallBanner from '../components/smallBanner'
 import MovingBanner from '../components/movingBanner'
 // import FilteredCategories from '../components/filteredCategories'
 import SmallCards from '../components/smallCards';
@@ -60,7 +62,7 @@ export default async function Page() {
         </section>
       </>)}
 
-      
+
       <section><OurBrands /></section>
 
       {featuredProducts.length > 0 && (
@@ -81,8 +83,9 @@ export default async function Page() {
         </section>
       </>)}
 
-      <SubBanner />
-      
+      {/* <SubBanner /> */}
+      <SmallBanner />
+      <SubBanner2 />
       <MovingBanner />
 
       {cheapest.length > 0 && <div style={{ padding: '40px 20px' }}>

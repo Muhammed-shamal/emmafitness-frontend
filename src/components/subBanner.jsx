@@ -38,18 +38,6 @@ function SubBanner() {
                     </Col>
                 </Row>
             </div>
-
-            {/* Categories */}
-            {/* <div style={{ background: '#fff', padding: '40px 20px', textAlign: 'center' }}>
-                <Title level={3}>Explore Categories</Title>
-                <div style={{ marginTop: 20 }}>
-                    {['Home Gym', 'Functional Trainer', 'Smith Machine', 'Multi-Gym'].map((category) => (
-                        <Button key={category} type="default" size="large" style={{ margin: '10px' }}>
-                            {category}
-                        </Button>
-                    ))}
-                </div>
-            </div> */}
         </div>
     );
 }

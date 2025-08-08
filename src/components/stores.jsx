@@ -4,6 +4,7 @@ import { Row, Col, Card, Typography, Empty } from 'antd';
 import { useEffect, useState } from 'react';
 import fetchApi from '../utility/api/fetchApi';
 import StoreCardSkeleton from './global/skeletons/store'
+import { storeUrl } from '../utility/api/constant';
 const { Title } = Typography;
 
 export default function StorePage() {
@@ -14,8 +15,7 @@ export default function StorePage() {
     const fetchData = async () => {
       try {
         const response = await fetchApi({ URI: "public/stores" });
-        console.log("store response", response)
-        setData(response.data);
+        setData(response);
       } catch (error) {
         console.error('Error fetching stores:', error);
       } finally {
@@ -44,7 +44,7 @@ export default function StorePage() {
                 cover={
                   <img
                     alt={store.title}
-                    src={store.image}
+                    src={storeUrl + '/' + store.image}
                     style={{ height: 200, objectFit: 'cover' }}
                   />
                 }
