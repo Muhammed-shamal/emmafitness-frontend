@@ -46,9 +46,8 @@ export default function CategorySlider() {
       <div className="relative">
         <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
           {bannerCategories.map((cat, index) => (
-            <Link href={`/productByCategory/${encodeURIComponent(cat.id)}`}>
+            <Link href={`/productByCategory/${encodeURIComponent(cat.id)}`} key={index}>
               <motion.div
-                key={index}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex flex-col items-center min-w-[120px]"
@@ -103,9 +102,8 @@ export default function CategorySlider() {
           >
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {hoveredCategory.children.map((sub, index) => (
-                <Link href={`/productByCategory/${encodeURIComponent(sub.id)}`}>
+                <Link href={`/productByCategory/${encodeURIComponent(sub.id)}`} key={index}>
                   <motion.div
-                    key={index}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}

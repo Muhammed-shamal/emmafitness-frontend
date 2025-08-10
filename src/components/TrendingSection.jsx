@@ -1,5 +1,7 @@
 
 'use client';
+import { productUrl } from '../utility/api/constant';
+import ProductCard2 from './global/ProductCard2';
 import SkeletonGrid from './global/skeletons/SkeletonGrid'
 
 export default function TrendingSection({ products = [] }) {
