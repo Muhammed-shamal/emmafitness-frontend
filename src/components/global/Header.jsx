@@ -191,8 +191,8 @@ function Header() {
           {/* Phone number */}
           <div className='hidden md:flex items-center gap-2 font-bold text-sm'>
             <PhoneOutlined className='text-secondary' />
-            <Link href="tel:+91 8304912033">
-              +91 8304912033</Link>
+            <Link href="tel:+971 563296585">
+              +971 563296585</Link>
           </div>
 
           {/* Icons */}

@@ -35,9 +35,9 @@ import CustomSpinner from "../../components/global/CustomSpinner"
 
   return (
     <div className='container flex flex-row gap-4 my-4'>
-      <div className='hidden md:block border-r border-r-gray-300'>
+      {/* <div className='hidden md:block border-r border-r-gray-300'>
         <Filter />
-      </div>
+      </div> */}
       <div className='flex-1'>
         <div className='w-full md:w-[70vw] bg-white p-2'>
         <OurBrands/>

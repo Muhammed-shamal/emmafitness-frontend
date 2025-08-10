@@ -61,9 +61,9 @@ function Page() {
   return (
     <div className='container flex flex-row gap-4 my-4'>
       <div className='border-r border-r-gray-300 hidden md:block'>
-        <div className="w-52 pr-2 flex flex-col gap-4">
+        {/* <div className="w-52 pr-2 flex flex-col gap-4">
           <Filter maxAmount={maxAmount} />
-        </div>
+        </div> */}
       </div>
       <div className='flex-1'>
         <div>

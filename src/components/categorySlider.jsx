@@ -88,7 +88,7 @@ export default function CategorySlider() {
                     transition={{ type: 'spring', stiffness: 300 }}
                     className="mt-1"
                   >
-                    <svg
+                    {/* <svg
                       width="20"
                       height="10"
                       viewBox="0 0 20 10"
@@ -101,7 +101,7 @@ export default function CategorySlider() {
                         strokeWidth="2"
                         strokeLinecap="round"
                       />
-                    </svg>
+                    </svg> */}
                   </motion.div>
                 )}
               </motion.div>

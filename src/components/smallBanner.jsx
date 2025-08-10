@@ -105,15 +105,8 @@ export default function SmallBanner() {
               <Button
                 type="primary"
                 shape="round"
+                href={`/products`}
                 size="middle"
-                style={{
-                  background: 'linear-gradient(90deg, #ff4d4f 0%, #f5222d 100%)',
-                  border: 'none',
-                  fontWeight: 600,
-                  padding: '0 20px',
-                  height: '36px',
-                  boxShadow: '0 2px 10px rgba(245, 34, 45, 0.3)'
-                }}
                 icon={<RightOutlined style={{ fontSize: '12px' }} />}
               >
                 Shop Now

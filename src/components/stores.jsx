@@ -52,7 +52,7 @@ export default function StorePage() {
                 <h3>{store.title}</h3>
                 <p>{store.address}</p>
                 <p>
-                  📞 <a href={`tel:${store.phone}`}>{store.phone}</a>
+                  📞 <a href={`tel:+971${store.phone}`}>{store.phone}</a>
                 </p>
 
               </Card>

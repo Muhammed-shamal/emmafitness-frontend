@@ -37,9 +37,9 @@ function Page() {
 
   return (
     <div className='container flex flex-row gap-4 my-4'>
-      <div className='hidden md:block border-r border-r-gray-300'>
+      {/* <div className='hidden md:block border-r border-r-gray-300'>
         <Filter categories={false} />
-      </div>
+      </div> */}
       <div className='flex-1'>
         <div className='w-full md:w-[70vw]  p-2 bg-white max-h-52 overflow-hidden'>
           <CategoryList />

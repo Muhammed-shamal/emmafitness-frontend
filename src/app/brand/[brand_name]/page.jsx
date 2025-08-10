@@ -37,9 +37,9 @@ function Page() {
 
   return (
     <div className='container flex flex-row gap-4 my-4'>
-      <div className='border-r border-r-gray-300'>
+      {/* <div className='border-r border-r-gray-300'>
         <Filter brand={false} />
-      </div>
+      </div> */}
 
 
       <CustomSpinner spinning={loading}>
