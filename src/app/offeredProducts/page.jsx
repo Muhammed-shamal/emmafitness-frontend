@@ -132,8 +132,7 @@ const ProductsByOfferPage = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
 
     }
-
-    console.log("filteredProducts", filteredProducts)
+    
     return (
         <div style={{ padding: 24 }}>
             {currentOffer && (
@@ -150,9 +149,9 @@ const ProductsByOfferPage = () => {
                 <Spin size="large" style={{ display: 'block', margin: '40px auto' }} />
             ) : (
                 <Row gutter={[16, 16]}>
-                    {(offerId ? filteredProducts : products).map((product) => (
+                    {(offerId ? filteredProducts : products).map((product,index) => (
                         <PremiumProductCard product={product}
-                            onAddToCart={() => console.log('Add to cart', product._id)} />
+                            onAddToCart={() => console.log('Add to cart', product._id)} key={index}/>
                     ))}
                 </Row>
             )}
