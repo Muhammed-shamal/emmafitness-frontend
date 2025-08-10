@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import TitleWithSort from "./TitleWithSort"
 import { productUrl } from "../../utility/api/constant"
-import ProductCard2 from "../global/productCard2"
+import ProductCard from "../global/ProductCard"
 
 
 function ProductsList({ products }) {
@@ -38,7 +38,7 @@ function ProductsList({ products }) {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
         {
           product && product?.map((product, idx) =>
-            <ProductCard2 key={idx}
+            <ProductCard key={idx}
               Id={product.id}
               Title={product?.name}
               Category={product?.category}
