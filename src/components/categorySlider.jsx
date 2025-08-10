@@ -45,10 +45,10 @@ export default function CategorySlider() {
       {/* Horizontal Slider */}
       <div className="relative">
         <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
-          {bannerCategories.map((cat) => (
+          {bannerCategories.map((cat, index) => (
             <Link href={`/productByCategory/${encodeURIComponent(cat.id)}`}>
               <motion.div
-                key={cat.id}
+                key={index}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex flex-col items-center min-w-[120px]"
@@ -77,33 +77,6 @@ export default function CategorySlider() {
                     {cat.name}
                   </span>
                 </div>
-
-                {/* Animated dropdown indicator */}
-                {cat.children?.length > 0 && (
-                  <motion.div
-                    animate={{
-                      y: hoveredCategory?.id === cat.id ? 5 : 0,
-                      opacity: hoveredCategory?.id === cat.id ? 1 : 0.5
-                    }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                    className="mt-1"
-                  >
-                    {/* <svg
-                      width="20"
-                      height="10"
-                      viewBox="0 0 20 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M1 1L10 9L19 1"
-                        stroke="#4B5563"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                    </svg> */}
-                  </motion.div>
-                )}
               </motion.div>
             </Link>
           ))}
