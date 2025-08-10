@@ -233,8 +233,8 @@ function Header() {
           <div className='mb-2'><Search /></div>
           <div className='flex items-center gap-2 text-sm'>
             <PhoneOutlined className='text-secondary' />
-            <Link href="tel:+91 8304912033">
-              +91 8304912033</Link>
+            <Link href="tel:+971 563296585">
+              +971 563296585</Link>
           </div>
         </div>
 
