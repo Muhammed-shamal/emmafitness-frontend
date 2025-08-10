@@ -59,7 +59,6 @@ function Page() {
         console.log(err)
       } finally {
         setLoading(false)
-
       }
     }
     fetch()
@@ -70,9 +69,7 @@ function Page() {
     setPagination(prv => ({ ...prv, pageNo }))
     setReload(rl => !rl)
     window.scrollTo({ top: 0, behavior: "smooth" });
-
   }
-
 
   return (
     <div className='container flex flex-row gap-4 my-4'>

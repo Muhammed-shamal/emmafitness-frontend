@@ -51,7 +51,10 @@ export default function StorePage() {
               >
                 <h3>{store.title}</h3>
                 <p>{store.address}</p>
-                <p>📞 {store.phone}</p>
+                <p>
+                  📞 <a href={`tel:${store.phone}`}>{store.phone}</a>
+                </p>
+
               </Card>
             </Col>
           ))

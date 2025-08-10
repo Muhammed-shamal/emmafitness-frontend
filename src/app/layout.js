@@ -2,6 +2,7 @@
 // import { Gothic_A1 } from 'next/font/google';
 import '../../theme/global.css'
 import Currency from '../components/currency'
+import ServiceTicker from  '../components/serviceTicker'
 import Header from '../components/global/Header';
 import Footer from '../components/global/footer/Footer';
 import { Providers } from '../utility/redux/provider'
@@ -33,7 +34,8 @@ export default function RootLayout({ children }) {
             <Toaster position="top-right" />
             <ToastListener />
             <header className='sticky top-0 z-50'>
-              <Currency />
+              {/* <Currency /> */}
+              <ServiceTicker />
               <Header />
             </header>
             {/* <NavMenu /> */}

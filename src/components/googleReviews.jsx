@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from "react";
-import { Card, Button, Rate, Row, Col, Typography, Avatar } from "antd";
+import React, { useEffect, useState } from "react";
+import { Card, Button, Rate, Row, Col, Typography, Avatar, Skeleton } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
@@ -31,8 +31,16 @@ function getInitials(name) {
 
 export default function Reviews() {
   const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const displayedReviews = reviewsData.slice(0, page * reviewsPerPage);
+
+  // Simulate loading
+  useEffect(() => {
+    setIsLoading(true);
+    const timeout = setTimeout(() => setIsLoading(false), 1000); // 1-second loading
+    return () => clearTimeout(timeout);
+  }, [page]);
 
   return (
     <div style={{ margin: "0 auto", padding: 20 }}>
@@ -42,43 +50,71 @@ export default function Reviews() {
 
       <Card
         style={{ marginBottom: 40 }}
-        bodyStyle={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+        bodyStyle={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <div style={{ fontWeight: "bold", fontSize: 20, display: "flex", alignItems: "center", gap: 12 }}>
+        <div
+          style={{
+            fontWeight: "bold",
+            fontSize: 20,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
           <GoogleOutlined style={{ fontSize: 24, color: "#4285F4" }} />
           Google Reviews
           <span style={{ color: "#4285F4", fontSize: 28, marginLeft: 10 }}>4.4</span>
           <Rate disabled defaultValue={5} style={{ color: "#fadb14", fontSize: 18 }} />
           <span style={{ color: "#888", fontSize: 16 }}>(1,174)</span>
         </div>
-        <Button type="primary" href="https://www.google.com/maps/place/Emma+Fitness+Gym+Equipments+Commercial+and+Home/@25.2844663,55.4440232,17z/data=!4m8!3m7!1s0x3ef5f58681ae533f:0x791a34995fa3d39e!8m2!3d25.2844663!4d55.4440232!9m1!1b1!16s%2Fg%2F11s4clhkf5?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D" target="_blank">
+        <Button
+          type="primary"
+          href="https://www.google.com/maps/place/Emma+Fitness+Gym+Equipments+Commercial+and+Home/@25.2844663,55.4440232,17z/data=!4m8!3m7!1s0x3ef5f58681ae533f:0x791a34995fa3d39e!8m2!3d25.2844663!4d55.4440232!9m1!1b1!16s%2Fg%2F11s4clhkf5?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D"
+          target="_blank"
+        >
           Review us on Google
         </Button>
       </Card>
 
       <Row gutter={[20, 20]}>
-        {displayedReviews.map(({ name, date, rating, text }, idx) => (
-          <Col xs={24} sm={12} md={8} key={idx}>
-            <Card>
-              <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
-                <Avatar style={{ backgroundColor: "#1890ff", marginRight: 10 }}>
-                  {getInitials(name)}
-                </Avatar>
-                <div style={{ flexGrow: 1 }}>
-                  <Text strong>{name}</Text> <br />
-                  <Text type="secondary" style={{ fontSize: 12 }}>
-                    {date}
-                  </Text>
+        {isLoading
+          ? Array.from({ length: reviewsPerPage }).map((_, idx) => (
+            <Col xs={24} sm={12} md={8} key={`skeleton-${idx}`}>
+              <Card>
+                <Skeleton avatar paragraph={{ rows: 3 }} active />
+              </Card>
+            </Col>
+          ))
+          : displayedReviews.map(({ name, date, rating, text }, idx) => (
+            <Col xs={24} sm={12} md={8} key={idx}>
+              <Card>
+                <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
+                  <Avatar style={{ backgroundColor: "#1890ff", marginRight: 10 }}>
+                    {getInitials(name)}
+                  </Avatar>
+                  <div style={{ flexGrow: 1 }}>
+                    <Text strong>{name}</Text> <br />
+                    <Text type="secondary" style={{ fontSize: 12 }}>
+                      {date}
+                    </Text>
+                  </div>
                 </div>
-              </div>
-              <Rate disabled defaultValue={rating} style={{ color: "#fadb14", fontSize: 14, marginBottom: 10 }} />
-              <Text>{text}</Text>
-            </Card>
-          </Col>
-        ))}
+                <Rate
+                  disabled
+                  defaultValue={rating}
+                  style={{ color: "#fadb14", fontSize: 14, marginBottom: 10 }}
+                />
+                <Text>{text}</Text>
+              </Card>
+            </Col>
+          ))}
       </Row>
 
-      {page * reviewsPerPage < reviewsData.length && (
+      {!isLoading && page * reviewsPerPage < reviewsData.length && (
         <div style={{ textAlign: "center", marginTop: 30 }}>
           <Button onClick={() => setPage(page + 1)}>Load More</Button>
         </div>

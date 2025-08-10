@@ -87,8 +87,8 @@ export default async function Page() {
 
       {/* <SubBanner /> */}
       <SmallBanner />
-      <SubBanner2 />
-      <MovingBanner />
+      {/* <SubBanner2 /> */}
+      {/* <MovingBanner /> */}
 
       {cheapest.length > 0 && <div style={{ padding: '40px 20px' }}>
         <Title titlePart1={'Small'} titlePart2={'Budget'} />
@@ -101,7 +101,7 @@ export default async function Page() {
         </Row>
       </div>}
 
-      <HelpStayStrong />
+      {/* <HelpStayStrong /> currently comend because static */}
 
       <StorePage />
       <Reviews />

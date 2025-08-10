@@ -9,11 +9,12 @@ import SeasonalHeader from './seasonalHeader'
 import fetchApi from '../utility/api/fetchApi';
 import { productUrl } from '../utility/api/constant';
 import ProductCardSkeleton from './global/skeletons/productSlider';
+import Link from 'next/link';
 
 const { Title, Text } = Typography;
 
 const ProductSlider = () => {
-    const [loading,setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -23,7 +24,7 @@ const ProductSlider = () => {
                 setProducts(response);
             } catch (error) {
                 console.error(error);
-            }finally{setLoading(false)}
+            } finally { setLoading(false) }
         };
 
         fetchTopProducts();
@@ -57,48 +58,48 @@ const ProductSlider = () => {
             >
                 {loading ? <ProductCardSkeleton /> : products.map((product, index) => (
                     <SwiperSlide key={product._id || index}>
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                background: '#f9f9f9',
-                                borderRadius: '8px',
-                                overflow: 'hidden',
-                                height: '100%',
-                            }}
-                        >
-                            <img
-                                alt={product.name}
-                                src={getImage(product)}
+                        <Link href={`/product/${encodeURIComponent(product.slug)}`}>
+                            <div
                                 style={{
-                                    width: '100%',
-                                    height: '200px',
-                                    objectFit: 'cover',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    background: '#f9f9f9',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    height: '100%',
+                                    cursor: 'pointer',
                                 }}
-                            />
-                            <div style={{ padding: '1rem' }}>
-                                <Title level={5} style={{ marginBottom: 4 }}>
-                                    {product.customLabel || product.name}
-                                </Title>
-                                <Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>
-                                    Brand: {product.brand.name || 'N/A'}
-                                </Text>
-                                {product.salePrice && product.salePrice < product.regularPrice ? (
-                                    <div>
-                                        <Title level={4} style={{ margin: 0, color: '#d32f2f' }}>
-                                            AED {product.salePrice}
-                                        </Title>
-                                        <Text delete type="secondary" style={{ fontSize: 14 }}>
-                                            AED {product.regularPrice}
-                                        </Text>
-                                    </div>
-                                ) : (
-                                    <Title level={4} style={{ margin: 0 }}>
-                                        AED {product.regularPrice}
+                            >
+                                <img
+                                    alt={product.name}
+                                    src={getImage(product)}
+                                    style={{
+                                        width: '100%',
+                                        height: '200px',
+                                        objectFit: 'cover',
+                                    }}
+                                />
+                                <div style={{ padding: '1rem' }}>
+                                    <Title level={5} style={{ marginBottom: 4 }}>
+                                        {product.customLabel || product.name}
                                     </Title>
-                                )}
+                                    {product.salePrice && product.salePrice < product.regularPrice ? (
+                                        <div>
+                                            <Title level={4} style={{ margin: 0, color: '#d32f2f' }}>
+                                                AED {product.salePrice}
+                                            </Title>
+                                            <Text delete type="secondary" style={{ fontSize: 14 }}>
+                                                AED {product.regularPrice}
+                                            </Text>
+                                        </div>
+                                    ) : (
+                                        <Title level={4} style={{ margin: 0 }}>
+                                            AED {product.regularPrice}
+                                        </Title>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     </SwiperSlide>
                 ))}
             </Swiper>
