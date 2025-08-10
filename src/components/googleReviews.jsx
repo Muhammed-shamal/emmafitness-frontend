@@ -52,8 +52,10 @@ export default function Reviews() {
         style={{ marginBottom: 40 }}
         bodyStyle={{
           display: "flex",
+          flexWrap: "wrap", // allow wrapping on small screens
           justifyContent: "space-between",
           alignItems: "center",
+          gap: 20,
         }}
       >
         <div
@@ -61,8 +63,11 @@ export default function Reviews() {
             fontWeight: "bold",
             fontSize: 20,
             display: "flex",
+            flexWrap: "wrap", // wrap elements inside
             alignItems: "center",
             gap: 12,
+            flex: 1, // take up full width if needed
+            minWidth: 250, // prevent squishing
           }}
         >
           <GoogleOutlined style={{ fontSize: 24, color: "#4285F4" }} />
@@ -71,14 +76,18 @@ export default function Reviews() {
           <Rate disabled defaultValue={5} style={{ color: "#fadb14", fontSize: 18 }} />
           <span style={{ color: "#888", fontSize: 16 }}>(1,174)</span>
         </div>
-        <Button
-          type="primary"
-          href="https://www.google.com/maps/place/Emma+Fitness+Gym+Equipments+Commercial+and+Home/@25.2844663,55.4440232,17z/data=!4m8!3m7!1s0x3ef5f58681ae533f:0x791a34995fa3d39e!8m2!3d25.2844663!4d55.4440232!9m1!1b1!16s%2Fg%2F11s4clhkf5?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D"
-          target="_blank"
-        >
-          Review us on Google
-        </Button>
+        <div style={{ minWidth: 200, textAlign: "right" }}>
+          <Button
+            type="primary"
+            href="https://www.google.com/maps/place/Emma+Fitness+Gym+Equipments+Commercial+and+Home/@25.2844663,55.4440232,17z/data=!4m8!3m7!1s0x3ef5f58681ae533f:0x791a34995fa3d39e!8m2!3d25.2844663!4d55.4440232!9m1!1b1!16s%2Fg%2F11s4clhkf5?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D"
+            target="_blank"
+            style={{ width: "100%", maxWidth: 220 }}
+          >
+            Review us on Google
+          </Button>
+        </div>
       </Card>
+
 
       <Row gutter={[20, 20]}>
         {isLoading
