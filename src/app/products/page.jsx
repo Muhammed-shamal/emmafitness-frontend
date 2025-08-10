@@ -6,7 +6,6 @@ import TitleWithSort from '../../components/products/TitleWithSort'
 import Filter from '../../components/products/Filter'
 import { useSearchParams } from 'next/navigation'
 import useFilter from '../../utility/useFilter'
-import CustomSpinner from "../../components/global/CustomSpinner"
 import { productUrl } from "../../utility/api/constant"
 import ProductCard2 from '../../components/global/ProductCard2'
 

@@ -99,7 +99,7 @@ function Search() {
         className='h-10 rounded-l flex-1 bg-lightPrimary md:bg-white border-none text-white placeholder:text-gray-400 ' >
       </Select>
 
-      <button onClick={formHandle} className='bg-secondary text-white h-10 border-none rounded-r w-8 md:w-20 text-xl flex justify-center items-center rounded-none hover:bg-darkSecondary '><SearchOutlined /></button>
+      {/* <button onClick={formHandle} className='bg-secondary text-white h-10 border-none rounded-r w-8 md:w-20 text-xl flex justify-center items-center rounded-none hover:bg-darkSecondary '><SearchOutlined /></button> */}
     </form>
   )
 }

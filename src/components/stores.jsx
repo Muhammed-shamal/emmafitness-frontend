@@ -38,7 +38,7 @@ export default function StorePage() {
         ) : data && data.length > 0 ? (
           // Show actual store cards
           data.map((store) => (
-            <Col xs={24} sm={12} md={8} lg={6} key={store.id}>
+            <Col xs={24} sm={12} md={8} lg={6} key={store._id}>
               <Card
                 hoverable
                 cover={

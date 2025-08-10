@@ -3,11 +3,9 @@ import Price from "./Price"
 import Link from "next/link"
 import OffLabel from './label/OffLabel'
 import WishListButton from "./WishListButton"
-
 import { Tag } from "antd"
 
 function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, Brand, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, }) {
-
     return (
         <div className="relative flex flex-col rounded-xl shadow-sm border border-gray-200 bg-white transition hover:shadow-md overflow-hidden">
             {/* Tags - Top Right */}

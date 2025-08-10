@@ -6,7 +6,8 @@ import OurBrands from '../components/home/OurBrands'
 import FeaturedProducts from '../components/home/FeaturedProducts'
 import NewProducts from '../components/home/NewProducts'
 import Title from '../components/global/Title'
-import SubBanner from '../components/subBanner'
+// import SubBanner from '../components/subBanner'
+import OffersBanner from '../components/OfferBanner'
 import SubBanner2 from '../components/subBanner2'
 import SmallBanner from '../components/smallBanner'
 import MovingBanner from '../components/movingBanner'
@@ -74,6 +75,7 @@ export default async function Page() {
         </>
       )}
 
+      <OffersBanner />
       <ProductSlider />
 
       {newArrivals.length > 0 && (<>

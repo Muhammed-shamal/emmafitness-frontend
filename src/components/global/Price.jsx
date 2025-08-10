@@ -10,10 +10,10 @@ function Price({ salePrice = 0, regularPrice = 0 }) {
                 <span className='text-xs px-1'>AED</span>
             </>
             {
-                (salePrice !== 0 && salePrice !== undefined) && 
+                (salePrice !== 0 && salePrice !== undefined) &&
                 <span className="text-sm text-gray-400 line-through">{currency(regularPrice).format({ symbol: "" })}</span>
             }
-                
+
         </div>
     )
 }

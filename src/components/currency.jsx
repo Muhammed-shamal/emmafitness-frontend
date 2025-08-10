@@ -50,7 +50,7 @@ export default function Currency() {
       >
         {currencyPairs &&
           currencyPairs.map((pair, index) => (
-            <TickerText>
+            <TickerText key={index}>
               <span>
                 <span style={{ color: "red" }}>UAE / </span>
                 {pair.currency}:

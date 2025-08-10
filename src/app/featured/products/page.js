@@ -68,32 +68,32 @@ function Page() {
       <div className='flex-1'>
         <div>
           <Spin spinning={loading}>
-          <div>
-            <TitleWithSort Title="All Featured Products" setProducts={setProducts} />
+            <div>
+              <TitleWithSort Title="All Featured Products" setProducts={setProducts} />
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
-              {products?.map((product, idx) => (
-                <ProductCard
-                  key={idx}
-                  Id={product.id}
-                  Brand={product?.brand}
-                  Title={product?.name}
-                  Category={product?.category}
-                  SalePrice={product?.salePrice}
-                  RegularPrice={product?.regularPrice}
-                  ImageUrl={`${productUrl}/${product?.imageUrl}`}
-                  createdAt={product?.createdAt}
-                  Slug={product?.slug}
-                  CustomLabel={product.customLabel}
-                  isNewArrival={product?.isNewArrival}
-            isTrending={product?.isTrending}
-            isFeatured={product?.isFeatured}
-            isBestSeller={product?.isBestSeller}
-                />
-              ))}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
+                {products?.map((product, idx) => (
+                  <ProductCard
+                    key={idx}
+                    Id={product.id}
+                    Brand={product?.brand}
+                    Title={product?.name}
+                    Category={product?.category}
+                    SalePrice={product?.salePrice}
+                    RegularPrice={product?.regularPrice}
+                    ImageUrl={`${productUrl}/${product?.imageUrl}`}
+                    createdAt={product?.createdAt}
+                    Slug={product?.slug}
+                    CustomLabel={product.customLabel}
+                    isNewArrival={product?.isNewArrival}
+                    isTrending={product?.isTrending}
+                    isFeatured={product?.isFeatured}
+                    isBestSeller={product?.isBestSeller}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        </Spin>
+          </Spin>
         </div>
       </div>
     </div>
