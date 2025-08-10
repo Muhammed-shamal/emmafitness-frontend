@@ -2,18 +2,23 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { bannerUrl } from '../utility/api/constant'
+import { useState } from 'react';
 
 export default function Banner({ image, title, description }) {
+   const fallbackImage = "/fitness-banner.webp"; // replace with your actual fallback path
+  const [imgSrc, setImgSrc] = useState(`${bannerUrl}/${image}`);
+
   return (
     <section className="relative w-full h-[400px] md:h-[600px] overflow-hidden mt-2 mb-3">
       {/* Background Image */}
       <Image
-        src={`${bannerUrl}/${image}`}
+        src={imgSrc}
         alt="Fitness Banner"
         width={1920}
         height={800}
         priority
         className="object-center object-cover brightness-75 transition-all duration-300 hover:brightness-100"
+        onError={() => setImgSrc(fallbackImage)}
       />
 
       {/* Overlay Content */}
