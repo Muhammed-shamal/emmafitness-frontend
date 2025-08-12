@@ -52,9 +52,6 @@ export default async function Page() {
     fetchSafeApi('public/products/cheapest')
   ])
 
-  console.log("featured",featuredProducts)
-  console.log("banner is",banner)
-
   return (
     <main className='container space-y-2 md:space-y-4'>
       {banner && <Banner title={banner.title} description={banner.description} image={banner.image} />}
