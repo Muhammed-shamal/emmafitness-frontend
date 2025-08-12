@@ -43,43 +43,54 @@ export default function Reviews() {
   }, [page]);
 
   return (
-    <div style={{ margin: "0 auto", padding: 20 }}>
+    <div style={{ margin: "0 auto", padding: 20, maxWidth: 1280 }}>
       <Title level={3} style={{ textAlign: "center", marginBottom: 40 }}>
-        WHY THOUSANDS TRUST ACTIVE FITNESS STORE?
+        WHY THOUSANDS TRUST EMMA FITNESS?
       </Title>
 
+      {/* Google Review Summary */}
       <Card
         style={{ marginBottom: 40 }}
         bodyStyle={{
           display: "flex",
-          flexWrap: "wrap", // allow wrapping on small screens
+          flexWrap: "wrap",
           justifyContent: "space-between",
           alignItems: "center",
           gap: 20,
         }}
       >
+        {/* Left: Rating Info */}
         <div
           style={{
             fontWeight: "bold",
-            fontSize: 20,
+            fontSize: 18,
             display: "flex",
-            flexWrap: "wrap", // wrap elements inside
+            flexWrap: "wrap",
             alignItems: "center",
             gap: 12,
-            flex: 1, // take up full width if needed
-            minWidth: 250, // prevent squishing
+            flex: 1,
+            minWidth: 240,
           }}
         >
           <GoogleOutlined style={{ fontSize: 24, color: "#4285F4" }} />
           Google Reviews
-          <span style={{ color: "#4285F4", fontSize: 28, marginLeft: 10 }}>4.4</span>
-          <Rate disabled defaultValue={5} style={{ color: "#fadb14", fontSize: 18 }} />
-          <span style={{ color: "#888", fontSize: 16 }}>(1,174)</span>
+          <span style={{ color: "#4285F4", fontSize: 26, marginLeft: 8 }}>4.4</span>
+          <Rate disabled defaultValue={5} style={{ color: "#fadb14", fontSize: 16 }} />
+          <span style={{ color: "#888", fontSize: 14 }}>(1,174)</span>
         </div>
-        <div style={{ minWidth: 200, textAlign: "right" }}>
+
+        {/* Right: Button */}
+        <div
+          style={{
+            flexShrink: 0,
+            flexBasis: "100%",
+            textAlign: "center",
+            minWidth: 200,
+          }}
+        >
           <Button
             type="primary"
-            href="https://www.google.com/maps/place/Emma+Fitness+Gym+Equipments+Commercial+and+Home/@25.2844663,55.4440232,17z/data=!4m8!3m7!1s0x3ef5f58681ae533f:0x791a34995fa3d39e!8m2!3d25.2844663!4d55.4440232!9m1!1b1!16s%2Fg%2F11s4clhkf5?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D"
+            href="https://www.google.com/maps/place/Emma+Fitness+Gym+Equipments+Commercial+and+Home/@25.2844663,55.4440232,17z"
             target="_blank"
             style={{ width: "100%", maxWidth: 220 }}
           >
@@ -88,7 +99,7 @@ export default function Reviews() {
         </div>
       </Card>
 
-
+      {/* Reviews Grid */}
       <Row gutter={[20, 20]}>
         {isLoading
           ? Array.from({ length: reviewsPerPage }).map((_, idx) => (
@@ -101,11 +112,23 @@ export default function Reviews() {
           : displayedReviews.map(({ name, date, rating, text }, idx) => (
             <Col xs={24} sm={12} md={8} key={idx}>
               <Card>
-                <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
-                  <Avatar style={{ backgroundColor: "#1890ff", marginRight: 10 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 10,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <Avatar
+                    style={{
+                      backgroundColor: "#1890ff",
+                      marginRight: 10,
+                    }}
+                  >
                     {getInitials(name)}
                   </Avatar>
-                  <div style={{ flexGrow: 1 }}>
+                  <div style={{ flexGrow: 1, minWidth: 150 }}>
                     <Text strong>{name}</Text> <br />
                     <Text type="secondary" style={{ fontSize: 12 }}>
                       {date}
@@ -123,6 +146,7 @@ export default function Reviews() {
           ))}
       </Row>
 
+      {/* Load More Button */}
       {!isLoading && page * reviewsPerPage < reviewsData.length && (
         <div style={{ textAlign: "center", marginTop: 30 }}>
           <Button onClick={() => setPage(page + 1)}>Load More</Button>

@@ -38,7 +38,7 @@ const ProductSlider = () => {
     };
 
     return (
-        <div style={{ padding: '2rem', backgroundColor: '#fff' }}>
+        <div className="bg-white px-4 py-8 sm:px-6 lg:px-8">
             {/* Mini Banner */}
             <SeasonalHeader />
 
@@ -46,62 +46,53 @@ const ProductSlider = () => {
                 modules={[Autoplay]}
                 autoplay={{ delay: 3000, disableOnInteraction: false }}
                 loop={true}
-                style={{ marginTop: '2rem' }}
+                className="mt-8"
                 spaceBetween={24}
-                slidesPerView={3}
                 breakpoints={{
+                    0: { slidesPerView: 1 },
                     640: { slidesPerView: 1 },
                     768: { slidesPerView: 2 },
                     1024: { slidesPerView: 3 },
                     1280: { slidesPerView: 4 },
                 }}
             >
-                {loading ? <ProductCardSkeleton /> : products.map((product, index) => (
-                    <SwiperSlide key={product._id || index}>
-                        <Link href={`/product/${encodeURIComponent(product.slug)}`}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    background: '#f9f9f9',
-                                    borderRadius: '8px',
-                                    overflow: 'hidden',
-                                    height: '100%',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                <img
-                                    alt={product.name}
-                                    src={getImage(product)}
-                                    style={{
-                                        width: '100%',
-                                        height: '200px',
-                                        objectFit: 'cover',
-                                    }}
-                                />
-                                <div style={{ padding: '1rem' }}>
-                                    <Title level={5} style={{ marginBottom: 4 }}>
-                                        {product.customLabel || product.name}
-                                    </Title>
-                                    {product.salePrice && product.salePrice < product.regularPrice ? (
-                                        <div>
-                                            <Title level={4} style={{ margin: 0, color: '#d32f2f' }}>
-                                                AED {product.salePrice}
-                                            </Title>
-                                            <Text delete type="secondary" style={{ fontSize: 14 }}>
+                {loading ? (
+                    <ProductCardSkeleton />
+                ) : (
+                    products.map((product, index) => (
+                        <SwiperSlide key={product._id || index}>
+                            <Link href={`/product/${encodeURIComponent(product.slug)}`}>
+                                <div className="flex flex-col bg-gray-100 rounded-lg overflow-hidden h-full shadow hover:shadow-md transition-shadow">
+                                    <img
+                                        alt={product.name}
+                                        src={getImage(product)}
+                                        className="w-full h-48 sm:h-56 md:h-64 object-cover"
+                                    />
+                                    <div className="p-4">
+                                        <h5 className="text-base font-semibold mb-1 line-clamp-1">
+                                            {product.customLabel || product.name}
+                                        </h5>
+
+                                        {product.salePrice && product.salePrice < product.regularPrice ? (
+                                            <div>
+                                                <p className="text-lg font-bold text-red-600">
+                                                    AED {product.salePrice}
+                                                </p>
+                                                <p className="text-sm line-through text-gray-500">
+                                                    AED {product.regularPrice}
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <p className="text-lg font-bold text-gray-800">
                                                 AED {product.regularPrice}
-                                            </Text>
-                                        </div>
-                                    ) : (
-                                        <Title level={4} style={{ margin: 0 }}>
-                                            AED {product.regularPrice}
-                                        </Title>
-                                    )}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
-                    </SwiperSlide>
-                ))}
+                            </Link>
+                        </SwiperSlide>
+                    ))
+                )}
             </Swiper>
         </div>
     );

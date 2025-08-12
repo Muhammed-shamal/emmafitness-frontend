@@ -2,7 +2,7 @@
 // import { Gothic_A1 } from 'next/font/google';
 import '../../theme/global.css'
 import Currency from '../components/currency'
-import ServiceTicker from  '../components/serviceTicker'
+import ServiceTicker from '../components/serviceTicker'
 import Header from '../components/global/Header';
 import Footer from '../components/global/footer/Footer';
 import { Providers } from '../utility/redux/provider'
@@ -22,6 +22,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
         <link rel="icon" type="image/svg" href="/logos/emma_logo-02.svg" />
       </head>
       <body className={` text-gray-700 relative`}>
