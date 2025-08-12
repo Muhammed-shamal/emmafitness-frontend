@@ -1,18 +1,25 @@
 import axios from "axios";
 
-export const baseUrl = "https://emmafitness-server.onrender.com";
-export const productUrl = "https://emmafitness-server.onrender.com/productImages";
-export const categoryUrl = "https://emmafitness-server.onrender.com/categoryImage";
-export const brandUrl = "https://emmafitness-server.onrender.com/brandImage";
-export const bannerUrl = 'https://emmafitness-server.onrender.com/bannerImage';
-export const storeUrl = 'https://emmafitness-server.onrender.com/storeImage';
+// export const baseUrl = "https://emmafitness-server.onrender.com";
+// export const productUrl = "https://emmafitness-server.onrender.com/productImages";
+// export const categoryUrl = "https://emmafitness-server.onrender.com/categoryImage";
+// export const brandUrl = "https://emmafitness-server.onrender.com/brandImage";
+// export const bannerUrl = 'https://emmafitness-server.onrender.com/bannerImage';
+// export const storeUrl = 'https://emmafitness-server.onrender.com/storeImage';
 
-// export const baseUrl = 'http://localhost:1000';
-// export const productUrl = 'http://localhost:1000/productImages';
-// export const categoryUrl = 'http://localhost:1000/categoryImage';
-// export const brandUrl = 'http://localhost:1000/brandImage';
-// export const bannerUrl = 'http://localhost:1000/bannerImage';
-// export const storeUrl = 'http://localhost:1000/storeImage';
+// export const baseUrl = 'http://localhost:5000';
+// export const productUrl = 'http://localhost:5000/productImages';
+// export const categoryUrl = 'http://localhost:5000/categoryImage';
+// export const brandUrl = 'http://localhost:5000/brandImage';
+// export const bannerUrl = 'http://localhost:5000/bannerImage';
+// export const storeUrl = 'http://localhost:5000/storeImage';
+
+export const baseUrl = "http://13.229.109.96:5000";
+export const productUrl = "http://13.229.109.96:5000/productImages";
+export const categoryUrl = "http://13.229.109.96:5000/categoryImage";
+export const brandUrl = "http://13.229.109.96:5000/brandImage";
+export const bannerUrl = 'http://13.229.109.96:5000/bannerImage';
+export const storeUrl = 'http://13.229.109.96:5000/storeImage';
 
 
 const baseUrlCurrency = "https://api.freecurrencyapi.com";

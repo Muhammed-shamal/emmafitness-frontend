@@ -29,7 +29,7 @@ export const metadata = {
 // 👇 Server-side data fetching
 async function fetchSafeApi(endpoint) {
   try {
-    const res = await fetch(`http://localhost:1000/api/${endpoint}`, {
+    const res = await fetch(`http://13.229.109.96:5000/api/${endpoint}`, {
       cache: 'no-store',
     });
 
@@ -51,6 +51,9 @@ export default async function Page() {
     fetchSafeApi('public/products/trending'),
     fetchSafeApi('public/products/cheapest')
   ])
+
+  console.log("featured",featuredProducts)
+  console.log("banner is",banner)
 
   return (
     <main className='container space-y-2 md:space-y-4'>
@@ -108,19 +111,25 @@ export default async function Page() {
 
       <div className='p-5'>
         <h2 className='text-center font-sans text-2xl'>
-          We Are Active Fitness Store
+          Emma Fitness Store
         </h2>
         <p>
-          With over a decade of experience powering the UAE’s fitness movement, Active Fitness Store has become more than just a retailer — we’re a trusted partner in how the nation trains.
+          With over a decade of experience fueling the UAE’s fitness movement, Emma Fitness has grown beyond being just a retailer — we are your trusted partner in achieving your fitness goals.
         </p>
         <p>
-          From compact home setups to full-scale commercial gyms, we’ve helped thousands across Dubai, Abu Dhabi, Sharjah, Al Ain, and beyond build workout spaces that perform. What started as a focused online fitness store has evolved into one of the UAE’s most respected fitness equipment brands — driven by expertise, service, and a deep understanding of what it means to move better.
+          From compact home gyms to expansive commercial fitness centers, we’ve helped thousands of customers across Dubai, Abu Dhabi, Sharjah, Al Ain, and the entire UAE create workout spaces that inspire and perform. What began as a dedicated online fitness store has now become one of the UAE’s most reliable fitness equipment suppliers — backed by expertise, exceptional service, and a passion for helping you move better.
         </p>
+        <p>
+          At Emma Fitness, we don’t just sell equipment — we empower your fitness journey.
+        </p>
+        <p>📍 Located in Sharjah | Delivering Across the UAE</p>
+
         <div style={{ maxWidth: 600, margin: '50px auto', lineHeight: '1.6' }}>
           <h1>Frequently Asked Questions</h1>
           <FAQ />
         </div>
       </div>
+
 
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5872586466508!2d55.4440232!3d25.284466299999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ef5f58681ae533f%3A0x791a34995fa3d39e!2sEmma%20Fitness%20Gym%20Equipments%20Commercial%20and%20Home!5e0!3m2!1sen!2sin!4v1754233183285!5m2!1sen!2sin"
         width="100%" height="600" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy='no-referrer-when-downgrade'></iframe>
