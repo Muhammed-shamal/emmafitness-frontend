@@ -44,12 +44,12 @@ async function fetchSafeApi(endpoint) {
 
 export default async function Page() {
   // 👇 fetch server-side before render
-  const [featuredProducts, newArrivals, banner, trendingProducts, cheapest] = await Promise.all([
+  const [featuredProducts, newArrivals, banner, trendingProducts] = await Promise.all([
     fetchSafeApi('public/products/featured'),
     fetchSafeApi('public/products/new'),
     fetchSafeApi('public/banner'),
     fetchSafeApi('public/products/trending'),
-    fetchSafeApi('public/products/cheapest')
+    // fetchSafeApi('public/products/cheapest')
   ])
 
   return (
@@ -90,7 +90,7 @@ export default async function Page() {
       {/* <SubBanner2 /> */}
       {/* <MovingBanner /> */}
 
-      {cheapest.length > 0 && <div style={{ padding: '40px 20px' }}>
+      {/* {cheapest.length > 0 && <div style={{ padding: '40px 20px' }}>
         <Title titlePart1={'Small'} titlePart2={'Budget'} />
         <Row gutter={[24, 24]}>
           {cheapest.map((product, index) => (
@@ -99,7 +99,7 @@ export default async function Page() {
             </Col>
           ))}
         </Row>
-      </div>}
+      </div>} */}
 
       {/* <HelpStayStrong /> currently comend because static */}
 

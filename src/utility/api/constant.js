@@ -22,6 +22,15 @@ export const bannerUrl = 'http://13.229.109.96:5000/bannerImage';
 export const storeUrl = 'http://13.229.109.96:5000/storeImage';
 
 
+//new url with https because of ngrok;
+// export const baseUrl = "https://516b967e2789.ngrok-free.app";
+// export const productUrl = "https://516b967e2789.ngrok-free.app/productImages";
+// export const categoryUrl = "https://516b967e2789.ngrok-free.app/categoryImage";
+// export const brandUrl = "https://516b967e2789.ngrok-free.app/brandImage";
+// export const bannerUrl = 'https://516b967e2789.ngrok-free.app/bannerImage';
+// export const storeUrl = 'https://516b967e2789.ngrok-free.app/storeImage';
+
+
 const baseUrlCurrency = "https://api.freecurrencyapi.com";
 export const Currency_instance = axios.create({ baseURL: baseUrlCurrency });
 

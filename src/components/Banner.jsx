@@ -5,7 +5,7 @@ import { bannerUrl } from '../utility/api/constant'
 import { useState } from 'react';
 
 export default function Banner({ image, title, description }) {
-   const fallbackImage = "/fitness-banner.webp"; // replace with your actual fallback path
+  const fallbackImage = "/fitness-banner.webp"; // replace with your actual fallback path
   const [imgSrc, setImgSrc] = useState(`${bannerUrl}/${image}`);
 
   return (
