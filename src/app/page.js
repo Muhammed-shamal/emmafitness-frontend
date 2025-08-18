@@ -19,6 +19,7 @@ import HelpStayStrong from '../components/helpStayStrong'
 import StorePage from '../components/stores'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Col, Row } from 'antd'
+import { baseUrl } from '../utility/api/constant'
 
 export const metadata = {
   title: 'Top Fitness Brands at Competitive Prices: Shop Now at Emma Fitness in Dubai & Sharjah',
@@ -29,7 +30,7 @@ export const metadata = {
 // 👇 Server-side data fetching
 async function fetchSafeApi(endpoint) {
   try {
-    const res = await fetch(`http://13.229.109.96:5000/api/${endpoint}`, {
+    const res = await fetch(`${baseUrl}/api/${endpoint}`, {
       cache: 'no-store',
     });
 

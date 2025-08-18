@@ -29,4 +29,3 @@ export const cartSlice = createSlice({
 export const { addToCart, removeFromCart, bulkReplaceCart,setCart } = cartSlice.actions
 
 export default cartSlice.reducer
-
