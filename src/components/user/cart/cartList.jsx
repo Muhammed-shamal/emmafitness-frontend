@@ -1,171 +1,268 @@
-'use client'
-import { useEffect, useState } from 'react'
-import PriceSummary from '../../checkout/PriceSummary'
-import Price from '../../global/Price'
-import Image from 'next/image'
-import CartButton from '../../global/CartButton'
-import fetchApi from '../../../utility/api/fetchApi'
-import useCheckout from '../../../utility/useCheckout'
-import { useDispatch, useSelector } from 'react-redux'
-import { addOrderDraft } from '../../../utility/redux/orderDraftSlice'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { DeleteOutlined } from '@ant-design/icons'
-import WishListButton from '../../global/WishListButton'
-import useAddAndRemoveCart from '../../../utility/useAddAndRemoveCart'
-import { Button, message } from 'antd'
-import CustomSpinner from '../../global/CustomSpinner'
+'use client';
 
-function CartList() {
-    const cartItem = useSelector(state => state.cart)
-    const [cartProduct, setCartProduct] = useState([])
-    const [accountSummery, setAccountSummery] = useState({})
-    const [coupon, setCoupon] = useState({ code: '', valid: false, discount: 0, msg: '' })
-    const [loading, setLoading] = useState(false)
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    Table,
+    Button,
+    InputNumber,
+    Space,
+    Typography,
+    Card,
+    Divider,
+    Spin,
+    Alert,
+    Badge,
+    Popconfirm,
+    message
+} from 'antd';
+import {
+    ShoppingCartOutlined,
+    DeleteOutlined,
+    ArrowLeftOutlined,
+    CheckOutlined
+} from '@ant-design/icons';
+import { useRouter } from 'next/router';
+import fetchApi from '@/utility/api/fetchApi';
+import { setLoading, removeFromCart, setCart, setError, updateCartItemQuantity } from '@/utility/redux/cartSlice';
+import updateApi from '@/utility/api/updateAPI';
+const { Title, Text } = Typography;
 
-    const prdoducts = useCheckout()
-    const route = useRouter()
-    const dispatch = useDispatch()
+const CartPage = () => {
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const { items, loading, error } = useSelector((state) => state.cart);
+    const { user } = useSelector((state) => state.auth);
 
-    const { removeCartHandle } = useAddAndRemoveCart()
-
-    // cart detials
     useEffect(() => {
-        const ready = async () => {
-            setLoading(true)
-            const { cartProducts, taxDetials, totalSummary } = await prdoducts({ discount: coupon?.discount })
-            console.log('cart products',cartProduct)
-            console.log('taxDetials',taxDetials)
-            console.log('totalSummary',totalSummary)
-            setCartProduct(cartProducts)
-            setAccountSummery({ ...accountSummery, ...taxDetials, ...totalSummary })
-            setLoading(false)
+        if (user?.userId) {
+            fetchCart();
         }
-        ready()
+    }, [user]);
 
-    }, [cartItem, coupon])
-
-
-    // handle coupons needs to complete
-    const couponHandle = async () => {
+    const fetchCart = async () => {
         try {
-            setLoading(true)
-            if (coupon.valid) {
-                setCoupon({ ...coupon, valid: false, code: "", discount: 0 })
-            } else {
-                const result = await fetchApi({ URI: `coupons?filters[code][$eq]=${coupon?.code}` })
-                if (result?.data?.length > 0) {
-                    setCoupon({ ...coupon, valid: true, discount: result?.data?.[0]?.attributes?.discount_amount, msg: 'Coupon code applied successfully' })
-                } else {
-                    setCoupon({ ...coupon, valid: false, discount: 0, code: '', msg: 'Coupon not valid' })
-                }
+            dispatch(setLoading(true));
+            const response = await fetchApi({ URI: `customers/cart/${user?.userId}` })
+            console.log('cart response', response);
+            dispatch(setCart(response.data?.items || []));
+        } catch (err) {
+            dispatch(setError(err.response?.data?.message || 'Failed to fetch cart'));
+            dispatch(showToast({ type: 'error', message: err.response?.data?.message || 'Failed to fetch data' }));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+
+    const handleQuantityChange = async (productId, quantity) => {
+        try {
+            if (quantity < 1) {
+                message.warning('Quantity must be at least 1');
+                return;
+            }
+
+            dispatch(updateCartItemQuantity({ productId, quantity }));
+
+            if (user?._id) {
+                await updateApi({
+                    URI: "customers/cart/update", token: user.token, Data: {
+                        userId: user?.userId,
+                        productId,
+                        quantity
+                    }
+                });
             }
         } catch (err) {
-            message.error(err.message || err)
-        } finally {
-
-            setLoading(true)
+            message.error('Failed to update quantity');
         }
+    };
+
+    const handleRemoveItem = async (productId) => {
+        try {
+            dispatch(removeFromCart(productId));
+
+            if (user?._id) {
+                await updateApi({
+                    URI: "customers/cart/remove", token: user.token, Data: {
+                        userId: user?.userId,
+                        productId
+                    }
+                });
+            }
+            message.success('Item removed from cart');
+        } catch (err) {
+            message.error('Failed to remove item');
+        }
+    };
+
+    const handleCheckout = () => {
+        if (items.length === 0) {
+            message.warning('Your cart is empty');
+            return;
+        }
+        router.push('/checkout');
+    };
+
+    const calculateTotal = () => {
+        return items.reduce((total, item) => {
+            return total + (item.product.price * item.quantity);
+        }, 0).toFixed(2);
+    };
+
+    const columns = [
+        {
+            title: 'Product',
+            dataIndex: 'product',
+            key: 'product',
+            render: (product) => (
+                <Space>
+                    <img
+                        src={product.image}
+                        alt={product.name}
+                        style={{ width: 60, height: 60, objectFit: 'cover' }}
+                    />
+                    <Text strong>{product.name}</Text>
+                </Space>
+            ),
+        },
+        {
+            title: 'Price',
+            dataIndex: 'product',
+            key: 'price',
+            render: (product) => `$${product.price.toFixed(2)}`,
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'quantity',
+            key: 'quantity',
+            render: (quantity, record) => (
+                <InputNumber
+                    min={1}
+                    max={100}
+                    defaultValue={quantity}
+                    value={quantity}
+                    onChange={(value) => handleQuantityChange(record.product._id, value)}
+                />
+            ),
+        },
+        {
+            title: 'Subtotal',
+            key: 'subtotal',
+            render: (_, record) => (
+                <Text strong>
+                    ${(record.product.price * record.quantity).toFixed(2)}
+                </Text>
+            ),
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_, record) => (
+                <Popconfirm
+                    title="Are you sure to remove this item?"
+                    onConfirm={() => handleRemoveItem(record.product._id)}
+                    okText="Yes"
+                    cancelText="No"
+                >
+                    <Button
+                        type="text"
+                        danger
+                        icon={<DeleteOutlined />}
+                    />
+                </Popconfirm>
+            ),
+        },
+    ];
+
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', padding: 50 }}>
+                <Spin size="large" />
+            </div>
+        );
     }
 
-    const checkoutHandle = () => {
-        dispatch(addOrderDraft({ cartProduct, accountSummery }))
-        route.push('/checkout')
+    if (error) {
+        return (
+            <Alert
+                message="Error"
+                description={error}
+                type="error"
+                showIcon
+                style={{ margin: 20 }}
+            />
+        );
     }
+
     return (
-        <CustomSpinner spinning={loading}>
+        <div style={{ padding: 24 }}>
+            <Button
+                type="text"
+                icon={<ArrowLeftOutlined />}
+                onClick={() => router.back()}
+                style={{ marginBottom: 20 }}
+            >
+                Continue Shopping
+            </Button>
 
-            <div className='flex flex-col gap-4'>
-                <div className='flex flex-col md:flex-row gap-4 '>
+            <Title level={3}>
+                <ShoppingCartOutlined /> Your Cart
+                <Badge
+                    count={items.length}
+                    showZero
+                    style={{ marginLeft: 10 }}
+                />
+            </Title>
 
-                    <div className='flex-1 space-y-4'>
-                        {
-                            cartProduct ?
-                                cartProduct?.map(item => (
+            <Table
+                columns={columns}
+                dataSource={items}
+                rowKey={(record) => record.product._id}
+                pagination={false}
+                scroll={{ x: true }}
+                style={{ marginBottom: 24 }}
+                locale={{ emptyText: 'Your cart is empty' }}
+            />
 
-                                    <CartItem key={item?.products}
-                                        Id={item?.products} Title={item?.name}
-                                        Photo={item?.photo}
-                                        Brand={item?.Brand}
-                                        Desc={item?.Short_Description}
-                                        SalePrice={item?.Sale_Price}
-                                        RegularPrice={item?.Regular_Price}
-                                        removeFromCart={removeCartHandle} />
+            <Card style={{ marginTop: 20 }}>
+                <Space direction="vertical" style={{ width: '100%' }}>
+                    <Title level={4}>Order Summary</Title>
+                    <Divider />
 
-                                ))
-                                : <div className='bg-red-200 border border-red-500 p-2 rounded text-sm'>Oops! Your cart is currently empty. <br />
-                                    <Link href="/products" className='text-secondary font-semibold'>Click here </Link>to browse products and add items to your cart.</div>
-                        }
-
-                        <div className=' flex flex-row justify-between bg-gray-100 border border-gray-200 p-2 gap-2'>
-
-                            <Link href="/products" className='p-1 md:p-3 h-10 rounded  text-blue-500 text-xs md:text-base font-semibold flex items-center justify-center'>Continue shopping</Link>
-                            <div>
-
-                                <div className='w-full border border-gray-300 rounded focus-within:border-blue-300 px-2 flex items-center max-w-sm bg-white'>
-                                    <input onChange={(e) => setCoupon({ code: e.target.value, valid: false })} value={coupon?.code} disabled={coupon.valid} className='outline-none w-full' placeholder='Coupon Code' />
-                                    <button onClick={couponHandle} disabled={cartProduct ? false : true} className='bg-blue-500 hover:bg-blue-700 px-4 py-1 text-sm text-white rounded'>{coupon?.valid ? "Remove" : "Apply"}</button>
-                                </div>
-                                <span className={coupon?.valid ? "text-green-500" : "text-red-500"}>{coupon.msg?.toString()}</span>
+                    <Space direction="vertical" style={{ width: '100%' }}>
+                        {items.map((item) => (
+                            <div key={item.product._id} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Text>
+                                    {item.product.name} x {item.quantity}
+                                </Text>
+                                <Text>
+                                    ${(item.product.price * item.quantity).toFixed(2)}
+                                </Text>
                             </div>
+                        ))}
+                    </Space>
 
-                        </div>
+                    <Divider />
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Text strong>Total:</Text>
+                        <Title level={4}>${calculateTotal()}</Title>
                     </div>
 
-                    <div>
-
-                        <div className='bg-gray-100 p-4 border border-gray-200 space-y-4 '>
-                            <h4 className='font-semibold w-60'>Order Summary</h4>
-
-                            <div className='flex flex-col gap-2 md:gap-4 '>
-
-                                <PriceSummary
-                                    total={accountSummery?.total}
-                                    shipping={accountSummery?.shipping}
-                                    discount={accountSummery?.discount}
-                                    subTotal={accountSummery?.subTotal}
-                                    taxName={accountSummery?.taxName}
-                                    taxAmount={accountSummery?.taxAmount}
-                                    grandTotal={accountSummery?.grandTotal} />
-
-                                <button onClick={checkoutHandle} disabled={cartProduct ? false : true} type='primary' className='bg-blue-600 text-sm text-white rounded text-center py-2 hover:bg-blue-800'>Checkout</button>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </CustomSpinner>
-    )
-}
-
-export default CartList
-
-
-const CartItem = ({ Id, Title, Photo, Desc, SalePrice, RegularPrice, removeFromCart, Brand }) => (
-    <div className='flex flex-row gap-4 bg-gray-100 border border-gray-200  p-4'>
-        <Image width={120} height={120} className='max-h-44 min-w-fit mix-blend-multiply' src={`${Photo ? Photo : "/product-placehold.png"}`} alt={Title} />
-        <div className='flex flex-col justify-between items-start gap-4 w-full'>
-            <div>
-
-                <h2 className='font-semibold text-sm line-clamp-1'>{Title}</h2>
-                <p className='text-xs line-clamp-2 text-gray-500'>Brand : {Brand}</p>
-            </div>
-            <p className='text-xs line-clamp-2'>{Desc}</p>
-            <Price regularPrice={RegularPrice} salePrice={SalePrice} />
-            <div className='flex flex-col md:flex-row gap-2 w-full justify-between flex-wrap'>
-
-                <div className='flex flex-row gap-4 items-center flex-wrap'>
-                    <CartButton ProductId={Id} />
-                </div>
-                <div>
-
-                    <Button type='text' icon={<DeleteOutlined />} className='cursor-pointer' onClick={() => removeFromCart({ ProductId: Id })}>Remove</Button>
-                    <WishListButton ProductId={Id} label={false} />
-                </div>
-            </div>
+                    <Button
+                        type="primary"
+                        size="large"
+                        block
+                        icon={<CheckOutlined />}
+                        onClick={handleCheckout}
+                        disabled={items.length === 0}
+                    >
+                        Proceed to Checkout
+                    </Button>
+                </Space>
+            </Card>
         </div>
-    </div>
-)
+    );
+};
+
+export default CartPage;

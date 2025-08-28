@@ -49,16 +49,27 @@ function Login({ Close }) {
   return (
     <>
       <h2 className="font-semibold text-lg">Login</h2>
-      <Form name="signInForm" onFinish={formHandle} autoComplete="off" className="space-y-2" >
-        <Form.Item name="email"
+      <Form
+        name="signInForm"
+        onFinish={formHandle}
+        autoComplete="off"
+        className="space-y-2"
+      >
+        <Form.Item
+          name="email"
           rules={[
             {
               required: true,
-              message: 'Please input your Email',
+              message: 'Please input your email!',
+            },
+            {
+              type: 'email',
+              message: 'Please enter a valid email address!',
             },
           ]}
         >
-          <label> Email ID
+          <label>
+            Email ID
             <Input className="h-12" />
           </label>
         </Form.Item>
@@ -70,6 +81,10 @@ function Login({ Close }) {
               required: true,
               message: 'Please input your password!',
             },
+            {
+              min: 8,
+              message: 'Password must be at least 8 characters!',
+            },
           ]}
         >
           <label>
@@ -78,8 +93,6 @@ function Login({ Close }) {
           </label>
         </Form.Item>
 
-
-
         <Form.Item>
           {result.msg && (
             <p className={`${result.err ? 'text-red-500' : 'text-green-500'} text-sm text-center`}>
@@ -87,13 +100,19 @@ function Login({ Close }) {
             </p>
           )}
 
-          <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={result.loading} disabled={result.loading}>
+          <Button
+            type="primary"
+            className="bg-blue-500 w-full"
+            htmlType="submit"
+            loading={result.loading}
+            disabled={result.loading}
+          >
             Submit
           </Button>
         </Form.Item>
       </Form>
     </>
-  )
+  );
 }
 
 export default Login

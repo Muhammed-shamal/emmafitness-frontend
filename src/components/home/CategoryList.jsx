@@ -17,9 +17,6 @@ function CategoryList() {
     const [startX, setStartX] = useState(null)
     const ref = useRef(null)
 
-
-    
-
     const handleMouseDown = (e) => {
         setIsMouseDown(true);
         setStartX(e.pageX)

@@ -5,9 +5,10 @@ import { useState } from "react";
 import { useSignIn } from '../../utility/userHandle'
 import { showToast } from "../../utility/redux/toastSlice";
 import { useDispatch } from "react-redux";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
-
-const phoneNumberRegex = /^[6-9]\d{9}$/;  // ✅ Matches 10-digit Indian mobile numbers
 
 function SignUp({ Close = () => { } }) {
 
@@ -16,7 +17,18 @@ function SignUp({ Close = () => { } }) {
 
   const [result, setResult] = useState({
     loading: false, err: false, msg: ""
-  });  
+  });
+
+  const validatePhoneNumber = (_, value) => {
+    if (!value) {
+      return Promise.reject(new Error('Please input your phone number!'));
+    }
+    if (!isValidPhoneNumber('+' + value)) {
+      return Promise.reject(new Error('Please enter a valid phone number!'));
+    }
+    return Promise.resolve();
+  };
+
 
   async function formHandle(e) {
     try {
@@ -41,25 +53,6 @@ function SignUp({ Close = () => { } }) {
       console.error('Error during registration:', error);
     }
   }
-
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 70,
-          height: "2.25rem"
-        }}
-      >
-        <Select.Option value="971">+971</Select.Option>
-
-      </Select>
-    </Form.Item>
-  );
-
-  const initialValues = {
-    prefix: '971',
-  };
 
   return (
     <div onSubmit={formHandle} className="flex flex-col justify-center ">
@@ -106,30 +99,31 @@ function SignUp({ Close = () => { } }) {
 
         <Form.Item
           name="phone"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your phone number!',
-            },
-            {
-              pattern: phoneNumberRegex,
-              message: 'Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9',
-            },
-          ]}
+          rules={[{ validator: validatePhoneNumber }]}
+          label="Phone Number"
         >
-          <label >
-            Phone Number
-            <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
-          </label>
+          <PhoneInput
+            country={'ae'} // Default country: United Arab Emirates (+971)
+            inputProps={{
+              name: 'phone',
+              required: true,
+              autoFocus: true,
+            }}
+            containerStyle={{ width: '100%' }}
+            inputStyle={{ width: '100%', height: '2.25rem' }}
+          />
         </Form.Item>
 
         <Form.Item
           name="password"
-
           rules={[
             {
               required: true,
               message: 'Please input your password!',
+            },
+            {
+              min: 8,
+              message: 'Password must be at least 8 characters!',
             },
           ]}
         >

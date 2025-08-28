@@ -97,7 +97,7 @@ function OurBrands() {
       </div>} */}
 
       {/* Brand Story Section */}
-      <div className="max-w-6xl mx-auto py-12 px-4">
+      <div className="max-w-6xl mx-auto py-0 sm:py-12 px-4">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-2xl font-bold mb-4">Our Story</h2>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import fetchApi from '../../../utility/api/fetchApi';
 import ProductCard from '../../../components/global/ProductCard';
 import { productUrl } from '../../../utility/api/constant';
+import Link from 'next/link';
 
 function Page({ params }) {
     const [products, setProducts] = useState([]);
@@ -58,7 +59,47 @@ function Page({ params }) {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
                 {products.length === 0 ? (
-                    <p>No products found in this category.</p>
+                    <div className="col-span-full flex flex-col items-center justify-center py-12 px-4 text-center">
+                        <div className="mb-6">
+                            <svg
+                                className="w-20 h-20 text-gray-300 mx-auto"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="1.5"
+                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-16M9 10h.01M15 10h.01"
+                                />
+                            </svg>
+                        </div>
+
+                        <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                            No products found
+                        </h3>
+
+                        <p className="text-gray-500 mb-6 max-w-md">
+                            We couldn't find any products in this category. Try checking back later or explore other categories.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <button
+                                onClick={() => window.history.back()}
+                                className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                            >
+                                Go Back
+                            </button>
+
+                            <Link
+                                href="/"
+                                className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium text-center"
+                            >
+                                Browse Categories
+                            </Link>
+                        </div>
+                    </div>
                 ) : (
                     products.map((product) => (
                         <ProductCard
