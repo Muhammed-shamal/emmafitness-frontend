@@ -127,11 +127,11 @@ function OurBrands() {
               <div className="text-black">
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">{brand.name}</h1>
                 <p className="text-lg mb-6 max-w-2xl">{brand.description}</p>
-                <Link href={brand.slug}>
+                {/* <Link href={brand.slug}>
                   <button className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-gray-800 transition duration-200">
                     Explore Collection
                   </button>
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>

@@ -38,7 +38,8 @@ function SignUp({ Close = () => { } }) {
       if (user.error) throw user
 
       signIn({
-        token: user.token, userId: user?.customer?._id,
+        token: user.token,
+        userId: user?.customer?._id,
         userName: user?.customer?.name,
         phone: user?.customer?.phone,
         email: user?.customer?.email,
@@ -62,7 +63,6 @@ function SignUp({ Close = () => { } }) {
       <Form
         className="space-y-2"
         name="signUpForm"
-        initialValues={initialValues}
         onFinish={formHandle}
         autoComplete="off"
       >
@@ -179,7 +179,7 @@ function SignUp({ Close = () => { } }) {
             </p>
           )}
           <Button type="primary" className="bg-blue-500 w-full " htmlType="submit" loading={result.loading} disabled={result.loading}>
-            Submit
+            Register
           </Button>
         </Form.Item>
       </Form>

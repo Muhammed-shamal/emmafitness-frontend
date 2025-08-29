@@ -21,7 +21,7 @@ const fetchApi = async ({ URI, API_TOKEN = null, revalidate = 3 }) => {
     const message = errorBody.message || res.statusText;
     throw new Error(`Fetch failed: ${message}`);
   }
-
+  
   return await res.json();
 };
 

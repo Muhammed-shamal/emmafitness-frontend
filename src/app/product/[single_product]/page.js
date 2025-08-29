@@ -210,7 +210,7 @@ function Page({ params }) {
             </div>
 
             <div className="flex flex-row gap-4">
-              <CartButton ProductId={product?._id} />
+              <CartButton productId={product?._id} />
               <BuyNow ProductId={product?._id} />
               <WishLIstButton ProductId={product?._id} />
             </div>

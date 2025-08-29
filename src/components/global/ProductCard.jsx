@@ -9,20 +9,20 @@ import { Tag } from "antd"
 
 function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, Brand }) {
     return (
-        <div className="bg-white border border-gray-200 rounded-lg p-3 flex flex-col gap-2 shadow-sm hover:shadow-md transition-all">
-            <Link href={`/product/${encodeURIComponent(Slug)}`} className="relative block group">
+        <div className="bg-white border border-gray-200 rounded-lg p-3 flex flex-col gap-2 shadow-sm hover:shadow-md transition-all relative block group">
 
-                {/* Top Right Tags + Wishlist */}
-                <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1 text-xs font-bold">
-                    <WishListButton ProductId={Id} />
-                    {isNewArrival && <Tag color="red" className="!rounded">New</Tag>}
-                    {isTrending && <Tag color="purple" className="!rounded">Trending</Tag>}
-                    {isBestSeller && <Tag color="green" className="!rounded">Best Seller</Tag>}
-                    {CustomLabel && (
-                        <Tag color="yellow-inverse" className="text-black rounded">{CustomLabel}</Tag>
-                    )}
-                </div>
+            {/* Top Right Tags + Wishlist */}
+            <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1 text-xs font-bold">
+                <WishListButton ProductId={Id} />
+                {isNewArrival && <Tag color="red" className="!rounded">New</Tag>}
+                {isTrending && <Tag color="purple" className="!rounded">Trending</Tag>}
+                {isBestSeller && <Tag color="green" className="!rounded">Best Seller</Tag>}
+                {CustomLabel && (
+                    <Tag color="yellow-inverse" className="text-black rounded">{CustomLabel}</Tag>
+                )}
+            </div>
 
+            <Link href={`/product/${encodeURIComponent(Slug)}`}>
                 {/* Image Section */}
                 <div className="aspect-[4/3] w-full bg-gray-50 flex items-center justify-center overflow-hidden rounded">
                     <Image
