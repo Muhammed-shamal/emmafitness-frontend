@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   Card,
-  Space,
   Typography,
   Divider,
   Badge,
@@ -30,7 +29,6 @@ import fetchApi from '../../../utility/api/fetchApi';
 import { setLoading, removeFromCart, setCart, setError, updateCartItemQuantity } from '../../../utility/redux/cartSlice';
 import updateApi from '../../../utility/api/updateAPI';
 import { useRouter } from 'next/navigation';
-import { showToast } from '../../../utility/redux/toastSlice';
 import { productUrl } from '../../../utility/api/constant';
 const { Title, Text } = Typography;
 
@@ -40,6 +38,7 @@ const CartPage = () => {
   const { items, loading, error } = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user);
   const [updatingItems, setUpdatingItems] = useState(new Set());
+  const [slug, setSlug] = useState(null);
 
   useEffect(() => {
     if (user?.userId && user?.token) {
@@ -50,13 +49,18 @@ const CartPage = () => {
   const fetchCart = async () => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchApi({ 
-        URI: `customers/cart/${user?.userId}`, 
-        API_TOKEN: user.token 
+      const response = await fetchApi({
+        URI: `customers/cart/getBy/${user?.userId}`,
+        API_TOKEN: user.token
       });
-      dispatch(setCart(response.data?.items || []));
+      const items = response?.items || [];
+      dispatch(setCart(items));
+
+      // ✅ Get the slug of the first product, if available
+      if (items.length > 0 && items[0]?.product?.slug) {
+        setSlug(items[0].product.slug);
+      }
     } catch (err) {
-      console.log("error is", err);
       dispatch(setError(err.response?.data?.message || 'Failed to fetch cart'));
       message.error(err.response?.data?.message || 'Failed to fetch cart data');
     } finally {
@@ -82,7 +86,8 @@ const CartPage = () => {
             userId: user.userId,
             productId,
             quantity: newQuantity
-          }
+          },
+          isTop: true,
         });
       }
     } catch (err) {
@@ -107,12 +112,36 @@ const CartPage = () => {
           Data: {
             userId: user.userId,
             productId
-          }
+          },
+          isTop: true,
         });
       }
       message.success('Item removed from cart');
     } catch (err) {
       message.error('Failed to remove item');
+    }
+  };
+
+  const handleShare = () => {
+    const shareUrl = `${window.location.origin}/product/${slug}`;
+
+    // Use Web Share API if supported (mostly on mobile)
+    if (navigator.share) {
+      navigator.share({
+        title: 'My Cart',
+        text: 'Check out my cart!',
+        url: shareUrl,
+      }).catch((err) => {
+        console.error('Share failed:', err);
+        message.error('Failed to share.');
+      });
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        message.success('Cart link copied to clipboard!');
+      }).catch(() => {
+        message.error('Failed to copy link.');
+      });
     }
   };
 
@@ -141,7 +170,7 @@ const CartPage = () => {
   };
 
   const getProductImage = (product) => {
-    return product.images && product.images.length > 0 
+    return product.images && product.images.length > 0
       ? `${productUrl}/${product.images[0]}`
       : '/api/placeholder/300/300';
   };
@@ -188,7 +217,7 @@ const CartPage = () => {
           >
             Continue Shopping
           </Button>
-          
+
           <div className="flex items-center">
             <ShoppingCartOutlined className="text-2xl text-primary mr-2" />
             <Title level={2} className="!mb-0 !text-gray-800">
@@ -232,7 +261,7 @@ const CartPage = () => {
                   {items.map((item) => {
                     const product = item.product;
                     const isUpdating = updatingItems.has(product._id);
-                    
+
                     return (
                       <div key={product._id} className="flex flex-col sm:flex-row gap-4 p-4 border-b border-gray-100 last:border-b-0">
                         {/* Product Image */}
@@ -269,7 +298,7 @@ const CartPage = () => {
                                 </Tag>
                               )}
                             </div>
-                            
+
                             {/* Price */}
                             <div className="text-right">
                               <div className="flex items-center gap-2">
@@ -298,11 +327,11 @@ const CartPage = () => {
                                 disabled={item.quantity <= 1 || isUpdating}
                                 loading={isUpdating}
                               />
-                              
+
                               <span className="w-12 text-center font-medium">
                                 {item.quantity}
                               </span>
-                              
+
                               <Button
                                 icon={<PlusOutlined />}
                                 size="small"
@@ -317,7 +346,7 @@ const CartPage = () => {
                               <Text strong className="text-lg">
                                 AED {(product.salePrice * item.quantity).toFixed(2)}
                               </Text>
-                              
+
                               <Button
                                 type="text"
                                 danger
@@ -349,21 +378,21 @@ const CartPage = () => {
                       <Text>Subtotal</Text>
                       <Text>AED {calculateSubtotal().toFixed(2)}</Text>
                     </div>
-                    
+
                     {calculateDiscount() > 0 && (
                       <div className="flex justify-between text-green-600">
                         <Text>Discount</Text>
                         <Text>-AED {calculateDiscount().toFixed(2)}</Text>
                       </div>
                     )}
-                    
+
                     <div className="flex justify-between">
                       <Text>Shipping</Text>
                       <Text className="text-green-600">Free</Text>
                     </div>
-                    
+
                     <Divider className="my-4" />
-                    
+
                     <div className="flex justify-between text-lg font-semibold">
                       <Text>Total</Text>
                       <Text className="text-primary">
@@ -374,7 +403,6 @@ const CartPage = () => {
 
                   {/* Checkout Button */}
                   <Button
-                    type="primary"
                     size="large"
                     block
                     icon={<CheckOutlined />}
@@ -397,6 +425,7 @@ const CartPage = () => {
                       icon={<ShareAltOutlined />}
                       block
                       className="flex-1"
+                      onClick={handleShare}
                     >
                       Share Cart
                     </Button>

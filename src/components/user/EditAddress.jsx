@@ -4,6 +4,10 @@ import { useState, useEffect } from "react";
 import updateAPI from "../../utility/api/updateAPI";
 import fetchApi from "../../utility/api/fetchApi";
 import { useSelector } from "react-redux";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { isValidPhoneNumber } from 'libphonenumber-js';
+import { showToast } from "@/utility/redux/toastSlice";
 
 function EditAddress({ Data, close }) {
     const [result, setResult] = useState({ loading: false, err: false, msg: '' });
@@ -55,12 +59,23 @@ function EditAddress({ Data, close }) {
             });
 
             setResult({ err: false, msg: 'Successfully updated', loading: false });
+            dispatch(showToast({ type: 'success', message: 'Successfully updated address' }));
             close?.(); // Close if available
         } catch (err) {
             setResult({ err: true, msg: 'Unable to save address', loading: false });
             console.error('Error while updating address:', err);
         }
     };
+
+    const validatePhoneNumber = (_, value) => {
+            if (!value) {
+                return Promise.reject(new Error('Please input your phone number!'));
+            }
+            if (!isValidPhoneNumber('+' + value)) {
+                return Promise.reject(new Error('Please enter a valid phone number!'));
+            }
+            return Promise.resolve();
+        };
 
     return (
         <div className="flex flex-col justify-center">
@@ -84,10 +99,10 @@ function EditAddress({ Data, close }) {
                     label="Full Name"
                     rules={[
                         { required: true, message: 'Please input your full name!' },
-                        {
-                            pattern: /^[A-Za-z]{2,}(?:\s[A-Za-z]{2,})+$/,
-                            message: 'Please enter your full name (at least first and last name)',
-                        },
+                        // {
+                        //     pattern: /^[A-Za-z]{2,}(?:\s[A-Za-z]{2,})+$/,
+                        //     message: 'Please enter your full name (at least first and last name)',
+                        // },
                     ]}
                 >
                     <Input />
@@ -135,16 +150,18 @@ function EditAddress({ Data, close }) {
 
                 <Form.Item
                     name="contactNo"
-                    label="Contact No."
-                    rules={[
-                        { required: true, message: 'Please input your contact number!' },
-                        {
-                            pattern: /^05[0-9]{8}$/,
-                            message: 'Please enter a valid UAE phone number (e.g. 0501234567)',
-                        },
-                    ]}
+                    rules={[{ validator: validatePhoneNumber }]}
                 >
-                    <Input maxLength={10} />
+                    <PhoneInput
+                        country={'ae'} // Default country: United Arab Emirates (+971)
+                        inputProps={{
+                            name: 'contactNo',
+                            required: true,
+                            autoFocus: true,
+                        }}
+                        containerStyle={{ width: '100%' }}
+                        inputStyle={{ width: '100%', height: '2.25rem' }}
+                    />
                 </Form.Item>
 
                 {result.msg && (

@@ -158,7 +158,7 @@ function Header() {
     },
     {
       key: '6',
-      label: (<span onClick={() => signOut()} > Logout</span>),
+      label: (<span onClick={() => signOut(user.token)} > Logout</span>),
     }
     ] :
     [{

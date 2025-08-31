@@ -15,6 +15,7 @@ import basicData from '../utility/basicDatas';
 import ToastListener from '../components/ToastListner'
 import { OffersProvider } from '../utility/context/OfferContext';
 
+
 // const inter = Gothic_A1({ subsets: ['latin'], weight: ['400'] });
 
 

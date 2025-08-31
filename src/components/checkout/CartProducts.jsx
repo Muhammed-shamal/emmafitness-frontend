@@ -1,14 +1,18 @@
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
+import Price from "../global/Price";
 
 
 function CartProducts() {
-  const items = useSelector(state => state?.orderDraft)
-  const route = useRouter()
-  useEffect(()=>{
-    if(items.length < 1) route.push('/cart')
-  },[])
+  const { items } = useSelector(state => state.cart);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!items || items.length < 1) {
+      router.push('/cart');
+    }
+  }, [items]);
 
   return (
     <div className='bg-gray-100 border border-gray-200 p-2 md:p-4 text-sm'>
@@ -18,18 +22,21 @@ function CartProducts() {
         <div className='w-1/4'>Price</div>
       </div>
 
-
-      {
-        items?.cartProduct?.map((it, idx) => (
-          <div key={idx} className={`flex flex-row gap-2 md:gap-4 p-2 border-b border-gray-300'}`}>
-            <div className='w-1/2 line-clamp-1'>{it?.name}</div>
-            <div className='w-1/4'>{it?.quantity}</div>
-            <div className='w-1/4'>{it?.Sale_Price || items?.Regular_Price}</div>
+      {items?.map((item, idx) => (
+        <div
+          key={idx}
+          className='flex flex-row gap-2 md:gap-4 p-2 border-b border-gray-300'
+        >
+          <div className='w-1/2 line-clamp-1'>{item.product?.name}</div>
+          <div className='w-1/4'>{item.quantity}</div>
+          <div className='w-1/4'>
+          {/* AED  {item.product?.salePrice || item.product?.regularPrice} */}
+          <Price salePrice={item.product?.salePrice} regularPrice={item.product?.regularPrice} />
           </div>
-        ))
-      }
+        </div>
+      ))}
     </div>
-  )
+  );
 }
 
 export default CartProducts

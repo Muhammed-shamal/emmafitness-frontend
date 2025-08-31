@@ -30,8 +30,6 @@ function Page() {
           API_TOKEN: userDetails?.token,
         });
 
-        console.log("addres rsult",result)
-
         if (result) {
           const formatted = result.map((state) => ({
             userName: state?.userName,
