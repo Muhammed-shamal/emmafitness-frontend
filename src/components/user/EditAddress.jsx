@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { isValidPhoneNumber } from 'libphonenumber-js';
-import { showToast } from "@/utility/redux/toastSlice";
+import { showToast } from "../../utility/redux/toastSlice";
 
 function EditAddress({ Data, close }) {
     const [result, setResult] = useState({ loading: false, err: false, msg: '' });
