@@ -55,7 +55,7 @@ export default async function Page() {
 
   return (
     <main className='container space-y-2 md:space-y-4'>
-      {banner && <Banner title={banner.title} description={banner.description} image={banner.image} />}
+      {banner && <Banner title={banner.title} description={banner.description} />}
       <div className='hidden sm:block'>
         <CategorySlider />
       </div>

@@ -31,7 +31,7 @@ function CartProducts() {
           <div className='w-1/4'>{item.quantity}</div>
           <div className='w-1/4'>
           {/* AED  {item.product?.salePrice || item.product?.regularPrice} */}
-          <Price salePrice={item.product?.salePrice} regularPrice={item.product?.regularPrice} />
+          <Price salePrice={2000} regularPrice={1590} />
           </div>
         </div>
       ))}
