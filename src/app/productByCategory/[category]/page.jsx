@@ -81,8 +81,9 @@ function Page({ params }) {
                         </h3>
 
                         <p className="text-gray-500 mb-6 max-w-md">
-                            We couldn't find any products in this category. Try checking back later or explore other categories.
+                            We couldn&rsquo;t find any products in this category.
                         </p>
+
 
                         <div className="flex flex-col sm:flex-row gap-3">
                             <button

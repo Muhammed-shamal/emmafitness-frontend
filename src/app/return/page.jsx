@@ -1,31 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { 
-  Card, 
-  Result, 
-  Spin, 
-  Typography, 
+import {
+  Card,
+  Result,
+  Spin,
+  Typography,
   Space,
   Button,
   Alert,
-  Divider 
+  Divider
 } from "antd";
-import { 
-  CheckCircleOutlined, 
-  LoadingOutlined, 
+import {
+  CheckCircleOutlined,
+  LoadingOutlined,
   ArrowLeftOutlined,
   MailOutlined
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import fetchApi from "../../utility/api/fetchApi";
 
 const { Title, Text, Paragraph } = Typography;
 
 export default function Page() {
-  const [status, setStatus] = useState<string | null>(null);
-  const [customerEmail, setCustomerEmail] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState(null);
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -38,31 +39,47 @@ export default function Page() {
       return;
     }
 
-    fetch(`/api/session-status?session_id=${sessionId}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setStatus(data.status);
-        setCustomerEmail(data.customer_email);
-        setLoading(false);
-      })
-      .catch((err) => {
+    // fetch(`/api/session-status?session_id=${sessionId}`)
+    //   .then((res) => {
+    //     if (!res.ok) {
+    //       throw new Error(`HTTP error! Status: ${res.status}`);
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     setStatus(data.status);
+    //     setCustomerEmail(data.customer_email);
+    //     setLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.error("Error fetching session status:", err);
+    //     setError("Failed to retrieve payment status. Please try again later.");
+    //     setLoading(false);
+    //   });
+
+    const fetchData = async () => {
+      try {
+        let response = await fetchApi({ URI: `customers/payment/status?session_id=${sessionId}`, API_TOKEN: user?.token, });
+        setStatus(response.status);
+        setCustomerEmail(response.customer_email);
+      } catch (error) {
         console.error("Error fetching session status:", err);
         setError("Failed to retrieve payment status. Please try again later.");
         setLoading(false);
-      });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
   }, []);
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         minHeight: '60vh',
         flexDirection: 'column',
         gap: 16
@@ -84,14 +101,14 @@ export default function Page() {
           title="Unable to Verify Payment"
           subTitle={error}
           extra={[
-            <Button 
-              type="primary" 
-              key="console" 
+            <Button
+              type="primary"
+              key="console"
               onClick={() => router.push('/')}
             >
               Return to Home
             </Button>,
-            <Button 
+            <Button
               key="buy"
               onClick={() => router.push('/checkout')}
             >
@@ -130,14 +147,14 @@ export default function Page() {
           title="Payment Successful!"
           subTitle="Thank you for your purchase. Your transaction has been completed successfully."
           extra={[
-            <Button 
-              type="primary" 
-              key="console" 
+            <Button
+              type="primary"
+              key="console"
               onClick={() => router.push('/dashboard')}
             >
               Go to Dashboard
             </Button>,
-            <Button 
+            <Button
               key="buy"
               onClick={() => router.push('/')}
             >
@@ -145,22 +162,22 @@ export default function Page() {
             </Button>,
           ]}
         />
-        
+
         <Card style={{ marginTop: 24 }}>
           <Title level={4}>Order Details</Title>
           <Space direction="vertical" style={{ width: '100%' }} size="large">
             <div>
               <Text strong>Payment Status:</Text>
               <div>
-                <Alert 
-                  message="Completed" 
-                  type="success" 
-                  showIcon 
+                <Alert
+                  message="Completed"
+                  type="success"
+                  showIcon
                   style={{ width: 'fit-content', marginTop: 8 }}
                 />
               </div>
             </div>
-            
+
             <div>
               <Text strong>Confirmation Email:</Text>
               <Paragraph style={{ margin: 0, marginTop: 8 }}>
@@ -168,11 +185,11 @@ export default function Page() {
                 A confirmation email has been sent to <Text mark>{customerEmail}</Text>
               </Paragraph>
             </div>
-            
+
             <Divider />
-            
+
             <Paragraph type="secondary">
-              If you have any questions about your order, please contact our 
+              If you have any questions about your order, please contact our
               support team at support@yourcompany.com or call us at (800) 123-4567.
             </Paragraph>
           </Space>
@@ -189,8 +206,8 @@ export default function Page() {
           title="Payment Status Unknown"
           subTitle="We couldn't determine the status of your payment. Please contact support if this issue persists."
           extra={
-            <Button 
-              type="primary" 
+            <Button
+              type="primary"
               icon={<ArrowLeftOutlined />}
               onClick={() => router.push('/')}
             >

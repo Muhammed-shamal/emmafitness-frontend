@@ -186,10 +186,10 @@ export default function StorePage() {
                   No Stores Available
                 </Title>
                 <Text className="text-gray-500 text-lg mb-8 block">
-                  We don't have any physical stores listed at the moment.
+                  We don&rsquo;t have any physical stores listed at the moment.
                 </Text>
                 <div className="space-y-3 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
-                  <Button type="primary" size="large" icon={<ExternalLink className="w-4 h-4" />}>
+                  <Button size="large" icon={<ExternalLink className="w-4 h-4" />}>
                     Contact Support
                   </Button>
                   <Button size="large">

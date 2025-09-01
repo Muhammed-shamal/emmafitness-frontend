@@ -241,7 +241,7 @@ const CartPage = () => {
               Your cart is empty
             </Title>
             <p className="text-gray-600 mb-8">
-              Looks like you haven't added any items to your cart yet.
+              Looks like you haven&rsquo;t added any items to your cart yet.
             </p>
             <Button
               type="primary"
