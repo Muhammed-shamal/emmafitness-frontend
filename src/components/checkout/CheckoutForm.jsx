@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+export const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 export default function CheckoutPage({ summary, disabled, orderId }) {
     const user = useSelector(state => state.user);

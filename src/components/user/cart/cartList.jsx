@@ -244,7 +244,6 @@ const CartPage = () => {
               Looks like you haven&rsquo;t added any items to your cart yet.
             </p>
             <Button
-              type="primary"
               size="large"
               onClick={() => router.push('/products')}
               className="px-8"
