@@ -5,13 +5,13 @@ import { bannerUrl } from '../utility/api/constant'
 import { useEffect, useState } from 'react';
 
 const images = [
-  "/gallery/Emma fitness banner 1_page-0001.jpg",
-  "/gallery/Emma fitness banner 2_page-0001.jpg",
-  "/gallery/Emma fitness banner 3_page-0001.jpg"
+  "/gallery/banner1.jpg",
+  "/gallery/banner2.jpg",
+  "/gallery/banner3.jpg"
 ]
 
 export default function Banner({ title, description }) {
-  const fallbackImage = "/gallery/Emma fitness banner 1_page-0001.jpg";
+  const fallbackImage = "/gallery/banner2.jpg";
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
