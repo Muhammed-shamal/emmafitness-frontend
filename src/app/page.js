@@ -79,7 +79,7 @@ export default async function Page() {
         </>
       )}
 
-      <OffersBanner />
+      {/* <OffersBanner /> */}
       <ProductSlider />
 
       {newArrivals.length > 0 && (<>
@@ -125,7 +125,7 @@ export default async function Page() {
         </p>
         <p>📍 Located in Sharjah | Delivering Across the UAE</p>
 
-        <div style={{ maxWidth: 600, margin: '50px auto', lineHeight: '1.6' }}>
+        <div style={{ margin: '50px auto', lineHeight: '1.6' }}>
           <h1>Frequently Asked Questions</h1>
           <FAQ />
         </div>

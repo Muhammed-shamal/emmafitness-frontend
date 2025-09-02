@@ -3,7 +3,7 @@
 import Price from "../../../components/global/Price"
 import OffLabel from "../../../components/global/label/OffLabel"
 import CartButton from "../../../components/global/CartButton"
-import BuyNow from "../../../components/global/BuyNowButton"
+import { BuyNow2 } from "../../../components/checkout/buyNow"
 import WishLIstButton from '../../../components/global/WishListButton'
 import { Divider, Tag, Spin } from "antd"
 import ImageSection from '../../../components/singleProduct/ImageSection'
@@ -22,12 +22,14 @@ import {
   FaWhatsapp,
   FaLink,
 } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 function Page({ params }) {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
-
   const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
@@ -54,6 +56,12 @@ function Page({ params }) {
 
     fetchData();
   }, [params.single_product, product?.category?._id, product?._id]);
+
+
+  const handleBuyNow = () => {
+    if (!product?._id) return;
+    router.push(`/order?productId=${product._id}`);
+  }
 
 
   const specialIcons = [
@@ -211,7 +219,7 @@ function Page({ params }) {
 
             <div className="flex flex-row gap-4">
               <CartButton productId={product?._id} />
-              <BuyNow ProductId={product?._id} />
+              <BuyNow2 productId={product?._id} product={product}/>
               <WishLIstButton ProductId={product?._id} />
             </div>
           </div>

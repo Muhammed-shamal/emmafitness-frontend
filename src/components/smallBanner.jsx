@@ -7,10 +7,9 @@ import { Tag, Typography, Button, Row, Col, Carousel } from 'antd';
 const { Title, Paragraph } = Typography;
 
 const heroImages = [
-  '/strong-man-training-gym.jpg',
-  '/product-placehold.png',
-  '/dumbbells-fitness.jpg',
-  '/fitness-banner.webp'
+  "/gallery/banner1.jpg",
+  "/gallery/banner2.jpg",
+  "/gallery/banner3.jpg"
 ];
 
 export default function SmallBanner() {
@@ -20,7 +19,7 @@ export default function SmallBanner() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       style={{
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%)',
+        // background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%)',
         padding: '40px 20px',
         borderBottom: '1px solid rgba(0,0,0,0.08)'
       }}

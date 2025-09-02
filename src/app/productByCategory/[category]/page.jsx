@@ -94,10 +94,10 @@ function Page({ params }) {
                             </button>
 
                             <Link
-                                href="/"
+                                href="/products"
                                 className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium text-center"
                             >
-                                Browse Categories
+                                Browse Products
                             </Link>
                         </div>
                     </div>

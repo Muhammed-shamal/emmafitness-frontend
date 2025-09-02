@@ -40,7 +40,7 @@ export default function StorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       {/* Header Section */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-6">
