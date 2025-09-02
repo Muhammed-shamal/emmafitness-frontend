@@ -112,9 +112,12 @@ function Page({ params }) {
               <Divider />
 
               <Price salePrice={product?.salePrice} regularPrice={product?.regularPrice} />
-              <OffLabel RegularPrice={product?.regularPrice} SalePrice={product?.salePrice} />
 
-              <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+              <div className="mt-3">
+                <OffLabel RegularPrice={product?.regularPrice} SalePrice={product?.salePrice} />
+              </div>
+
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
                 {/* <Tag color="cyan" className="rounded-none">{product?.status}</Tag> */}
 
                 {product?.stockQty < 10 && product?.stockQty > 0 ? (
@@ -131,7 +134,6 @@ function Page({ params }) {
                 {product?.isBestSeller && <Tag color="green">Best Seller</Tag>}
                 {product?.customLabel && <Tag color="yellow" className="text-black">{product?.customLabel}</Tag>}
               </div>
-
 
               <Divider />
 
@@ -219,7 +221,7 @@ function Page({ params }) {
 
             <div className="flex flex-row gap-4">
               <CartButton productId={product?._id} />
-              <BuyNow2 productId={product?._id} product={product}/>
+              <BuyNow2 productId={product?._id} product={product} />
               <WishLIstButton ProductId={product?._id} />
             </div>
           </div>

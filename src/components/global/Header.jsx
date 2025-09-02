@@ -191,8 +191,8 @@ function Header() {
           {/* Phone number */}
           <div className='hidden md:flex items-center gap-2 font-bold text-sm'>
             <PhoneOutlined className='text-secondary' />
-            <Link href="tel:+971 563296585">
-              +971 563296585</Link>
+            <Link href="tel:+971 559457419">
+              +971559457419</Link>
           </div>
 
           {/* Icons */}
@@ -233,8 +233,8 @@ function Header() {
           <div className='mb-2'><Search /></div>
           <div className='flex items-center gap-2 text-sm'>
             <PhoneOutlined className='text-secondary' />
-            <Link href="tel:+971 563296585">
-              +971 563296585</Link>
+            <Link href="tel:+971 559457419">
+              +971 559457419</Link>
           </div>
         </div>
 

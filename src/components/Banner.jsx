@@ -65,6 +65,7 @@ export default function Banner({ title, description }) {
               alt={`Fitness Banner ${index + 1}`}
               fill
               priority={index === 0}
+              sizes="(max-width: 768px) 100vw, 100vw"
               className="object-center object-cover brightness-75"
             />
           </div>

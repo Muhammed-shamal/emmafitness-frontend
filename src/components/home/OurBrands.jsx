@@ -100,11 +100,21 @@ function OurBrands() {
       <div className="max-w-6xl mx-auto py-0 sm:py-12 px-4">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-2xl font-bold mb-4">Our Story</h2>
-            <p className="text-gray-600 mb-6">
-              {brand.story || `Since our founding, ${brand.name} has been committed to delivering exceptional quality and innovative designs. Every product is crafted with precision and care to ensure your complete satisfaction.`}
-            </p>
             <div className="space-y-4">
+              <div className="text-black">
+                <h1 className="text-3xl md:text-4xl font-bold mb-4">{brand.name}</h1>
+                <p className="text-lg mb-6 max-w-2xl">{brand.description}</p>
+                {/* <Link href={brand.slug}>
+                  <button className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-gray-800 transition duration-200">
+                    Explore Collection
+                  </button>
+                </Link> */}
+              </div>
+
+              <h2 className="text-2xl font-bold mb-4">Our Story</h2>
+              <p className="text-gray-600 mb-6">
+                {brand.story || `Since our founding, ${brand.name} has been committed to delivering exceptional quality and innovative designs. Every product is crafted with precision and care to ensure your complete satisfaction.`}
+              </p>
               <div className="flex items-start">
                 <svg className="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -122,16 +132,6 @@ function OurBrands() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
                 <span>Customer satisfaction guarantee</span>
-              </div>
-
-              <div className="text-black">
-                <h1 className="text-3xl md:text-4xl font-bold mb-4">{brand.name}</h1>
-                <p className="text-lg mb-6 max-w-2xl">{brand.description}</p>
-                {/* <Link href={brand.slug}>
-                  <button className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-gray-800 transition duration-200">
-                    Explore Collection
-                  </button>
-                </Link> */}
               </div>
             </div>
           </div>
