@@ -26,7 +26,8 @@ import {
     UserOutlined,
     EnvironmentOutlined,
     CreditCardOutlined,
-    ExclamationCircleOutlined
+    ExclamationCircleOutlined,
+    CheckCircleOutlined
 } from '@ant-design/icons';
 import Image from "next/image"
 import moment from "moment"
@@ -146,7 +147,7 @@ function OrderHistory() {
     };
 
     const paymentStatusTag = (isPaid) => (
-        <Tag color={isPaid ? 'green' : 'red'} icon={isPaid ? <CheckCircleOutlined /> : <ExclamationCircleOutlined />}>
+        <Tag color={isPaid ? 'green' : 'red'} icon={isPaid ? <CheckCircleOutlined /> : <CheckCircleOutlined />}>
             {isPaid ? 'PAID' : 'UNPAID'}
         </Tag>
     );
