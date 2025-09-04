@@ -2,6 +2,7 @@ import SocialIcon from "../SocialIcon"
 import { EnvironmentOutlined } from "@ant-design/icons"
 import basicData from "../../../utility/basicDatas"
 import Image from "next/image"
+import Link from "next/link"
 
 function MainSection() {
     return (
@@ -13,6 +14,9 @@ function MainSection() {
                     <p className="text-xs md:text-sm">
                         We are passionate about the world of fitness and cutting-edge gym equipment. As dedicated fitness enthusiasts ourselves, we deeply understand the significance of a well-equipped workout space and the impact it can have on achieving your fitness goals.
                     </p>
+
+                    <Link href={"/privacy-policy"} className="me-3 text-blue-600">privacy and policy</Link>
+                    <Link href={"/terms-conditions"} className="text-blue-600">terms and condition</Link>
                 </div>
 
                 <div className="flex flex-col gap-5">

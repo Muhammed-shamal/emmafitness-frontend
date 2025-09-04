@@ -4,8 +4,8 @@ import Marquee from 'react-fast-marquee'
 export default function ServiceTicker() {
   const services = [
     "🚚 Free UAE Delivery on Orders Over 500 AED",
-    "💪 30-Day Money Back Guarantee",
-    "🔧 Lifetime Equipment Warranty",
+    "🛠 Spare Parts & Maintenance Services Available",
+    "🔧 2 years Equipment Warranty",
     "🏋️‍♂️ Professional Assembly Available",
     "📞 24/7 Customer Support"
   ]

@@ -112,6 +112,7 @@ function OurBrands() {
               </div>
 
               <h2 className="text-2xl font-bold mb-4">Our Story</h2>
+              <Link href={"/about"} className="text-blue-600 underline font-bold mb-4">About us</Link>
               <p className="text-gray-600 mb-6">
                 {brand.story || `Since our founding, ${brand.name} has been committed to delivering exceptional quality and innovative designs. Every product is crafted with precision and care to ensure your complete satisfaction.`}
               </p>

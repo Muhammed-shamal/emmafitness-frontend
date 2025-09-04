@@ -65,7 +65,7 @@ export const BuyNow2 = ({ productId, product }) => {
     console.log('addressId is',addressId)
 
     if (!productId || !product?.salePrice || !addressId) {
-      dispatch(showToast({ type: 'error', message: 'Missing product or shipping info' }));
+      dispatch(showToast({ type: 'error', message: 'Please Login to buy products' }));
       return;
     }
 

@@ -7,7 +7,7 @@ import FeaturedProducts from '../components/home/FeaturedProducts'
 import NewProducts from '../components/home/NewProducts'
 import Title from '../components/global/Title'
 import Section from '../components/Section'
-import SmallBanner from '../components/smallBanner'
+// import SmallBanner from '../components/smallBanner'
 // import FilteredCategories from '../components/filteredCategories'
 import FAQ from '../components/faq'
 import Reviews from '../components/googleReviews'
@@ -47,8 +47,6 @@ export default async function Page() {
     fetchSafeApi('public/banner'),
     // fetchSafeApi('public/products/cheapest')
   ])
-
-  console.log('trendingProducts', trendingProducts)
 
   return (
     <main className='container space-y-2 md:space-y-4'>

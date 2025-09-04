@@ -13,6 +13,8 @@ import UserSession from '../../components/user/userSessions'
 import CustomSpinner from '../../components/global/CustomSpinner'
 import { Modal } from 'antd'
 import { showToast } from '../../utility/redux/toastSlice'
+import updateApi from '../../utility/api/deleteApi'
+import { bulkReplaceCart } from '@/utility/redux/cartSlice'
 
 function Page() {
   const [loading, setLoading] = useState(false)
@@ -99,8 +101,23 @@ function Page() {
         isTop: true
       });
 
+
       dispatch(showToast({ type: "success", message: `Your order has been placed. Order# ${data?._id}` }));
       setOrderId(data._id);
+      try {
+        const data = await updateApi({
+          URI: "customers/carts/replace/bulk",
+          Data: {
+            userId: user?.userId
+          },
+          API_TOKEN: user?.token,
+          isTop: true
+        });
+        console.log("bulk data is",data);
+        dispatch(bulkReplaceCart(data.cart));
+      } catch (error) {
+        console.error("something went wrong for remove from cart");
+      }
     } catch (err) {
       console.error("Order creation failed:", err);
     } finally {
