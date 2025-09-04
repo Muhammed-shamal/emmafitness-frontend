@@ -6,19 +6,14 @@ import OurBrands from '../components/home/OurBrands'
 import FeaturedProducts from '../components/home/FeaturedProducts'
 import NewProducts from '../components/home/NewProducts'
 import Title from '../components/global/Title'
-// import SubBanner from '../components/subBanner'
-import OffersBanner from '../components/OfferBanner'
-import SubBanner2 from '../components/subBanner2'
+import Section from '../components/Section'
 import SmallBanner from '../components/smallBanner'
-import MovingBanner from '../components/movingBanner'
 // import FilteredCategories from '../components/filteredCategories'
-import SmallCards from '../components/smallCards';
 import FAQ from '../components/faq'
 import Reviews from '../components/googleReviews'
-import HelpStayStrong from '../components/helpStayStrong'
+import Sale from '../components/Sale'
 import StorePage from '../components/stores'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { Col, Row } from 'antd'
 import { baseUrl } from '../utility/api/constant'
 
 export const metadata = {
@@ -45,21 +40,23 @@ async function fetchSafeApi(endpoint) {
 
 export default async function Page() {
   // 👇 fetch server-side before render
-  const [featuredProducts, newArrivals, banner, trendingProducts] = await Promise.all([
+  const [featuredProducts, newArrivals, trendingProducts, banner] = await Promise.all([
     fetchSafeApi('public/products/featured'),
     fetchSafeApi('public/products/new'),
-    fetchSafeApi('public/banner'),
     fetchSafeApi('public/products/trending'),
+    fetchSafeApi('public/banner'),
     // fetchSafeApi('public/products/cheapest')
   ])
 
+  console.log('trendingProducts', trendingProducts)
+
   return (
     <main className='container space-y-2 md:space-y-4'>
-      {banner && <Banner title={banner.title} description={banner.description} />}
+      {banner && <Banner />}
       <div className='hidden sm:block'>
         <CategorySlider />
       </div>
-      
+
       {trendingProducts.length > 0 && (<>
         <Title titlePart1={'Top Trending Products'} titlePart2={'For You'} viewAllUrl='/trending/products' />
         <section>
@@ -72,7 +69,7 @@ export default async function Page() {
 
       {featuredProducts.length > 0 && (
         <>
-          <Title titlePart1={'Featured Products'} titlePart2={'For You'} viewAllUrl='/featured/products' />
+          <Title titlePart1={'Featured Products'} titlePart2={'For You'} viewAllUrl='/featured/products' bgType='light'/>
           <section>
             <FeaturedProducts products={featuredProducts} />
           </section>
@@ -81,6 +78,7 @@ export default async function Page() {
 
       {/* <OffersBanner /> */}
       <ProductSlider />
+      <Sale />
 
       {newArrivals.length > 0 && (<>
         <Title titlePart1={'New'} titlePart2={'Products'} />
@@ -89,10 +87,8 @@ export default async function Page() {
         </section>
       </>)}
 
-      {/* <SubBanner /> */}
-      <SmallBanner />
-      {/* <SubBanner2 /> */}
-      {/* <MovingBanner /> */}
+      <Section />
+      {/* <SmallBanner /> */}
 
       {/* {cheapest.length > 0 && <div style={{ padding: '40px 20px' }}>
         <Title titlePart1={'Small'} titlePart2={'Budget'} />

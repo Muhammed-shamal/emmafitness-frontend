@@ -39,7 +39,7 @@ function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl
                 </div>
 
                 {/* Bottom Left Tags */}
-                <div className="absolute bottom-2 left-2 z-10 flex items-center gap-2">
+                <div className="absolute bottom-1 left-2 z-10 flex items-center gap-2">
                     <OffLabel SalePrice={SalePrice} RegularPrice={RegularPrice} />
                     {isFeatured && <Tag color="gold" className="!rounded">Featured</Tag>}
                 </div>

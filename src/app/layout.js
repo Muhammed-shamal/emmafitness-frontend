@@ -1,12 +1,11 @@
 
 // import { Gothic_A1 } from 'next/font/google';
 import '../../theme/global.css'
-import Currency from '../components/currency'
 import ServiceTicker from '../components/serviceTicker'
 import Header from '../components/global/Header';
 import Footer from '../components/global/footer/Footer';
 import { Providers } from '../utility/redux/provider'
-import NavMenu from '../components/global/Menu';
+import BackToTop from '../components/BackToTop'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { WhatsAppOutlined } from '@ant-design/icons';
 import { Toaster } from 'react-hot-toast';
@@ -56,6 +55,7 @@ export default function RootLayout({ children }) {
             </div>
 
             <Footer />
+            <BackToTop />
           </OffersProvider>
         </Providers>
       </body>

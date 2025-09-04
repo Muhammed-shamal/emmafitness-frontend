@@ -13,14 +13,13 @@ import { Spin } from "antd"
 function Page() {
 
   const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const params = useSearchParams()
   const [maxAmount, setMaxAmount] = useState(undefined)
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        setLoading(true)
         const result = await fetchApi({ URI: 'public/products/featured?data=all' })
 
         setProducts(result?.map(prdct => ({

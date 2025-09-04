@@ -1,19 +1,21 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { Typography } from 'antd';
+// import { Typography } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Autoplay } from 'swiper/modules'; // For Swiper v9+
-import SeasonalHeader from './seasonalHeader'
+// import SeasonalHeader from './seasonalHeader'
 import fetchApi from '../utility/api/fetchApi';
 import { productUrl } from '../utility/api/constant';
 import ProductCardSkeleton from './global/skeletons/productSlider';
+import { getSeason, } from '../utility/Season/getSeason'
 import Link from 'next/link';
-
-const { Title, Text } = Typography;
+import Title from './global/Title';
 
 const ProductSlider = () => {
+    const season = getSeason();
+    
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState([]);
 
@@ -36,11 +38,11 @@ const ProductSlider = () => {
             ? `${productUrl}/${product.images[0]}` // adjust this path as per your backend
             : '/product-placehold.png'; // fallback image
     };
-
     return (
         <div className="bg-white px-4 py-8 sm:px-6 lg:px-8">
             {/* Mini Banner */}
-            <SeasonalHeader />
+            {/* <SeasonalHeader /> */}
+            <Title titlePart1={'Trending this'} titlePart2={season} bgType='light'/>
 
             <Swiper
                 modules={[Autoplay]}

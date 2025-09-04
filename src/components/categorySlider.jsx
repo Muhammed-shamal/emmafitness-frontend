@@ -41,7 +41,7 @@ export default function CategorySlider() {
   }, [selected]);
 
   return (
-    <section className="px-4 mt-6 relative">
+    <section className="px-4 mt-16 relative">
       {/* Horizontal Slider */}
       <div className="relative">
         <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">

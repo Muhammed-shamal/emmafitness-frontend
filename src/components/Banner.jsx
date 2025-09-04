@@ -1,16 +1,16 @@
 'use client'
 import Image from 'next/image'
-import Link from 'next/link'
-import { bannerUrl } from '../utility/api/constant'
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const images = [
-  "/gallery/banner1.jpg",
-  "/gallery/banner2.jpg",
-  "/gallery/banner3.jpg"
+  { id: 1, redirect: '/products', image: "/gallery/banner1.jpg" },
+  { id: 2, redirect: '/trending/products', image: "/gallery/banner2.jpg" },
+  { id: 3, redirect: '/featured/products', image: "/gallery/banner3.jpg" }
+
 ]
 
-export default function Banner({ title, description }) {
+export default function Banner() {
   const fallbackImage = "/gallery/banner2.jpg";
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -56,37 +56,22 @@ export default function Banner({ title, description }) {
       <div className="relative w-full h-full">
         {images.map((image, index) => (
           <div
-            key={index}
+            key={image.id}
             className={`absolute inset-0 transition-opacity duration-700 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
           >
-            <Image
-              src={image || fallbackImage}
-              alt={`Fitness Banner ${index + 1}`}
-              fill
-              priority={index === 0}
-              sizes="(max-width: 768px) 100vw, 100vw"
-              className="object-center object-cover brightness-75"
-            />
+            <Link href={image.redirect}>
+              <Image
+                src={image.image || fallbackImage}
+                alt={`Fitness Banner ${index + 1}`}
+                fill
+                priority={index === 0}
+                sizes="(max-width: 768px) 100vw, 100vw"
+                className="object-center object-cover brightness-75"
+              />
+            </Link>
           </div>
         ))}
-      </div>
-
-      {/* Overlay Content */}
-      <div className="absolute inset-0 flex items-center justify-center text-center px-4">
-        <div className="text-white space-y-4 max-w-2xl">
-          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
-            {title}
-          </h1>
-          <p className="text-lg md:text-xl">
-            {description}
-          </p>
-          <Link href="/products">
-            <button className="bg-secondary hover:bg-white hover:text-secondary transition-all px-6 py-3 mt-5 text-white font-semibold rounded-full">
-              View All Products
-            </button>
-          </Link>
-        </div>
       </div>
 
       {/* Navigation Arrows */}
