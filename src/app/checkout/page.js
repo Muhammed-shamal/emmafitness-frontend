@@ -14,7 +14,7 @@ import CustomSpinner from '../../components/global/CustomSpinner'
 import { Modal } from 'antd'
 import { showToast } from '../../utility/redux/toastSlice'
 import updateApi from '../../utility/api/deleteApi'
-import { bulkReplaceCart } from '@/utility/redux/cartSlice'
+import { bulkReplaceCart } from '../../utility/redux/cartSlice'
 
 function Page() {
   const [loading, setLoading] = useState(false)

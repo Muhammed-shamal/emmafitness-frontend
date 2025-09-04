@@ -15,10 +15,12 @@ import UserSession from '../user/userSessions'
 import { addBulkWishlist, setWishList } from '../../utility/redux/wishListSlice'
 import CategoryNav from './CategoryNav'
 import { showToast } from '../../utility/redux/toastSlice'
+import { useRouter } from 'next/navigation'
 
 
 function Header() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const router = useRouter();
   const cart = useSelector(state => state.cart)
   const wishList = useSelector(state => state.wishList)
   const user = useSelector(state => state.user)
@@ -135,6 +137,15 @@ function Header() {
     }
   }, [user?.userId, user?.token, dispatch]);
 
+  const handleCartClick = () => {
+    if (user?.token) {
+      router.push('/cart');
+    } else {
+      setPopup(true);
+    }
+  };
+
+
   const items = user?.userId ?
     [{
       key: '1',
@@ -216,14 +227,14 @@ function Header() {
 
             {/* Cart */}
             <Skeleton loading={loading} active paragraph={false} title={false}>
-              <Link href="/cart" className='hover:text-secondary text-3xl'>
-                <div className='relative'>
-                  <ShoppingCartOutlined className='text-red-500' />
-                  <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
+              <div onClick={handleCartClick} className="cursor-pointer hover:text-secondary text-3xl">
+                <div className="relative">
+                  <ShoppingCartOutlined className="text-red-500" />
+                  <div className="h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1">
                     {cart.items?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0) || 0}
                   </div>
                 </div>
-              </Link>
+              </div>
             </Skeleton>
           </div>
         </div>

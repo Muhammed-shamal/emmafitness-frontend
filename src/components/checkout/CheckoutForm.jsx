@@ -15,7 +15,6 @@ export default function CheckoutPage({ summary, disabled, orderId }) {
 
     // Fetch clientSecret only when paymentOpen becomes true
     useEffect(() => {
-        console.log('try to succes payemnt')
         if (paymentOpen && !clientSecret) {
             const fetchClientSecret = async () => {
                 try {
