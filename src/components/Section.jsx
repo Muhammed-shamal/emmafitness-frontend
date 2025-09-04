@@ -48,7 +48,7 @@ const Section = () => {
               
               <div className="absolute top-1/2 left-6 transform -translate-y-1/2 text-white">
                 <h4 className="text-xl font-bold">
-                  New Men's<br />Collection
+                  New <br />Collection
                 </h4>
               </div>
             </div>

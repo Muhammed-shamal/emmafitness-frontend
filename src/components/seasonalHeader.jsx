@@ -11,7 +11,7 @@ const SeasonalHeader = () => {
                 <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
                     Trending this <span className={`${theme.textColor} font-bold`}>{season}</span>
                 </h2>
-                <p className="text-sm text-gray-600 mt-1">Discover the season's most wanted items</p>
+                <p className="text-sm text-gray-600 mt-1">Discover the season&apos;s most wanted items</p>
             </div>
             <div className="text-2xl ml-2 hidden md:block">
                 {theme.emoji}

@@ -99,8 +99,8 @@ function AboutUs() {
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Our Mission</h3>
                                 <p className="text-gray-600">
-                                    To provide high-quality fashion products that empower self-expression and
-                                    confidence through accessible pricing and exceptional service.
+                                    To deliver premium-quality gym equipment that empowers fitness, strength, and performance — combining durability,
+                                    innovation, and affordability to support every fitness journey.
                                 </p>
                             </div>
                         </Col>
@@ -111,8 +111,8 @@ function AboutUs() {
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Our Vision</h3>
                                 <p className="text-gray-600">
-                                    To become the most customer-centric fashion destination, revolutionizing
-                                    how people discover and shop for clothing online.
+                                    To become the most trusted and customer-centric fitness equipment brand,
+                                    revolutionizing how individuals and gyms access world-class workout solutions.
                                 </p>
                             </div>
                         </Col>
@@ -123,8 +123,8 @@ function AboutUs() {
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Our Values</h3>
                                 <p className="text-gray-600">
-                                    Quality, innovation, sustainability, and customer satisfaction are at the
-                                    heart of everything we do.
+                                    Quality, innovation, reliability, and customer satisfaction are at the core of everything we create.
+                                    At Emma Fitness, we are dedicated to building stronger bodies and stronger communities through fitness.
                                 </p>
                             </div>
                         </Col>
