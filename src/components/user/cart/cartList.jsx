@@ -208,7 +208,8 @@ const CartPage = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
           <Button
             type="text"
             icon={<ArrowLeftOutlined />}
@@ -220,7 +221,7 @@ const CartPage = () => {
 
           <div className="flex items-center">
             <ShoppingCartOutlined className="text-2xl text-primary mr-2" />
-            <Title level={2} className="!mb-0 !text-gray-800">
+            <Title level={2} className="!mb-0 !text-gray-800 text-lg sm:text-2xl">
               Your Cart
             </Title>
             <Badge
@@ -231,6 +232,7 @@ const CartPage = () => {
             />
           </div>
         </div>
+
 
         {items.length === 0 ? (
           <div className="text-center py-16">
@@ -252,7 +254,7 @@ const CartPage = () => {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2">
               <Card className="shadow-sm border-0">
@@ -264,7 +266,7 @@ const CartPage = () => {
                     return (
                       <div key={product._id} className="flex flex-col sm:flex-row gap-4 p-4 border-b border-gray-100 last:border-b-0">
                         {/* Product Image */}
-                        <div className="flex-shrink-0">
+                        <div className="w-full sm:w-auto flex justify-center sm:justify-start">
                           <Image
                             src={getProductImage(product)}
                             alt={product.name}
@@ -317,8 +319,8 @@ const CartPage = () => {
                           </div>
 
                           {/* Quantity Controls */}
-                          <div className="flex items-center justify-between mt-4">
-                            <div className="flex items-center space-x-2">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-4">
+                            <div className="flex items-center justify-center sm:justify-start space-x-2">
                               <Button
                                 icon={<MinusOutlined />}
                                 size="small"
@@ -341,11 +343,10 @@ const CartPage = () => {
                             </div>
 
                             {/* Subtotal and Actions */}
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center justify-between sm:justify-end space-x-4">
                               <Text strong className="text-lg">
                                 AED {(product.salePrice * item.quantity).toFixed(2)}
                               </Text>
-
                               <Button
                                 type="text"
                                 danger

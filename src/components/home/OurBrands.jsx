@@ -104,15 +104,10 @@ function OurBrands() {
               <div className="text-black">
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">{brand.name}</h1>
                 <p className="text-lg mb-6 max-w-2xl">{brand.description}</p>
-                {/* <Link href={brand.slug}>
-                  <button className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-gray-800 transition duration-200">
-                    Explore Collection
-                  </button>
-                </Link> */}
               </div>
 
-              <h2 className="text-2xl font-bold mb-4">Our Story</h2>
-              <Link href={"/about"} className="text-blue-600 underline font-bold mb-4">About us</Link>
+              <Link className="text-blue-600 underline text-2xl font-bold mb-4" href={"/about"}>About US</Link>
+              {/* <Link href={"/about"} className="text-blue-600 underline font-bold mb-4">About us</Link> */}
               <p className="text-gray-600 mb-6">
                 {brand.story || `Since our founding, ${brand.name} has been committed to delivering exceptional quality and innovative designs. Every product is crafted with precision and care to ensure your complete satisfaction.`}
               </p>

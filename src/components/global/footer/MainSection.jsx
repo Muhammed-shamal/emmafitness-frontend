@@ -33,6 +33,7 @@ function MainSection() {
                 <div className="flex flex-col">
                     <Title title="ACCEPTED PAYMENT METHODS" />
                     <div className="flex gap-2 items-center">
+                        <Image src="/payment-icons/tabby.svg" alt="Visa" className="h-6" width={100} height={70}/>
                         <Image src="/payment-icons/visa.svg" alt="Visa" className="h-6" width={100} height={70}/>
                         <Image src="/payment-icons/mastercard.svg" alt="Mastercard" className="h-6" width={100} height={70}/>
                         <Image src="/payment-icons/paypal.svg" alt="Paypal" className="h-6" width={100} height={70}/>

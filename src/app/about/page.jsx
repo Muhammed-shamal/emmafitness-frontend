@@ -1,36 +1,35 @@
 import React from 'react';
 import { Row, Col, Card } from 'antd';
 import {
-    
     CustomerServiceOutlined,
-    
     ToolOutlined,
     CheckCircleOutlined,
     SettingOutlined,
-    
+
 } from '@ant-design/icons';
 import Title from '../../components/global/Title';
+import BackButton from '../../components/BackButton'
 
 function AboutUs() {
 
     const reasonsData = [
         {
-            icon: <SettingOutlined className="text-4xl text-blue-600" />,
+            icon: <SettingOutlined className="text-4xl text-red-600" />,
             title: 'Spare Parts & Maintenance',
             description: 'Ongoing support with spare parts and maintenance services',
         },
         {
-            icon: <CheckCircleOutlined className="text-4xl text-blue-600" />,
+            icon: <CheckCircleOutlined className="text-4xl text-red-600" />,
             title: '2-Year Warranty',
             description: 'Comprehensive 2-year warranty on all gym equipment',
         },
         {
-            icon: <ToolOutlined className="text-4xl text-blue-600" />,
+            icon: <ToolOutlined className="text-4xl text-red-600" />,
             title: 'Professional Assembly',
             description: 'Expert installation and setup of your equipment at home',
         },
         {
-            icon: <CustomerServiceOutlined className="text-4xl text-blue-600" />,
+            icon: <CustomerServiceOutlined className="text-4xl text-red-600" />,
             title: '24/7 Customer Support',
             description: 'Always available to help with questions or issues anytime',
         },
@@ -38,6 +37,10 @@ function AboutUs() {
 
     return (
         <div className="min-h-screen bg-gray-50">
+
+            {/* Custom Back Button */}
+           <BackButton />
+
             <Title
                 title="About Us"
             />
