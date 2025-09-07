@@ -7,11 +7,10 @@ import FeaturedProducts from '../components/home/FeaturedProducts'
 import NewProducts from '../components/home/NewProducts'
 import Title from '../components/global/Title'
 import Section from '../components/Section'
-// import SmallBanner from '../components/smallBanner'
-// import FilteredCategories from '../components/filteredCategories'
 import FAQ from '../components/faq'
 import Reviews from '../components/googleReviews'
 import Sale from '../components/Sale'
+import NoOffers from '../components/NoOffer'
 import StorePage from '../components/stores'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { baseUrl } from '../utility/api/constant'
@@ -40,11 +39,12 @@ async function fetchSafeApi(endpoint) {
 
 export default async function Page() {
   // 👇 fetch server-side before render
-  const [featuredProducts, newArrivals, trendingProducts, banner] = await Promise.all([
+  const [featuredProducts, newArrivals, trendingProducts, banner, specialOffer] = await Promise.all([
     fetchSafeApi('public/products/featured'),
     fetchSafeApi('public/products/new'),
     fetchSafeApi('public/products/trending'),
     fetchSafeApi('public/banner'),
+    fetchSafeApi('public/banner/offers/active')
     // fetchSafeApi('public/products/cheapest')
   ])
 
@@ -67,7 +67,7 @@ export default async function Page() {
 
       {featuredProducts.length > 0 && (
         <>
-          <Title titlePart1={'Featured Products'} titlePart2={'For You'} viewAllUrl='/featured/products' bgType='light'/>
+          <Title titlePart1={'Featured Products'} titlePart2={'For You'} viewAllUrl='/featured/products' bgType='light' />
           <section>
             <FeaturedProducts products={featuredProducts} />
           </section>
@@ -76,7 +76,12 @@ export default async function Page() {
 
       {/* <OffersBanner /> */}
       <ProductSlider />
-      <Sale />
+
+      {specialOffer.length > 0 ? (
+        <Sale offer={specialOffer[0]} />
+      ) : (
+        <NoOffers />
+      )}
 
       {newArrivals.length > 0 && (<>
         <Title titlePart1={'New'} titlePart2={'Products'} />

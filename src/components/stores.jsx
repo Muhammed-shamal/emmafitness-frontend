@@ -154,7 +154,7 @@ export default function StorePage() {
                       <Button
                         type="primary"
                         icon={<Navigation className="w-4 h-4" />}
-                        href={getDirectionsUrl(store.address)}
+                        href={store.location}
                         target="_blank"
                         className="w-full"
                         size="large"

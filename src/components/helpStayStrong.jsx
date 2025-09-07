@@ -8,25 +8,25 @@ const cards = [
     {
         title: "Commercial Gym Setup",
         description: "Premium Equipment. Hassle-Free Installation.",
-        phone: "+971 58 169 8084",
+        phone: "+971 55 945 7419",
         img: "https://images.unsplash.com/photo-1554284126-8e0ef4325e7a?auto=format&fit=crop&w=600&q=80",
     },
     {
         title: "Repair & Maintenance",
         description: "Fast, Reliable Support—We’ve Got You Covered.",
-        phone: "+971 56 533 6553",
+        phone: "+971 55 945 7419",
         img: "https://images.unsplash.com/photo-1590080877777-0c736dbddbdc?auto=format&fit=crop&w=600&q=80",
     },
     {
         title: "Bike Service",
         description: "Home Pickup. Quick Repairs. Fast Delivery",
-        phone: "+971 56 737 5433",
+        phone: "+971 55 945 7419",
         img: "https://images.unsplash.com/photo-1517433456452-f9633a875f6f?auto=format&fit=crop&w=600&q=80",
     },
     {
         title: "Pilates Studio Setup",
         description: "Planning a Studio? Talk to Our Experts.",
-        phone: "+971 50 638 5942",
+        phone: "+971 55 945 7419",
         img: "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=600&q=80",
     },
 ];

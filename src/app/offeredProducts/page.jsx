@@ -1,37 +1,64 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Card, Col, Row, Spin, Typography, Tag, Button, Pagination } from 'antd';
-import fetchApi from '../../utility/api/fetchApi';
-import { useOffers } from '../../utility/context/OfferContext';
-import Image from 'next/image';
-import { productUrl } from '../../utility/api/constant';
+import { Spin, Row, Typography, Tag, message, Pagination } from 'antd';
 import PremiumProductCard from '../../components/global/PremiumProductCard';
+import { getActiveSpecialOffers } from '../../utility/offerService';
+import fetchApi from '../../utility/api/fetchApi';
 
 const { Title, Text } = Typography;
 
 const ProductsByOfferPage = () => {
     const searchParams = useSearchParams();
     const offerId = searchParams.get('offer');
-    const { offers } = useOffers();
+
+    const [offers, setOffers] = useState([]);
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [pagination, setPagination] = useState({ pageCount: 0, pageNo: 1, pageSize: 30 })
-    const [reload, setReload] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [pagination, setPagination] = useState({
+        pageCount: 0,
+        pageNo: 1,
+        pageSize: 30
+    });
+    const [loadingOffers, setLoadingOffers] = useState(true);
+    const [loadingProducts, setLoadingProducts] = useState(true);
+
     const [currentOffer, setCurrentOffer] = useState(null);
-    const [maxAmount, setMaxAmount] = useState(undefined)
+    const [maxAmount, setMaxAmount] = useState(undefined);
 
+    // Fetch offers
     useEffect(() => {
-        const fetch = async () => {
+        const fetchOffers = async () => {
             try {
-                setLoading(true)
-                const result = await fetchApi({ URI: `public/products?populate=customLabel&populate=category.name,brand.Name&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
-                console.log('result in products page', result)
-                setPagination(prv => ({ ...prv, pageCount: result?.meta?.pagination?.pageCount, element: <Pagination onChange={handlePagination} responsive={true} pageSize={result?.meta?.pagination?.pageSize} showSizeChanger={false} total={result?.meta?.pagination?.total} /> }))
+                const data = await getActiveSpecialOffers();
+                setOffers(data);
+            } catch (error) {
+                console.error('Failed to load special offers:', error);
+                message.error('Failed to load special offers');
+            } finally {
+                setLoadingOffers(false);
+            }
+        };
+        fetchOffers();
+    }, []);
 
-                setProducts(result?.data?.map(prdct => ({
+    // Fetch products
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                setLoadingProducts(true);
+                const result = await fetchApi({
+                    URI: `public/products?populate=customLabel&populate=category.name,brand.Name&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}`
+                });
+
+                setPagination(prev => ({
+                    ...prev,
+                    pageCount: result?.meta?.pagination?.pageCount,
+                    total: result?.meta?.pagination?.total
+                }));
+
+                const transformedProducts = result?.data?.map(prdct => ({
                     _id: prdct._id,
                     name: prdct.name,
                     category: {
@@ -65,47 +92,73 @@ const ProductsByOfferPage = () => {
                     isBestSeller: prdct.isBestSeller || false,
                     reviews: prdct.reviews || [],
                     createdAt: prdct.createdAt
-                })));
+                }));
+
+                setProducts(transformedProducts);
 
                 if (!maxAmount) {
-                    const maxAmount = result?.data?.reduce((acc, prdct) => {
-                        const salePrice = prdct?.attributes?.Sale_Price || 0;
-                        const regularPrice = prdct?.attributes?.Regular_Price || 0;
-                        return Math.max(acc, salePrice, regularPrice);
+                    const calculatedMaxAmount = transformedProducts.reduce((acc, product) => {
+                        return Math.max(acc, product.salePrice, product.regularPrice);
                     }, 0);
-                    setMaxAmount(maxAmount);
+                    setMaxAmount(calculatedMaxAmount);
                 }
 
-
             } catch (err) {
-                console.log(err)
+                console.error('Error fetching products:', err);
+                message.error('Failed to load products');
             } finally {
-                setLoading(false)
-
+                setLoadingProducts(false);
             }
-        }
-        fetch()
-    }, [reload, searchParams])
+        };
 
+        fetchProducts();
+    }, [pagination.pageNo, pagination.pageSize]);
+
+
+    // Filter products based on offer
     useEffect(() => {
-
-        if (offerId && offers.length > 0) {
+        if (offerId && offers.length > 0 && products.length > 0) {
             const selectedOffer = offers.find(o => o._id === offerId);
-            console.log("seelctd offeer", selectedOffer)
+
             setCurrentOffer(selectedOffer);
 
             if (selectedOffer) {
                 let filtered = [];
 
-                if (selectedOffer.offerType === 'single') {
-                    filtered = products.filter(p => p._id === selectedOffer.product?._id);
-                }
-                else if (selectedOffer.offerType === 'category') {
-                    filtered = products.filter(p => p.category?._id === selectedOffer.category?._id);
-                }
-                else if (selectedOffer.offerType === 'multiple') {
-                    const offerProductIds = selectedOffer.products?.map(p => p._id);
-                    filtered = products.filter(p => offerProductIds?.includes(p._id));
+                switch (selectedOffer.offerType) {
+                    case 'single':
+                        // Single product offer
+                        if (selectedOffer.product && selectedOffer.product._id) {
+                            filtered = products.filter(p => p._id === selectedOffer.product._id);
+                        }
+                        break;
+
+                    case 'category':
+                        // Category offer
+                        if (selectedOffer.category && selectedOffer.category._id) {
+                            filtered = products.filter(p => p.category?._id === selectedOffer.category._id);
+                        }
+                        break;
+
+                    case 'multiple':
+                        // Multiple products offer
+                        if (selectedOffer.products && selectedOffer.products.length > 0) {
+                            const offerProductIds = selectedOffer.products.map(p => p._id);
+                            filtered = products.filter(p => offerProductIds.includes(p._id));
+                        }
+                        break;
+
+                    case 'bundle':
+                        // Bundle offer (you might need special handling)
+                        if (selectedOffer.products && selectedOffer.products.length > 0) {
+                            const offerProductIds = selectedOffer.products.map(p => p._id);
+                            filtered = products.filter(p => offerProductIds.includes(p._id));
+                        }
+                        break;
+
+                    default:
+                        filtered = products;
+                        break;
                 }
 
                 setFilteredProducts(filtered);
@@ -116,44 +169,112 @@ const ProductsByOfferPage = () => {
         }
     }, [offerId, offers, products]);
 
-    const calculateDiscountedPrice = (price, offer) => {
-        if (offer.discountType === 'percentage') {
-            return (price * (1 - offer.discountValue / 100)).toFixed(2);
+    // Calculate discount for display
+    const calculateDiscount = (product) => {
+        if (!currentOffer || product.regularPrice <= 0) return null;
+
+        let discountPrice = product.salePrice;
+
+        if (currentOffer.discountType === 'percentage') {
+            discountPrice = product.regularPrice * (1 - currentOffer.discountValue / 100);
+        } else if (currentOffer.discountType === 'fixed') {
+            discountPrice = product.regularPrice - currentOffer.discountValue;
         }
-        if (offer.discountType === 'fixed') {
-            return (price - offer.discountValue).toFixed(2);
-        }
-        return price.toFixed(2);
+
+        return {
+            originalPrice: product.regularPrice,
+            discountedPrice: discountPrice,
+            savings: product.regularPrice - discountPrice,
+            discountPercent: Math.round((1 - discountPrice / product.regularPrice) * 100)
+        };
     };
 
-    const handlePagination = (pageNo) => {
-        setPagination(prv => ({ ...prv, pageNo }))
-        setReload(rl => !rl)
-        window.scrollTo({ top: 0, behavior: "smooth" });
 
-    }
-    
+    const handlePageChange = (page, pageSize) => {
+        setPagination(prev => ({
+            ...prev,
+            pageNo: page,
+            pageSize
+        }));
+    };
+
+
     return (
-        <div style={{ padding: 24 }}>
+        <div style={{ padding: 24, minHeight: '80vh' }}>
+            {/* Offer Header */}
             {currentOffer && (
-                <div style={{ marginBottom: 24 }}>
-                    <Title level={3}>Special Offer: {currentOffer.title}</Title>
-                    <Text>{currentOffer.description}</Text>
-                    <div style={{ marginTop: 8 }}>
-                        <Tag color="red">Valid until: {new Date(currentOffer.endDate).toLocaleDateString()}</Tag>
+                <div style={{
+                    marginBottom: 32,
+                    padding: 24,
+                    backgroundColor: '#fff',
+                    borderRadius: 8,
+                    boxShadow: '0 1px 8px rgba(0,0,0,0.1)'
+                }}>
+                    <Title level={2} style={{ color: '#e53935', marginBottom: 8 }}>
+                        Special Offer: {currentOffer.title}
+                    </Title>
+
+                    <Text style={{ fontSize: 16, display: 'block', marginBottom: 16 }}>
+                        {currentOffer.description}
+                    </Text>
+
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                        <Tag color="red" style={{ fontSize: 14, padding: '4px 8px' }}>
+                            {currentOffer.discountType === 'percentage'
+                                ? `${currentOffer.discountValue}% OFF`
+                                : `$${currentOffer.discountValue} OFF`
+                            }
+                        </Tag>
+                        <Tag color="blue" style={{ fontSize: 14, padding: '4px 8px' }}>
+                            Valid until: {new Date(currentOffer.endDate).toLocaleDateString()}
+                        </Tag>
+                        <Tag color="green" style={{ fontSize: 14, padding: '4px 8px' }}>
+                            {filteredProducts.length} product(s) available
+                        </Tag>
                     </div>
                 </div>
             )}
 
-            {loading ? (
-                <Spin size="large" style={{ display: 'block', margin: '40px auto' }} />
+            {/* Products Grid */}
+            {loadingOffers || loadingProducts ? (
+                <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                    <Spin size="large" />
+                </div>
             ) : (
-                <Row gutter={[16, 16]}>
-                    {(offerId ? filteredProducts : products).map((product,index) => (
-                        <PremiumProductCard product={product}
-                            onAddToCart={() => console.log('Add to cart', product._id)} key={index}/>
-                    ))}
-                </Row>
+                <>
+                    {filteredProducts.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                            <Title level={4}>No products found</Title>
+                            <Text>There are no products available for this offer.</Text>
+                        </div>
+                    ) : (
+                        <>
+                            <Row gutter={[16, 24]}>
+                                {filteredProducts.map((product) => (
+                                    <PremiumProductCard
+                                        key={product._id}
+                                        product={product}
+                                        offer={currentOffer}
+                                        discountInfo={calculateDiscount(product)}
+                                    />
+                                ))}
+                            </Row>
+                            {pagination.pageCount > 1 && (
+                                <div style={{ marginTop: 32, textAlign: 'center' }}>
+                                    <Pagination
+                                        current={pagination.pageNo}
+                                        pageSize={pagination.pageSize}
+                                        total={pagination.total}
+                                        showSizeChanger
+                                        pageSizeOptions={['10', '20', '50']}
+                                        onChange={handlePageChange}
+                                        onShowSizeChange={handlePageChange}
+                                    />
+                                </div>
+                            )}
+                        </>
+                    )}
+                </>
             )}
         </div>
     );

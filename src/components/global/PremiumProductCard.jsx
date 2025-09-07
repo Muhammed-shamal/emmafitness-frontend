@@ -1,287 +1,198 @@
-import React from 'react';
-import { Card, Image, Typography, Tag, Button, Space, Divider, Rate, Badge, Tooltip } from 'antd';
-import {
-    ShoppingCartOutlined,
-    EyeOutlined,
-    HeartOutlined,
-    StarFilled,
-    FireFilled,
-    CrownFilled,
-    GiftFilled
-} from '@ant-design/icons';
-import { productUrl } from '../../utility/api/constant';
 import Link from 'next/link';
+import Image from 'next/image';
+import {
+  Card,
+  Tag,
+  Typography,
+  Rate,
+  Badge,
+  Button
+} from 'antd';
+import {
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import WishListButton from './WishListButton';
+import { productUrl } from '../../utility/api/constant';
+import Price from './Price';
 
-const { Text, Title } = Typography;
+const { Title, Text } = Typography;
 
-const PremiumProductCard = ({ product, onAddToCart }) => {
-    const discountPercentage = Math.round(((product.regularPrice - product.salePrice) / product.regularPrice) * 100);
-    const averageRating = product?.reviews.length > 0
-        ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
-        : 0;
+const PremiumProductCard = ({ product, onAddToCart, offer = null, discountInfo = null }) => {
 
-    return (
+  // Calculate regular discount
+  const regularDiscount = product.salePrice < product.regularPrice
+    ? Math.round(((product.regularPrice - product.salePrice) / product.regularPrice) * 100)
+    : 0;
+
+  // Use offer discount if available
+  const effectiveDiscount = discountInfo?.discountPercent || regularDiscount;
+  const displayPrice = product.salePrice;
+  const originalPrice = product.regularPrice;
+
+  const averageRating = product?.reviews?.length > 0
+    ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
+    : 0;
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onAddToCart(product);
+  };
+
+  return (
+    <div
+      className="relative group"
+    >
+      {/* Custom Label Ribbon */}
+      {product.customLabel && (
         <Badge.Ribbon
-            text={product.customLabel}
-            color="#1890ff"
-            placement="start"
+          text={product.customLabel}
+          color="#1890ff"
+          placement="start"
+          className="z-20"
         >
-            <div className="absolute top-2 right-2 z-20 flex flex-col gap-1 items-end text-xs font-semibold">
-                <WishListButton ProductId={product._id} />
-
-                {product.isNewArrival && <Tag color="red" className="!rounded">New</Tag>}
-                {product.isTrending && <Tag color="purple" className="!rounded">Trending</Tag>}
-                {product.isBestSeller && <Tag color="green" className="!rounded">Best Seller</Tag>}
-                {product.CustomLabel && <Tag color="yellow" className="text-black !rounded">{product.customLabel}</Tag>}
-            </div>
-
-            <Link href={`/product/${encodeURIComponent(product.slug)}`} className="relative block group">
-                <Card
-                    hoverable
-                    className="premium-product-card"
-                    cover={
-                        <div className="product-image-container">
-                            <Image
-                                src={`${productUrl}/${product.images[0]}`}
-                                alt={product.name}
-                                preview={false}
-                                className="product-image"
-                            />
-                            {/* <div className="product-badges">
-                                {product.isNewArrival && (
-                                    <Tag icon={<CrownFilled />} color="gold" className="product-badge">
-                                        New
-                                    </Tag>
-                                )}
-                                {product.isBestSeller && (
-                                    <Tag icon={<StarFilled />} color="volcano" className="product-badge">
-                                        Bestseller
-                                    </Tag>
-                                )}
-                                {product.isTrending && (
-                                    <Tag icon={<FireFilled />} color="magenta" className="product-badge">
-                                        Trending
-                                    </Tag>
-                                )}
-                                {product.isFeatured && (
-                                    <Tag icon={<GiftFilled />} color="cyan" className="product-badge">
-                                        Featured
-                                    </Tag>
-                                )}
-                            </div> */}
-                        </div>
-                    }
-                   
-                >
-                    <div className="product-content">
-                        <div className="product-meta">
-                            <Tag color="blue">{product.brand.name}</Tag>
-                            <Tag color="geekblue">{product.category.name}</Tag>
-                        </div>
-
-                        <Title level={4} className="product-title">
-                            {product.name}
-                        </Title>
-
-                        <Text type="secondary" className="product-description">
-                            {product.description}
-                        </Text>
-
-                        <div className="product-specs">
-                            <Space size={[8, 16]} wrap>
-                                <Tooltip title="Size">
-                                    <Tag icon="📏">{product.specs.size}</Tag>
-                                </Tooltip>
-                                <Tooltip title="Machine Weight">
-                                    <Tag icon="⚖️">{product.specs.machineWeight} kg</Tag>
-                                </Tooltip>
-                                <Tooltip title="Color">
-                                    <Tag icon="🎨">{product.specs.color}</Tag>
-                                </Tooltip>
-                            </Space>
-                        </div>
-                        <div className="price-section">
-                            <Text strong className="sale-price">
-                                ${product.salePrice.toFixed(2)}
-                            </Text>
-                            {product.salePrice < product.regularPrice && (
-                                <>
-                                    <Text delete className="regular-price">
-                                        ${product.regularPrice.toFixed(2)}
-                                    </Text>
-                                    <Tag color="red" className="discount-tag">
-                                        {discountPercentage}% OFF
-                                    </Tag>
-                                </>
-                            )}
-                        </div>
-
-                        <div className="product-stats">
-                            <Rate
-                                disabled
-                                allowHalf
-                                value={averageRating}
-                                className="product-rating"
-                            />
-                            <Text type="secondary" className="sold-count">
-                                {product.soldCount} sold
-                            </Text>
-                        </div>
-
-                        <div className="stock-status">
-                            <Text type={product.status === "In Stock" ? "success" : product.status === "Low Stock" ? "warning" : "danger"}>
-                                {product.status} ({product.stockQty} available)
-                            </Text>
-                        </div>
-                    </div>
-                </Card>
-            </Link>
-
-            <style jsx global>{`
-        .premium-product-card {
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-          transition: all 0.3s ease;
-          border: 1px solid #f0f0f0;
-        }
-        
-        .premium-product-card:hover {
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-          transform: translateY(-4px);
-        }
-        
-        .product-image-container {
-          position: relative;
-          height: 220px;
-          overflow: hidden;
-        }
-        
-        .product-image {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          transition: transform 0.5s ease;
-        }
-        
-        .premium-product-card:hover .product-image {
-          transform: scale(1.05);
-        }
-        
-        .product-badges {
-          position: absolute;
-          top: 12px;
-          right: 12px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          z-index: 1;
-        }
-        
-        .product-badge {
-          margin: 0;
-          font-weight: 500;
-          border-radius: 4px;
-        }
-        
-        .product-actions {
-          position: absolute;
-          bottom: 12px;
-          right: 12px;
-          display: flex;
-          gap: 8px;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-        
-        .premium-product-card:hover .product-actions {
-          opacity: 1;
-        }
-        
-        .action-btn {
-          background: rgba(255, 255, 255, 0.9);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .product-content {
-          padding: 12px;
-        }
-        
-        .product-meta {
-          margin-bottom: 8px;
-        }
-        
-        .product-title {
-          margin-bottom: 8px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        
-        .product-description {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          margin-bottom: 12px;
-          min-height: 36px;
-        }
-        
-        .product-divider {
-          margin: 12px 0;
-        }
-        
-        .product-specs {
-          margin-bottom: 12px;
-        }
-        
-        .product-pricing {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 12px;
-        }
-        
-        .price-section {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        
-        .sale-price {
-          font-size: 18px;
-          color: #1890ff;
-          font-weight: 600;
-        }
-        
-        .regular-price {
-          font-size: 14px;
-          color: #999;
-        }
-        
-        .discount-tag {
-          font-weight: 500;
-          border-radius: 4px;
-        }
-        
-        .product-stats {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        
-        .product-rating .ant-rate-star {
-          font-size: 14px;
-        }
-        
-        .sold-count {
-          font-size: 12px;
-        }
-        
-      `}</style>
+          <div></div>
         </Badge.Ribbon>
-    );
+      )}
+
+      {/* Offer Ribbon */}
+      {offer && (
+        <div className="absolute top-2 left-2 z-30 mt-6">
+          <Tag color="red" className="font-bold px-2">
+            {offer.discountType === 'percentage'
+              ? `${offer.discountValue}% OFF`
+              : `$${offer.discountValue} OFF`}
+          </Tag>
+        </div>
+      )}
+
+
+      {/* Status Badges */}
+      <div className="absolute top-2 right-2 z-30 flex flex-col gap-1 items-end">
+        <WishListButton ProductId={product._id} />
+
+        {product.isNewArrival && (
+          <Tag color="red" className="text-xs font-semibold !rounded-full">New</Tag>
+        )}
+        {product.isTrending && (
+          <Tag color="purple" className="text-xs font-semibold !rounded-full">Trending</Tag>
+        )}
+        {product.isBestSeller && (
+          <Tag color="green" className="text-xs font-semibold !rounded-full">Best Seller</Tag>
+        )}
+      </div>
+
+      <Link href={`/product/${encodeURIComponent(product.slug)}`}>
+        <Card
+          hoverable
+          className="h-full overflow-hidden transition-all duration-300 border border-gray-200 hover:border-blue-300 hover:shadow-xl"
+          bodyStyle={{ padding: '16px' }}
+          cover={
+            <div className="relative h-60 overflow-hidden bg-gray-100">
+              <Image
+                src={product.images?.[0] ? `${productUrl}/${product.images[0]}` : '/placeholder-product.jpg'}
+                alt={product.name}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            </div>
+          }
+        >
+          {/* Brand and Category */}
+          <div className="flex gap-1 mb-2 flex-wrap">
+            <Tag color="blue" className="text-xs !m-0">
+              {product.brand?.name || 'No Brand'}
+            </Tag>
+            <Tag color="geekblue" className="text-xs !m-0">
+              {product.category?.name || 'Uncategorized'}
+            </Tag>
+          </div>
+
+          {/* Product Name */}
+          <Title
+            level={5}
+            className="font-semibold mb-2 line-clamp-2 h-12"
+            style={{ marginBottom: '8px' }}
+          >
+            {product.name}
+          </Title>
+
+          {/* Price Section */}
+          {/* <div className="flex items-center gap-2 mb-3">
+            <Text strong className="text-lg text-blue-600">
+              ${displayPrice.toFixed(2)}
+            </Text>
+            
+            {displayPrice < originalPrice && (
+              <>
+                <Text delete className="text-gray-500 text-sm">
+                  ${originalPrice.toFixed(2)}
+                </Text>
+                <Tag color="red" className="text-xs font-semibold !m-0">
+                  {effectiveDiscount}% OFF
+                </Tag>
+              </>
+            )}
+          </div> */}
+
+          <Price salePrice={displayPrice} regularPrice={originalPrice} />
+
+          {/* Rating */}
+          <div className="flex items-center gap-2 mb-3">
+            <Rate
+              disabled
+              allowHalf
+              value={averageRating}
+              className="text-sm"
+            />
+            <Text type="secondary" className="text-xs">
+              ({product.reviews?.length || 0})
+            </Text>
+          </div>
+
+          {/* Stock Status */}
+          <div className="mb-3">
+            <Text
+              type={product.status === "In Stock" ? "success" :
+                product.status === "Low Stock" ? "warning" : "danger"}
+              className="text-sm font-medium"
+            >
+              {product.status} • {product.stockQty} available
+            </Text>
+          </div>
+
+          {/* Quick Specs */}
+          <div className="grid grid-cols-2 gap-1 text-xs text-gray-500 mb-3">
+            {product.specs?.size && product.specs.size !== "N/A" && (
+              <div className="flex items-center">
+                <span className="mr-1">📏</span>
+                <span className="truncate">{product.specs.size}</span>
+              </div>
+            )}
+            {product.specs?.color && product.specs.color !== "N/A" && (
+              <div className="flex items-center">
+                <span className="mr-1">🎨</span>
+                <span className="truncate">{product.specs.color}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Add to Cart Button (visible on mobile always) */}
+          <Button
+            type="primary"
+            block
+            icon={<ShoppingCartOutlined />}
+            onClick={handleAddToCart}
+            className="hidden md:block lg:hidden xl:block"
+            disabled={product.status === "Out of Stock"}
+          >
+            Add to Cart
+          </Button>
+        </Card>
+      </Link>
+    </div>
+  );
 };
 
 export default PremiumProductCard;

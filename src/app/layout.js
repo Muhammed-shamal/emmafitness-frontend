@@ -12,7 +12,6 @@ import { Toaster } from 'react-hot-toast';
 import BottomHeader from '../components/global/BottumHeader'
 import basicData from '../utility/basicDatas';
 import ToastListener from '../components/ToastListner'
-import { OffersProvider } from '../utility/context/OfferContext';
 
 
 // const inter = Gothic_A1({ subsets: ['latin'], weight: ['400'] });
@@ -34,8 +33,7 @@ export default function RootLayout({ children }) {
 
 
         <Providers>
-          <OffersProvider>
-            <Toaster position="top-right" />
+         <Toaster position="top-right" />
             <ToastListener />
             <header className='sticky top-0 z-50'>
               {/* <Currency /> */}
@@ -56,7 +54,6 @@ export default function RootLayout({ children }) {
 
             <Footer />
             <BackToTop />
-          </OffersProvider>
         </Providers>
       </body>
     </html>
