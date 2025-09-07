@@ -140,7 +140,7 @@ function Page({ params }) {
               {/* Support Buttons */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full text-sm">
                 <a
-                  href={`https://wa.me/971551187470?text=Hello, I'm interested in ${product?.name}`}
+                  href={`https://wa.me/971523930168?text=Hello, I'm interested in ${product?.name}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between border rounded-md px-4 py-3 shadow hover:shadow-md transition"
@@ -150,7 +150,7 @@ function Page({ params }) {
                 </a>
 
                 <a
-                  href="tel:+971551187470"
+                  href="tel:+971523930168"
                   className="flex items-center justify-between border rounded-md px-4 py-3 shadow hover:shadow-md transition"
                 >
                   <span>Request a Callback</span>

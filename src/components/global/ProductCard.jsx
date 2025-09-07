@@ -1,20 +1,43 @@
 import Image from "next/legacy/image"
 import Price from "./Price"
 import Link from "next/link"
-import moment from "moment"
 import OffLabel from './label/OffLabel'
 import WishListButton from "./WishListButton"
 
-import { Tag } from "antd"
+function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, Brand, reviews }) {
 
-function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, Brand }) {
+    const averageRating = reviews?.length
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+        : 0;
+
+    const roundedRating = Math.round(averageRating * 2) / 2; // for half-stars
+
+    const renderStars = (rating) => {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+        return (
+            <>
+                {Array(fullStars).fill('★').map((s, i) => (
+                    <span key={`full-${i}`} className="text-yellow-400 text-sm">★</span>
+                ))}
+                {halfStar && <span className="text-yellow-400 text-sm">☆</span>}
+                {Array(emptyStars).fill('☆').map((s, i) => (
+                    <span key={`empty-${i}`} className="text-gray-300 text-sm">★</span>
+                ))}
+            </>
+        );
+    };
+
+
     return (
         <div className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all duration-300 relative group overflow-hidden">
 
             {/* Top Right Tags + Wishlist */}
             <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-2">
                 <WishListButton ProductId={Id} className="text-gray-500 hover:text-red-500 transition-colors" />
-                
+
                 <div className="flex flex-col items-end gap-1">
                     {isNewArrival && (
                         <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
@@ -79,6 +102,14 @@ function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl
                         {Title}
                     </h3>
                 </Link>
+
+                {/* Product Rating */}
+                {reviews?.length > 0 && (
+                    <div className="flex items-center gap-1 text-sm">
+                        {renderStars(roundedRating)}
+                        <span className="text-gray-500 text-xs">({reviews.length})</span>
+                    </div>
+                )}
 
                 {/* Price */}
                 <div className="mt-1">

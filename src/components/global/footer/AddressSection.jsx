@@ -1,4 +1,4 @@
-import { MailOutlined, PhoneOutlined, WhatsAppOutlined } from "@ant-design/icons"
+import { MailOutlined, WhatsAppOutlined } from "@ant-design/icons"
 import basicDatas from '../../../utility/basicDatas'
 import Image from "next/image"
 

@@ -119,6 +119,7 @@ function Page({ params }) {
                             isTrending={product?.isTrending}
                             isFeatured={product?.isFeatured}
                             isBestSeller={product?.isBestSeller}
+                            reviews={product?.reviews}
                         />
                     ))
                 )}

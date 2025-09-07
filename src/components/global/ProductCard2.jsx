@@ -5,7 +5,32 @@ import OffLabel from './label/OffLabel'
 import WishListButton from "./WishListButton"
 import { Tag } from "antd"
 
-function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, Brand, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, }) {
+function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, Brand, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, reviews }) {
+
+    const averageRating = reviews?.length
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+        : 0;
+
+    const roundedRating = Math.round(averageRating * 2) / 2; // for half-stars
+
+    const renderStars = (rating) => {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+        return (
+            <>
+                {Array(fullStars).fill('★').map((s, i) => (
+                    <span key={`full-${i}`} className="text-yellow-400 text-sm">★</span>
+                ))}
+                {halfStar && <span className="text-yellow-400 text-sm">☆</span>}
+                {Array(emptyStars).fill('☆').map((s, i) => (
+                    <span key={`empty-${i}`} className="text-gray-300 text-sm">★</span>
+                ))}
+            </>
+        );
+    };
+
     return (
         <div className="relative flex flex-col rounded-xl shadow-sm border border-gray-200 bg-white transition-all duration-300 hover:shadow-md overflow-hidden group">
             {/* Tags - Top Right */}
@@ -75,6 +100,14 @@ function ProductCard2({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUr
                         {Title}
                     </h3>
                 </Link>
+
+                {/* Product Rating */}
+                {reviews?.length > 0 && (
+                    <div className="flex items-center gap-1 text-sm">
+                        {renderStars(roundedRating)}
+                        <span className="text-gray-500 text-xs">({reviews.length})</span>
+                    </div>
+                )}
 
                 <div className="mt-1">
                     <Price salePrice={SalePrice} regularPrice={RegularPrice} />

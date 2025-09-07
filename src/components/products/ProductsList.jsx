@@ -49,6 +49,7 @@ function ProductsList({ products }) {
               createdAt={product?.createdAt}
               Slug={product?.slug}
               CustomLabel={product.customLabel}
+              reviews={product?.reviews}
             />
           )
         }

@@ -88,6 +88,7 @@ function Page() {
                     isTrending={product?.isTrending}
                     isFeatured={product?.isFeatured}
                     isBestSeller={product?.isBestSeller}
+                    reviews={product?.reviews}
                   />
                 ))}
               </div>

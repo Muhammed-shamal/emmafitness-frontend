@@ -27,7 +27,7 @@ export default function TrendingSection({ products = [] }) {
               isNewArrival={prd?.isNewArrival}
               isTrending={prd?.isTrending}
               isFeatured={prd?.isFeatured}
-              isBestSeller={prd?.isBestSeller} />
+              isBestSeller={prd?.isBestSeller} reviews={prd?.reviews}/>
           )
         }
       </div>}
