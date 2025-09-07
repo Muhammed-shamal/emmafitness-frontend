@@ -5,7 +5,7 @@ import OffLabel from "../../../components/global/label/OffLabel"
 import CartButton from "../../../components/global/CartButton"
 import { BuyNow2 } from "../../../components/checkout/buyNow"
 import WishLIstButton from '../../../components/global/WishListButton'
-import { Divider, Tag, Spin } from "antd"
+import { Divider, Tag, Spin, Empty, List, Rate, Avatar ,Button} from "antd"
 import ImageSection from '../../../components/singleProduct/ImageSection'
 import DescriptionSection from '../../../components/singleProduct/descriptionSection'
 import SingleRowProducts from '../../../components/global/SingleRowProducts'
@@ -14,7 +14,7 @@ import Image from "next/legacy/image"
 import MarkDownText from "../../../components/global/MarkDownText"
 import { brandUrl, productUrl } from "../../../utility/api/constant"
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import moment from 'moment'
 import {
   FaFacebookSquare,
   FaTwitter,
@@ -23,6 +23,7 @@ import {
   FaLink,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { DislikeOutlined, LikeOutlined, StarFilled, StarOutlined, UserOutlined } from "@ant-design/icons";
 
 function Page({ params }) {
   const router = useRouter();
@@ -227,6 +228,137 @@ function Page({ params }) {
           </div>
         </div>
 
+
+        {/* Reviews Section */}
+        <div className="bg-white shadow rounded p-6">
+          <h2 className="text-2xl font-bold mb-6 border-b pb-3">Customer Reviews</h2>
+
+          {product?.reviews && product.reviews.length > 0 ? (
+            <>
+              {/* Review Summary */}
+              <div className="flex flex-col md:flex-row gap-8 mb-8">
+                <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg md:w-1/3">
+                  <div className="text-5xl font-bold text-blue-600 mb-2">
+                    {calculateAverageRating(product.reviews).toFixed(1)}
+                  </div>
+                  <Rate
+                    value={calculateAverageRating(product.reviews)}
+                    disabled
+                    className="text-lg mb-2"
+                    character={({ index }) => {
+                      const avgRating = calculateAverageRating(product.reviews);
+                      return index < Math.floor(avgRating) ? (
+                        <StarFilled className="text-yellow-400" />
+                      ) : index < avgRating ? (
+                        <StarHalfFilled className="text-yellow-400" />
+                      ) : (
+                        <StarOutlined className="text-yellow-400" />
+                      );
+                    }}
+                  />
+                  <p className="text-gray-600 text-sm">
+                    Based on {product.reviews.length} review{product.reviews.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+
+                <div className="flex-1">
+                  {[5, 4, 3, 2, 1].map((star) => {
+                    const count = product.reviews.filter(r => Math.round(r.rating) === star).length;
+                    const percentage = (count / product.reviews.length) * 100;
+
+                    return (
+                      <div key={star} className="flex items-center mb-2">
+                        <div className="w-12 text-right mr-2">
+                          <span className="text-gray-600">{star} star</span>
+                        </div>
+                        <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-yellow-400"
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                        <div className="w-12 text-right ml-2">
+                          <span className="text-sm text-gray-600">{count}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Reviews List */}
+              <div className="border-t pt-6">
+                <List
+                  itemLayout="vertical"
+                  dataSource={product.reviews}
+                  renderItem={(review) => (
+                    <li className="pb-6 mb-6 border-b last:border-b-0 last:mb-0">
+                      <div className="flex items-start mb-3">
+                        <Avatar
+                          size={40}
+                          icon={<UserOutlined />}
+                          className="mr-3"
+                        />
+                        <div className="flex-1">
+                          <div className="flex justify-between items-start">
+                            <h4 className="font-semibold text-gray-800">
+                              {review.user?.name || 'Anonymous Customer'}
+                            </h4>
+                            <span className="text-sm text-gray-500">
+                              {moment(review.createdAt).format('MMM DD, YYYY')}
+                            </span>
+                          </div>
+                          <Rate
+                            value={review.rating}
+                            disabled
+                            className="text-sm mb-2"
+                            character={({ index }) => {
+                              return index < review.rating ? (
+                                <StarFilled className="text-yellow-400" />
+                              ) : (
+                                <StarOutlined className="text-yellow-400" />
+                              );
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <p className="text-gray-700 mb-3">{review.comment}</p>
+
+                      {/* Helpful buttons */}
+                      {/* <div className="flex items-center">
+                        <span className="text-sm text-gray-500 mr-4">Was this helpful?</span>
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<LikeOutlined />}
+                          className="flex items-center mr-2"
+                        >
+                          <span className="ml-1">Yes</span>
+                        </Button>
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<DislikeOutlined />}
+                          className="flex items-center"
+                        >
+                          <span className="ml-1">No</span>
+                        </Button>
+                      </div> */}
+                    </li>
+                  )}
+                />
+              </div>
+            </>
+          ) : (
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={
+                <span className="text-gray-500">No reviews yet. Be the first to review this product!</span>
+              }
+            />
+          )}
+        </div>
+
         <DescriptionSection fullDescription={product?.description} />
         {relatedProducts && relatedProducts.length > 0 ? (
           <SingleRowProducts Products={relatedProducts} />
@@ -239,8 +371,29 @@ function Page({ params }) {
       </div>
     </Spin>
   );
-
 }
+
+// Helper function to calculate average rating
+const calculateAverageRating = (reviews) => {
+  if (!reviews || reviews.length === 0) return 0;
+  const sum = reviews.reduce((total, review) => total + review.rating, 0);
+  return sum / reviews.length;
+};
+
+// Custom half-star icon component
+const StarHalfFilled = () => (
+  <span className="anticon">
+    <svg viewBox="0 0 1024 1024" focusable="false" data-icon="star" width="1em" height="1em" fill="currentColor" aria-hidden="true">
+      <defs>
+        <linearGradient id="halfStar" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="50%" stopColor="currentColor" />
+          <stop offset="50%" stopColor="#E5E7EB" />
+        </linearGradient>
+      </defs>
+      <path d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 00.6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0046.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z" fill="url(#halfStar)"></path>
+    </svg>
+  </span>
+);
 
 export default Page
 

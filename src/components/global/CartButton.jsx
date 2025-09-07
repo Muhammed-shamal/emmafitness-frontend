@@ -14,8 +14,6 @@ function CartButton({ productId }) {
   const dispatch = useDispatch();
   const route = useRouter()
 
-  console.log('product is top ',productId)
-
   const user = useSelector(state => state.user);
   const cartItems = useSelector(state => state.cart.items);
 
@@ -31,7 +29,6 @@ function CartButton({ productId }) {
       return; // Prevent proceeding
     }
 
-    console.log('product id',productId)
     try {
       if (cartItem) {
         // If item exists, increment quantity

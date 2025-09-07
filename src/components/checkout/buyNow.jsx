@@ -107,18 +107,17 @@ export const BuyNow2 = ({ productId, product }) => {
       <button
         onClick={handleBuyNow}
         disabled={loading || product?.stockQty < 1}
-        className={`flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium transition-all duration-200 ${loading || product?.stockQty < 1
-          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
-          }`}
+        className={`flex items-center justify-center gap-1 px-4 py-2 rounded text-sm font-medium transition-all duration-200 
+    ${loading || product?.stockQty < 1
+            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            : 'bg-blue-600 hover:bg-blue-700 text-white shadow hover:shadow-md'
+          }
+    sm:px-6 sm:py-3 sm:gap-2 sm:text-base
+  `}
       >
-        {loading ? (
-          <Spin size="small" />
-        ) : (
-          <ShoppingCartOutlined />
-        )}
-        Buy Now
+        {loading ? <Spin size="small" /> : "Buy Now"}
       </button>
+
 
       <Modal
         title="Complete Your Purchase"
