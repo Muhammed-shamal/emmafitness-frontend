@@ -107,23 +107,27 @@ function Page() {
       });
 
 
-      dispatch(showToast({ type: "success", message: `Your order has been placed. Order# ${data._id}` }));
-      setOrderId(data._id);
-      setOrderData(data);
-      try {
-        const data = await updateApi({
-          URI: "customers/cart/replace/bulk",
-          Data: {
-            userId: user?.userId
-          },
-          token: user?.token,
-          isTop: true
-        });
-        
-        dispatch(bulkReplaceCart(data.cart));
-      } catch (error) {
-        console.error("something went wrong for remove from cart", error);
+      if (data) {
+        dispatch(showToast({ type: "success", message: `Your order has been placed. Order# ${data._id}` }));
+        setOrderId(data._id);
+        setOrderData(data);
+
+        try {
+          const data = await updateApi({
+            URI: "customers/cart/replace/bulk",
+            Data: {
+              userId: user?.userId
+            },
+            token: user?.token,
+            isTop: true
+          });
+
+          dispatch(bulkReplaceCart(data.cart));
+        } catch (error) {
+          console.error("something went wrong for remove from cart", error);
+        }
       }
+
     } catch (err) {
       console.error("Order creation failed:", err);
     } finally {
