@@ -15,9 +15,6 @@ export default function CheckoutPage({ summary, orderData }) {
 
     const [clientSecret, setClientSecret] = useState(null);
 
-    console.log('summary at',summary)
-    console.log('orderData at',orderData)
-
     useEffect(() => {
         const fetchClientSecret = async () => {
             const data = await PostAPI({

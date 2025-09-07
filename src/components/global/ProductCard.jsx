@@ -9,54 +9,84 @@ import { Tag } from "antd"
 
 function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, Brand }) {
     return (
-        <div className="bg-white border border-gray-200 rounded-lg p-2 sm:p-3 flex flex-col gap-2 shadow-sm hover:shadow-md transition-all relative group">
+        <div className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all duration-300 relative group overflow-hidden">
 
             {/* Top Right Tags + Wishlist */}
-            <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1 text-[10px] sm:text-xs font-bold">
-                <WishListButton ProductId={Id} />
-                {isNewArrival && <Tag color="red" className="!rounded text-[10px] sm:text-xs">New</Tag>}
-                {isTrending && <Tag color="purple" className="!rounded text-[10px] sm:text-xs">Trending</Tag>}
-                {isBestSeller && <Tag color="green" className="!rounded text-[10px] sm:text-xs">Best Seller</Tag>}
-                {CustomLabel && (
-                    <Tag color="yellow-inverse" className="text-black rounded text-[10px] sm:text-xs">{CustomLabel}</Tag>
-                )}
+            <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-2">
+                <WishListButton ProductId={Id} className="text-gray-500 hover:text-red-500 transition-colors" />
+                
+                <div className="flex flex-col items-end gap-1">
+                    {isNewArrival && (
+                        <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                            New
+                        </span>
+                    )}
+                    {isTrending && (
+                        <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                            Trending
+                        </span>
+                    )}
+                    {isBestSeller && (
+                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                            Best Seller
+                        </span>
+                    )}
+                    {CustomLabel && (
+                        <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-semibold border border-yellow-200">
+                            {CustomLabel}
+                        </span>
+                    )}
+                </div>
             </div>
 
-            <Link href={`/product/${encodeURIComponent(Slug)}`}>
-                {/* Image Section */}
-                <div className="aspect-[4/3] sm:aspect-[1/1] w-full bg-gray-50 flex items-center justify-center overflow-hidden rounded">
+            {/* Product Image */}
+            <Link href={`/product/${encodeURIComponent(Slug)}`} className="block relative">
+                <div className="aspect-square w-full bg-gray-50 flex items-center justify-center overflow-hidden rounded-lg mb-3">
                     <Image
                         src={ImageUrl}
-                        width={350}
-                        height={350}
+                        width={300}
+                        height={300}
                         alt={Title}
                         onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = "/product-placehold.png";
                         }}
-                        className="object-contain mix-blend-darken transition-transform group-hover:scale-105 duration-300"
+                        className="object-contain mix-blend-darken transition-transform duration-300 group-hover:scale-105 w-full h-full"
                     />
                 </div>
 
                 {/* Bottom Left Tags */}
-                <div className="absolute bottom-1 left-2 z-10 flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs">
+                <div className="absolute bottom-3 left-3 z-10 flex items-center gap-2">
                     <OffLabel SalePrice={SalePrice} RegularPrice={RegularPrice} />
-                    {isFeatured && <Tag color="gold" className="!rounded text-[10px] sm:text-xs">Featured</Tag>}
+                    {isFeatured && (
+                        <span className="bg-amber-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                            Featured
+                        </span>
+                    )}
                 </div>
             </Link>
 
-            {/* Brand */}
-            <span className="text-[10px] sm:text-xs text-gray-500 truncate">{Brand}</span>
+            {/* Product Details */}
+            <div className="flex flex-col gap-2 mt-auto">
+                {/* Brand */}
+                {Brand && (
+                    <span className="text-xs text-gray-500 font-medium truncate">{Brand}</span>
+                )}
 
-            {/* Product Title */}
-            <Link href={`/product/${encodeURIComponent(Slug)}?a=2`}>
-                <h3 className="text-[12px] sm:text-sm font-bold line-clamp-2 hover:text-primary transition">{Title}</h3>
-            </Link>
+                {/* Product Title */}
+                <Link href={`/product/${encodeURIComponent(Slug)}`}>
+                    <h3 className="text-sm font-semibold line-clamp-2 hover:text-primary transition-colors duration-200 min-h-[40px]">
+                        {Title}
+                    </h3>
+                </Link>
 
-            {/* Price */}
-            <Price salePrice={SalePrice} regularPrice={RegularPrice} />
+                {/* Price */}
+                <div className="mt-1">
+                    <Price salePrice={SalePrice} regularPrice={RegularPrice} />
+                </div>
+            </div>
         </div>
-    )
+    );
 }
 
 export default ProductCard
