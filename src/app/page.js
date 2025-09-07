@@ -50,13 +50,14 @@ export default async function Page() {
 
   return (
     <main className='container space-y-2 md:space-y-4'>
-      {banner && <Banner />}
+      {/* {banner && } */}dynamic
+      <Banner />
       <div className='hidden sm:block'>
         <CategorySlider />
       </div>
 
       {trendingProducts.length > 0 && (<>
-        <Title titlePart1={'Top Trending Products'} titlePart2={'For You'} viewAllUrl='/trending/products' />
+        <Title titlePart1={'Top Trending Products'} titlePart2={'For You'} viewAllUrl='/trending/products' bgType='light'/>
         <section>
           <TrendingSection products={trendingProducts} />
         </section>
