@@ -50,14 +50,14 @@ export default async function Page() {
 
   return (
     <main className='container space-y-2 md:space-y-4'>
-      {/* {banner && } */}dynamic
+      {/* {banner && } dynamic*/}
       <Banner />
       <div className='hidden sm:block'>
         <CategorySlider />
       </div>
 
       {trendingProducts.length > 0 && (<>
-        <Title titlePart1={'Top Trending Products'} titlePart2={'For You'} viewAllUrl='/trending/products' bgType='light'/>
+        <Title titlePart1={'Top Trending Products'} titlePart2={'For You'} viewAllUrl='/trending/products' bgType='light' />
         <section>
           <TrendingSection products={trendingProducts} />
         </section>
@@ -91,7 +91,8 @@ export default async function Page() {
         </section>
       </>)}
 
-      <Section />
+
+      {banner && <Section data={banner} />}
       {/* <SmallBanner /> */}
 
       {/* {cheapest.length > 0 && <div style={{ padding: '40px 20px' }}>

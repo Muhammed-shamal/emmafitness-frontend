@@ -9,22 +9,22 @@ import { Tag } from "antd"
 
 function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl, createdAt, Slug = "#", CustomLabel = false, isBestSeller = false, isTrending = false, isNewArrival = false, isFeatured = false, Brand }) {
     return (
-        <div className="bg-white border border-gray-200 rounded-lg p-3 flex flex-col gap-2 shadow-sm hover:shadow-md transition-all relative block group">
+        <div className="bg-white border border-gray-200 rounded-lg p-2 sm:p-3 flex flex-col gap-2 shadow-sm hover:shadow-md transition-all relative group">
 
             {/* Top Right Tags + Wishlist */}
-            <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1 text-xs font-bold">
+            <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1 text-[10px] sm:text-xs font-bold">
                 <WishListButton ProductId={Id} />
-                {isNewArrival && <Tag color="red" className="!rounded">New</Tag>}
-                {isTrending && <Tag color="purple" className="!rounded">Trending</Tag>}
-                {isBestSeller && <Tag color="green" className="!rounded">Best Seller</Tag>}
+                {isNewArrival && <Tag color="red" className="!rounded text-[10px] sm:text-xs">New</Tag>}
+                {isTrending && <Tag color="purple" className="!rounded text-[10px] sm:text-xs">Trending</Tag>}
+                {isBestSeller && <Tag color="green" className="!rounded text-[10px] sm:text-xs">Best Seller</Tag>}
                 {CustomLabel && (
-                    <Tag color="yellow-inverse" className="text-black rounded">{CustomLabel}</Tag>
+                    <Tag color="yellow-inverse" className="text-black rounded text-[10px] sm:text-xs">{CustomLabel}</Tag>
                 )}
             </div>
 
             <Link href={`/product/${encodeURIComponent(Slug)}`}>
                 {/* Image Section */}
-                <div className="aspect-[4/3] w-full bg-gray-50 flex items-center justify-center overflow-hidden rounded">
+                <div className="aspect-[4/3] sm:aspect-[1/1] w-full bg-gray-50 flex items-center justify-center overflow-hidden rounded">
                     <Image
                         src={ImageUrl}
                         width={350}
@@ -39,25 +39,24 @@ function ProductCard({ Id, Title = "", SalePrice = 0, RegularPrice = 0, ImageUrl
                 </div>
 
                 {/* Bottom Left Tags */}
-                <div className="absolute bottom-1 left-2 z-10 flex items-center gap-2">
+                <div className="absolute bottom-1 left-2 z-10 flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs">
                     <OffLabel SalePrice={SalePrice} RegularPrice={RegularPrice} />
-                    {isFeatured && <Tag color="gold" className="!rounded">Featured</Tag>}
+                    {isFeatured && <Tag color="gold" className="!rounded text-[10px] sm:text-xs">Featured</Tag>}
                 </div>
             </Link>
 
             {/* Brand */}
-            <span className="text-xs text-gray-500 truncate">{Brand}</span>
+            <span className="text-[10px] sm:text-xs text-gray-500 truncate">{Brand}</span>
 
             {/* Product Title */}
             <Link href={`/product/${encodeURIComponent(Slug)}?a=2`}>
-                <h3 className="text-sm font-bold line-clamp-2 hover:text-primary transition">{Title}</h3>
+                <h3 className="text-[12px] sm:text-sm font-bold line-clamp-2 hover:text-primary transition">{Title}</h3>
             </Link>
 
             {/* Price */}
             <Price salePrice={SalePrice} regularPrice={RegularPrice} />
         </div>
     )
-
 }
 
 export default ProductCard

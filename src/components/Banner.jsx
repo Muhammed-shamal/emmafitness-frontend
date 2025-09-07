@@ -4,16 +4,40 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const images = [
-  { id: 1, redirect: '/products', image: "/gallery/banner1.jpg" },
-  { id: 2, redirect: '/trending/products', image: "/gallery/banner2.jpg" },
-  { id: 3, redirect: '/featured/products', image: "/gallery/banner3.jpg" }
+  {
+    id: 1,
+    redirect: '/products',
+    desktopImage: '/gallery/banner1.jpg',
+    mobileImage: '/gallery/smallBanner1.png',
+  },
+  {
+    id: 2,
+    redirect: '/trending/products',
+    desktopImage: '/gallery/banner2.jpg',
+    mobileImage: '/gallery/smallBanner3.png',
+  },
+  {
+    id: 3,
+    redirect: '/featured/products',
+    desktopImage: '/gallery/banner3.jpg',
+    mobileImage: '/gallery/smallBanner2.png',
+  },
+];
 
-]
 
 export default function Banner() {
-  const fallbackImage = "/gallery/banner2.jpg";
+  
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Set up auto-advance carousel
   useEffect(() => {
@@ -50,6 +74,8 @@ export default function Banner() {
     setTimeout(() => setIsTransitioning(false), 700);
   };
 
+
+  const fallbackImage = isMobile ? "/gallery/smallBanner3.png" : "/gallery/banner2.jpg";
   return (
     <section className="relative w-full h-[400px] md:h-[600px] overflow-hidden mt-2 mb-3">
       {/* Carousel Container */}
@@ -57,12 +83,11 @@ export default function Banner() {
         {images.map((image, index) => (
           <div
             key={image.id}
-            className={`absolute inset-0 transition-opacity duration-700 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
-              }`}
+            className={`absolute inset-0 transition-opacity duration-700 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
           >
             <Link href={image.redirect}>
               <Image
-                src={image.image || fallbackImage}
+                src={isMobile ? image.mobileImage : image.desktopImage || fallbackImage}
                 alt={`Fitness Banner ${index + 1}`}
                 fill
                 priority={index === 0}
@@ -75,20 +100,12 @@ export default function Banner() {
       </div>
 
       {/* Navigation Arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all"
-        aria-label="Previous slide"
-      >
+       <button onClick={prevSlide} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all" aria-label="Previous slide">
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
       </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all"
-        aria-label="Next slide"
-      >
+      <button onClick={nextSlide} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all" aria-label="Next slide">
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
@@ -100,8 +117,7 @@ export default function Banner() {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${index === currentSlide ? 'bg-white' : 'bg-white/50'
-              }`}
+            className={`w-3 h-3 rounded-full transition-all ${index === currentSlide ? 'bg-white' : 'bg-white/50'}`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
