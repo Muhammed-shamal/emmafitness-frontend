@@ -33,6 +33,7 @@ import Image from "next/image"
 import moment from "moment"
 import { baseUrl, productUrl } from "../../../utility/api/constant"
 import PostAPI from "../../../utility/api/postApi";
+import CheckoutPage from "../../checkout/CheckoutPage"
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -42,10 +43,8 @@ function OrderHistory() {
     const user = useSelector(state => state.user)
     const [orders, setOrders] = useState([])
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [clientSecret, setClientSecret] = useState(null);
     const [paymentModalVisible, setPaymentModalVisible] = useState(false);
-    const [loadingPayment, setLoadingPayment] = useState(false);
-    const [paymentStatus, setPaymentStatus] = useState(null);
+    // const [paymentStatus, setPaymentStatus] = useState(null);
 
     useEffect(() => {
         const bring = async () => {
@@ -71,35 +70,14 @@ function OrderHistory() {
     }, [user]);
 
     const handleRetryPayment = async (order) => {
+        console.log('retry orde daa', order);
         setSelectedOrder(order);
-        setLoadingPayment(true);
         setPaymentModalVisible(true);
-
-        try {
-            const data = await PostAPI({
-                URI: "customers/payment/create",
-                API_TOKEN: user?.token,
-                Data: { amount: order.totalAmount, orderId: order._id, },
-                isTop: true
-            });
-
-            setClientSecret(data.client_secret);
-        } catch (err) {
-            console.error("Failed to create payment intent:", err);
-            setPaymentStatus({
-                type: 'error',
-                message: 'Failed to initialize payment. Please try again.'
-            });
-        } finally {
-            setLoadingPayment(false);
-        }
     };
 
     const closePaymentModal = () => {
         setPaymentModalVisible(false);
-        setClientSecret(null);
         setSelectedOrder(null);
-        setPaymentStatus(null);
     };
 
     const handleDownloadInvoice = async (orderId) => {
@@ -296,7 +274,7 @@ function OrderHistory() {
                                                     size="small"
                                                     icon={<DollarOutlined />}
                                                     onClick={() => handleRetryPayment(order)}
-                                                    loading={loadingPayment && selectedOrder?._id === order._id}
+                                                    loading={selectedOrder?._id === order._id}
                                                 >
                                                     Pay Now
                                                 </Button>
@@ -319,43 +297,25 @@ function OrderHistory() {
                 width={700}
                 bodyStyle={{ padding: 0, minHeight: '500px' }}
             >
-                {paymentStatus ? (
-                    <div style={{ padding: '24px' }}>
-                        <Alert
-                            message={paymentStatus.type === 'success' ? 'Payment Successful' : 'Payment Failed'}
-                            description={paymentStatus.message}
-                            type={paymentStatus.type}
-                            showIcon
-                        />
-                        <div style={{ marginTop: '16px', textAlign: 'center' }}>
-                            <Button type="primary" onClick={closePaymentModal}>
-                                Close
-                            </Button>
-                        </div>
-                    </div>
-                ) : loadingPayment ? (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
-                        <Spin size="large" tip="Initializing payment..." />
-                    </div>
-                ) : clientSecret ? (
-                    <div style={{ height: '500px' }}>
-                        <EmbeddedCheckoutProvider
-                            stripe={stripePromise}
-                            options={{ clientSecret }}
-                        >
-                            <EmbeddedCheckout />
-                        </EmbeddedCheckoutProvider>
-                    </div>
-                ) : (
-                    <div style={{ padding: '24px', textAlign: 'center' }}>
-                        <ExclamationCircleOutlined style={{ fontSize: '48px', color: '#faad14' }} />
-                        <p style={{ marginTop: '16px' }}>Unable to initialize payment. Please try again.</p>
-                        <Button onClick={closePaymentModal} style={{ marginTop: '16px' }}>
-                            Close
-                        </Button>
-                    </div>
-                )}
+
+                <CheckoutPage summary={selectedOrder ? { grandTotal: selectedOrder.totalAmount } : {
+                    grandTotal: 0
+                }} orderData={selectedOrder} />
             </Modal>
+
+            {/* {paymentStatus && <div style={{ padding: '24px' }}>
+                <Alert
+                    message={paymentStatus.type === 'success' ? 'Payment Successful' : 'Payment Failed'}
+                    description={paymentStatus.message}
+                    type={paymentStatus.type}
+                    showIcon
+                />
+                <div style={{ marginTop: '16px', textAlign: 'center' }}>
+                    <Button type="primary" onClick={closePaymentModal}>
+                        Close
+                    </Button>
+                </div>
+            </div>} */}
         </div>
     );
 }

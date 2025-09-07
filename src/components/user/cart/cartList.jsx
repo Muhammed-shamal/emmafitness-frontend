@@ -414,20 +414,20 @@ const CartPage = () => {
 
                   {/* Additional Actions */}
                   <div className="flex space-x-2">
-                    <Button
+                    {/* <Button
                       icon={<HeartOutlined />}
                       block
                       className="flex-1"
                     >
                       Save for Later
-                    </Button>
+                    </Button> */}
                     <Button
                       icon={<ShareAltOutlined />}
                       block
                       className="flex-1"
                       onClick={handleShare}
                     >
-                      Share Cart
+                      Share Product
                     </Button>
                   </div>
 

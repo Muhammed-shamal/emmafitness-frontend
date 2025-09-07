@@ -10,27 +10,30 @@ import PostAPI from '../../utility/api/postApi';
 
 export const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-export default function CheckoutPage({ summary, orderId }) {
+export default function CheckoutPage({ summary, orderData }) {
     const user = useSelector(state => state.user);
-    
+
     const [clientSecret, setClientSecret] = useState(null);
+
+    console.log('summary at',summary)
+    console.log('orderData at',orderData)
 
     useEffect(() => {
         const fetchClientSecret = async () => {
             const data = await PostAPI({
                 URI: "customers/payment/create-intent",
                 API_TOKEN: user?.token,
-                Data: { totalAmount: summary.grandTotal, orderId },
-                isTop:true
+                Data: { totalAmount: summary.grandTotal, orderId: orderData._id },
+                isTop: true
             });
-            console.log('data',data)
+            console.log('data', data)
             setClientSecret(data.clientSecret);
         };
 
-        if(orderId !== null){
+        if (orderData._id !== null) {
             fetchClientSecret();
         }
-    }, [summary.grandTotal, orderId]);
+    }, [summary.grandTotal, orderData._id]);
 
     const appearance = {
         theme: 'stripe',
@@ -45,7 +48,7 @@ export default function CheckoutPage({ summary, orderId }) {
         <div className="max-w-md mx-auto mt-10">
             {clientSecret && (
                 <Elements stripe={stripePromise} options={options}>
-                    <CheckoutForm clientSecret={clientSecret} orderId={orderId} />
+                    <CheckoutForm clientSecret={clientSecret} orderData={orderData} />
                 </Elements>
             )}
         </div>

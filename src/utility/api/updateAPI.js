@@ -1,7 +1,7 @@
 import { baseUrl } from "./constant";
 
 const updateApi = async ({ URI, Data = {}, isTop = false, token }) => {
-  if (!token) throw new Error("Invalid token");
+  if (!token) throw new Error("No token provide");
 
   const result = await fetch(`${baseUrl}/api/${URI}`, {
     method: "PUT",

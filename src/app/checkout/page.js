@@ -12,7 +12,7 @@ import UserSession from '../../components/user/userSessions'
 import CustomSpinner from '../../components/global/CustomSpinner'
 import { Modal } from 'antd'
 import { showToast } from '../../utility/redux/toastSlice'
-import updateApi from '../../utility/api/deleteApi'
+import updateApi from '../../utility/api/updateAPI'
 import CheckoutPage from '../../components/checkout/CheckoutPage'
 import { bulkReplaceCart } from '../../utility/redux/cartSlice'
 
@@ -32,8 +32,8 @@ function Page() {
 
   const [summary, setOrderSummary] = useState(null);
   const [reload, setReload] = useState(false)
+  const [orderData, setOrderData] = useState(null);
   const [orderId, setOrderId] = useState(null);
-  const [paymentStatus, setPaymentStatus] = useState(false)
 
 
   useEffect(() => {
@@ -77,6 +77,11 @@ function Page() {
   }
 
   const createOrder = async () => {
+    if (orderId) {
+      // Order already created, no need to create again
+      return;
+    }
+
     if (!addressId) {
       alert('Please choose your address');
       return;
@@ -104,19 +109,20 @@ function Page() {
 
       dispatch(showToast({ type: "success", message: `Your order has been placed. Order# ${data?._id}` }));
       setOrderId(data._id);
+      setOrderData(data);
       try {
         const data = await updateApi({
-          URI: "customers/carts/replace/bulk",
+          URI: "customers/cart/replace/bulk",
           Data: {
             userId: user?.userId
           },
-          API_TOKEN: user?.token,
+          token: user?.token,
           isTop: true
         });
-        console.log("bulk data is",data);
+        console.log('data is', data);
         dispatch(bulkReplaceCart(data.cart));
       } catch (error) {
-        console.error("something went wrong for remove from cart");
+        console.error("something went wrong for remove from cart", error);
       }
     } catch (err) {
       console.error("Order creation failed:", err);
@@ -127,17 +133,6 @@ function Page() {
 
   return (
     <div className='container my-4 '>
-      {
-        paymentStatus &&
-        <Modal open cancelButtonProps={false}
-          title="Order Placed!"
-          okButtonProps={{ className: 'bg-blue-500' }}
-          okText="Go to home"
-          cancelText="Ok"
-          onCancel={() => route.push("/")}
-          onOk={() => route.push("/")}
-        >{paymentStatus}</Modal>
-      }
       {
         popup && <Modal open={true} onCancel={() => route.push('/cart')} footer={false}><UserSession Close={() => setPopup(false)} /></Modal>
       }
@@ -155,7 +150,7 @@ function Page() {
               taxAmount: 0,
               shipping: 0,
               grandTotal: 0
-            }} disabled={orderId === null} orderId={orderId} />
+            }} orderData={orderData} />
           </div>
 
           {/* summary section */}
@@ -173,7 +168,14 @@ function Page() {
                 taxName="VAT"
               />
               {/* {result?.msg && <p className={`${result?.err ? "text-red-500" : "text-green-500"} text-sm`}>{result?.msg?.toString()}</p>} */}
-              <button onClick={createOrder} type='primary' className='bg-blue-600 text-sm text-white rounded text-center py-2 hover:bg-blue-800'>Create Order</button>
+              <button
+                onClick={createOrder}
+                type='button'
+                disabled={!!orderId} // disable if orderId exists
+                className={`bg-blue-600 text-sm text-white rounded text-center py-2 hover:bg-blue-800 ${orderId ? "opacity-50 cursor-not-allowed" : ""}`}
+              >
+                {orderId ? "Order Created" : "Create Order"}
+              </button>
             </div>
           </div>
         </div>

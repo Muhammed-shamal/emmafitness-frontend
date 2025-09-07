@@ -9,7 +9,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/navigation';
 
-export default function CheckoutForm({ clientSecret, orderId }) {
+export default function CheckoutForm({ clientSecret, orderData }) {
     const stripe = useStripe();
     const elements = useElements();
     const router = useRouter();
@@ -25,7 +25,7 @@ export default function CheckoutForm({ clientSecret, orderId }) {
                 currency: 'aed',
                 total: {
                     label: 'Order Total',
-                    amount: 10000, // Update dynamically if needed
+                    amount: orderData.totalAmount,
                 },
                 requestPayerName: true,
                 requestPayerEmail: true,
