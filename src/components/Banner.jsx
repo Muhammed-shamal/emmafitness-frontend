@@ -8,19 +8,19 @@ const images = [
     id: 1,
     redirect: '/products',
     desktopImage: '/gallery/banner1.jpg',
-    mobileImage: '/gallery/smallBanner1.png',
+    mobileImage: '/gallery/latestSmall1.png',
   },
   {
     id: 2,
     redirect: '/brand',
     desktopImage: '/gallery/banner2.jpg',
-    mobileImage: '/gallery/smallBanner3.png',
+    mobileImage: '/gallery/latestSmall2.png',
   },
   {
     id: 3,
     redirect: '/featured/products',
     desktopImage: '/gallery/banner3.jpg',
-    mobileImage: '/gallery/smallBanner2.png',
+    mobileImage: '/gallery/latestSmall3.png',
   },
 ];
 

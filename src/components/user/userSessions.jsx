@@ -5,6 +5,8 @@ import SignUp from './SignUp'
 
 function UserSession({Close=()=>{}}) {
   const [window, setWindow] = useState(<Login Close={Close} />)
+
+  console.log('wind is',window.type)
   return (
     <div className='flex flex-col gap-4'>
       {window}

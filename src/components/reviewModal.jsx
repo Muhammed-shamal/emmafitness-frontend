@@ -18,7 +18,6 @@ const ReviewModal = ({ visible, onCancel, onSubmit }) => {
     }
     try {
       await onSubmit({ rating, comment });
-      message.success('Thank you for your review!');
       setRating(0);
       setComment('');
       onCancel();

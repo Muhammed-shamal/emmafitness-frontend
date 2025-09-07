@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { Button, Input } from "antd"
-import axios from "axios"
+import { Button, Input,message } from "antd"
+
 import { useDispatch } from "react-redux"
 import { showToast } from "../../utility/redux/toastSlice"
 import PostAPI from "../../utility/api/postApi"
+import { useRouter } from "next/navigation"
 
 function ForgotUser({ close }) {
   const [email, setEmail] = useState("")
@@ -11,22 +12,28 @@ function ForgotUser({ close }) {
   const [otp, setOtp] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [loading, setLoading] = useState(false);
 
+  const router = useRouter();
   const dispatch = useDispatch();
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  // ✅ Standard email validation
 
   const handleSendOtp = async () => {
     if (!emailRegex.test(email)) {
-      dispatch(showToast({type:"error", message:"Please enter a valid email address."}));
+      dispatch(showToast({ type: "error", message: "Please enter a valid email address." }));
       return
     }
-    console.log("email is",email)
+    console.log("email is", email)
     try {
-      const res = await PostAPI({URI:"auth/customer/send-otp",Data:{email},isTop:true});
-      dispatch(showToast({ type: 'success', message: res.data.message}));
+      setLoading(true)
+      const res = await PostAPI({ URI: "auth/customer/send-otp", Data: { email }, isTop: true });
+      console.log('res is', res);
+      dispatch(showToast({ type: 'success', message: res.message }));
       setOtpSent(true);
     } catch (err) {
       dispatch(showToast({ type: 'error', message: err.response?.data?.message || "Failed to send OTP" }));
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -34,11 +41,15 @@ function ForgotUser({ close }) {
     e.preventDefault();
     if (newPassword !== confirmPassword) return message.error("Passwords do not match");
     try {
-      const res = await PostAPI({URI:"auth/customer/verify-reset",Data:{email,otp,newPassword},isTop:true});
-      dispatch(showToast({ type: 'success', message: res.data.message}));
-      close?.(); 
+      setLoading(true)
+      const res = await PostAPI({ URI: "auth/customer/verify-reset", Data: { email, otp, newPassword }, isTop: true });
+      dispatch(showToast({ type: 'success', message: res.message }));
+      router.refresh();
     } catch (err) {
-      dispatch(showToast({ type: 'error', message: err.response?.data?.message || "Reset Password failed" }));
+      console.log('erroris', err);
+      dispatch(showToast({ type: 'error', message: err.response?.data?.message || "Invalid or expired OTP" }));
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -55,12 +66,14 @@ function ForgotUser({ close }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <span
+          <button
+            disabled={loading}
             onClick={handleSendOtp}
+            type="button"
             className="text-sm shrink-0 p-2 bg-blue-500 text-white rounded-r hover:cursor-pointer hover:bg-blue-400"
           >
             Get OTP
-          </span>
+          </button>
         </div>
       </label>
 
@@ -82,7 +95,7 @@ function ForgotUser({ close }) {
       )}
 
       <div className="text-center">
-        <Button htmlType="submit" type="primary" className="w-24 bg-blue-500" disabled={!otpSent}>Reset</Button>
+        <Button  htmlType="submit" type="primary" className="w-24 bg-blue-500" disabled={!otpSent || loading}>Reset</Button>
       </div>
     </form>
   );

@@ -107,8 +107,7 @@ function OrderHistory() {
                 setReviewModalVisible(false);
             }
         } catch (err) {
-            console.log('faield to submit', err);
-            message.error("Failed to submit review.");
+            message.error(err.message || "Failed to submit review.");
         }
     };
 

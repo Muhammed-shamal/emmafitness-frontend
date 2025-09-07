@@ -153,7 +153,7 @@ function Header() {
     },
     {
       key: '2',
-      label: (<Link rel="noreferrer" href="/user/order"> Order History </Link>),
+      label: (<Link rel="noreferrer" href="/user/order"> My Orders </Link>),
     },
     {
       key: '3',
