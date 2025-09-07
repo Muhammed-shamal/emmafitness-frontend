@@ -119,7 +119,7 @@ function Page() {
           token: user?.token,
           isTop: true
         });
-        console.log('data is', data);
+        
         dispatch(bulkReplaceCart(data.cart));
       } catch (error) {
         console.error("something went wrong for remove from cart", error);

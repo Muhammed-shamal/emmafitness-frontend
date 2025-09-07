@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-
   Modal,
-
   Spin,
-
 } from 'antd';
 import {
   ShoppingCartOutlined,
@@ -17,6 +13,7 @@ import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe
 import { showToast } from '../../utility/redux/toastSlice';
 import PostAPI from '../../utility/api/postApi';
 import fetchApi from '../../utility/api/fetchApi';
+import CheckoutPage from './CheckoutPage';
 
 
 // Initialize Stripe
@@ -24,13 +21,11 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 export const BuyNow2 = ({ productId, product }) => {
   const [loading, setLoading] = useState(false);
-  const [orderId, setOrderId] = useState(null);
-  const [clientSecret, setClientSecret] = useState(null);
+  const [order, setOrder] = useState(null);
   const [showPayment, setShowPayment] = useState(false);
   const [addressId, setAddressId] = useState(null);
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
-  const router = useRouter();
 
 
   useEffect(() => {
@@ -46,7 +41,7 @@ export const BuyNow2 = ({ productId, product }) => {
         URI: `customers/address/getBy/${user.userId}`,
         API_TOKEN: user?.token,
       });
-      console.log('data is address', data)
+
       if (data) {
         setAddressId(data[0]?._id);
       }
@@ -61,14 +56,10 @@ export const BuyNow2 = ({ productId, product }) => {
       return;
     }
 
-    console.log('product is',product)
-    console.log('addressId is',addressId)
-
     if (!productId || !product?.salePrice || !addressId) {
       dispatch(showToast({ type: 'error', message: 'Please Login to buy products' }));
       return;
     }
-
 
     setLoading(true);
     try {
@@ -101,17 +92,7 @@ export const BuyNow2 = ({ productId, product }) => {
         isTop: true
       });
 
-      setOrderId(data._id);
-
-      // Create payment intent
-      const paymentData = await PostAPI({
-        URI: "customers/payment/create",
-        API_TOKEN: user?.token,
-        Data: { amount: totalAmount, orderId: orderId, },
-        isTop: true
-      });
-
-      setClientSecret(paymentData.client_secret);
+      setOrder(data);
       setShowPayment(true);
     } catch (error) {
       console.error("Buy now error:", error);
@@ -119,12 +100,6 @@ export const BuyNow2 = ({ productId, product }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handlePaymentSuccess = () => {
-    dispatch(showToast({ type: 'success', message: 'Payment successful! Your order has been placed.' }));
-    setShowPayment(false);
-    router.push('/orders');
   };
 
   return (
@@ -154,20 +129,9 @@ export const BuyNow2 = ({ productId, product }) => {
         bodyStyle={{ padding: 0 }}
       >
         <div className="p-1">
-          {clientSecret ? (
-            <div style={{ height: '500px' }}>
-              <EmbeddedCheckoutProvider
-                stripe={stripePromise}
-                options={{ clientSecret }}
-              >
-                <EmbeddedCheckout />
-              </EmbeddedCheckoutProvider>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center h-64">
-              <Spin size="large" tip="Initializing payment..." />
-            </div>
-          )}
+          <CheckoutPage summary={order ? { grandTotal: order.totalAmount } : {
+            grandTotal: 0
+          }} orderData={order} />
         </div>
       </Modal>
     </>
