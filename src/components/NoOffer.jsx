@@ -75,7 +75,7 @@ export default function NoOffers() {
 
             {subscribed ? (
               <div className="bg-green-100 text-green-700 py-3 px-4 rounded-lg">
-                ✅ Thank you! We'll notify you when new offers are available.
+                ✅ Thank you! We&apos;ll notify you when new offers are available.
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
