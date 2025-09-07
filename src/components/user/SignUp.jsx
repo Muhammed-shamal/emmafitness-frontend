@@ -59,7 +59,6 @@ function SignUp({ Close = () => { } }) {
     <div onSubmit={formHandle} className="flex flex-col justify-center ">
       <h2 className="font-semibold text-lg">Register New User</h2>
 
-
       <Form
         className="space-y-2"
         name="signUpForm"

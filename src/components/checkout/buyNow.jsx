@@ -57,7 +57,7 @@ export const BuyNow2 = ({ productId, product }) => {
     }
 
     if (!productId || !product?.salePrice || !addressId) {
-      dispatch(showToast({ type: 'error', message: 'Please Login to buy products' }));
+      dispatch(showToast({ type: 'error', message: 'Please add your address to buy this product' }));
       return;
     }
 

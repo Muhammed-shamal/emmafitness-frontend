@@ -9,6 +9,7 @@ export default function CategoryNav() {
     const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState(null);
 
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -22,7 +23,8 @@ export default function CategoryNav() {
                     slug: cat.slug,
                     subCategories: cat.children?.map(child => ({
                         name: child.name,
-                        slug: child.slug
+                        slug: child.slug,
+                        id: child._id
                     })) || []
                 }));
 
@@ -94,7 +96,7 @@ export default function CategoryNav() {
                                             {category.subCategories.map((subCategory) => (
                                                 <Link
                                                     key={subCategory.slug}
-                                                    href={`/category/${category.slug}/${subCategory.slug}`}
+                                                    href={`/productByCategory/${encodeURIComponent(subCategory.id)}`}
                                                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
                                                 >
                                                     {subCategory.name}
@@ -154,7 +156,7 @@ export default function CategoryNav() {
                                             {category.subCategories.map((subCategory) => (
                                                 <li key={subCategory.slug}>
                                                     <Link
-                                                        href={`/category/${category.slug}/${subCategory.slug}`}
+                                                        href={`/productByCategory/${encodeURIComponent(subCategory.id)}`}
                                                         className="block py-1 text-sm text-gray-600 hover:text-primary transition-colors"
                                                         onClick={() => setOpen(false)}
                                                     >

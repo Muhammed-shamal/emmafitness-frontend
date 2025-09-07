@@ -23,7 +23,7 @@ function ForgotUser({ close }) {
       dispatch(showToast({ type: "error", message: "Please enter a valid email address." }));
       return
     }
-    console.log("email is", email)
+    
     try {
       setLoading(true)
       const res = await PostAPI({ URI: "auth/customer/send-otp", Data: { email }, isTop: true });
