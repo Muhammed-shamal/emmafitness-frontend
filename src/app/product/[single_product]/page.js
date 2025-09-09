@@ -5,7 +5,7 @@ import OffLabel from "../../../components/global/label/OffLabel"
 import CartButton from "../../../components/global/CartButton"
 import { BuyNow2 } from "../../../components/checkout/buyNow"
 import WishLIstButton from '../../../components/global/WishListButton'
-import { Divider, Tag, Spin, Empty, List, Rate, Avatar ,Button} from "antd"
+import { Divider, Tag, Spin, Empty, List, Rate, Avatar, Button } from "antd"
 import ImageSection from '../../../components/singleProduct/ImageSection'
 import DescriptionSection from '../../../components/singleProduct/descriptionSection'
 import SingleRowProducts from '../../../components/global/SingleRowProducts'
@@ -70,6 +70,7 @@ function Page({ params }) {
     { url: "/icons/easy-installation.png", alt: "installation", title: "Free Installation" },
     { url: "/icons/guarantee.png", alt: "guarantee", title: "Product Warranty" },
   ]
+  console.log("prodcts are", product);
 
 
   return (
@@ -78,12 +79,17 @@ function Page({ params }) {
         <div className="flex flex-col lg:flex-row bg-white shadow rounded p-4">
 
           <ImageSection
-            Images={[
-              {
-                url: `${product?.images?.[0] ? productUrl + '/' + product.images[0] : "/product-placehold.png"}`,
-                alt: product?.name,
-              },
-            ]}
+            Images={
+              product?.images?.length > 0
+                ? product.images.map(img => ({
+                  url: `${productUrl}/${img}`,
+                  alt: product.name
+                }))
+                : [{
+                  url: "/product-placehold.png",
+                  alt: "Placeholder"
+                }]
+            }
           />
 
           <div className="lg:border-l pl-4 max-w-md flex flex-col gap-4">
