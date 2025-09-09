@@ -11,7 +11,7 @@ import DescriptionSection from '../../../components/singleProduct/descriptionSec
 import SingleRowProducts from '../../../components/global/SingleRowProducts'
 import fetchApi from "../../../utility/api/fetchApi"
 import Image from "next/legacy/image"
-import MarkDownText from "../../../components/global/MarkDownText"
+import DescriptionWithReadMore from '../../../components/DescriptionWithReadMore'
 import { brandUrl, productUrl } from "../../../utility/api/constant"
 import { useEffect, useState } from "react";
 import moment from 'moment'
@@ -23,7 +23,7 @@ import {
   FaLink,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { DislikeOutlined, LikeOutlined, StarFilled, StarOutlined, UserOutlined } from "@ant-design/icons";
+import { StarFilled, StarOutlined, UserOutlined } from "@ant-design/icons";
 
 function Page({ params }) {
   const router = useRouter();
@@ -221,9 +221,7 @@ function Page({ params }) {
               </div>
 
 
-              <div className="text-sm">
-                <MarkDownText text={product?.description} />
-              </div>
+             <DescriptionWithReadMore text={product?.description} />
             </div>
 
             <div className="flex flex-row gap-4">
