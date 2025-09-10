@@ -44,7 +44,7 @@ const CartPage = () => {
     if (user?.userId && user?.token) {
       fetchCart();
     }
-  }, [user]);
+  }, [user]);  
 
   const fetchCart = async () => {
     try {

@@ -20,7 +20,7 @@ function CartButton({ productId }) {
   const [popup, setPopup] = useState(false)
 
   // Find the cart item for this product
-  const cartItem = cartItems.find(item => item.product._id === productId);
+  const cartItem = cartItems.find(item => item.product?._id === productId);
   const quantity = cartItem?.quantity || 0;
 
   const handleAddToCart = async () => {

@@ -70,8 +70,6 @@ function Page({ params }) {
     { url: "/icons/easy-installation.png", alt: "installation", title: "Free Installation" },
     { url: "/icons/guarantee.png", alt: "guarantee", title: "Product Warranty" },
   ]
-  console.log("prodcts are", product);
-
 
   return (
     <Spin spinning={loading}>

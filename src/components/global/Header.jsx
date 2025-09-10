@@ -123,6 +123,8 @@ function Header() {
           API_TOKEN: user?.token
         });
 
+        console.log('result are',result);
+
         // Flatten and assign only items
         const cartItems = result?.items || [];
         dispatch(setCart(cartItems));
