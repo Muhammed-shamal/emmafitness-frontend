@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import fetchApi from "../../../utility/api/fetchApi"
 import ReviewModal from '../../../components/reviewModal'
 import {
@@ -33,17 +33,26 @@ import moment from "moment"
 import { baseUrl, productUrl } from "../../../utility/api/constant"
 import CheckoutPage from "../../checkout/CheckoutPage"
 import PostAPI from "../../../utility/api/postApi";
+import { showToast } from "../../../utility/redux/toastSlice"
+import { Elements } from "@stripe/react-stripe-js"
+import CheckoutForm from "../../checkout/CheckoutForm"
+import { loadStripe } from "@stripe/stripe-js"
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
 function OrderHistory() {
 
     const user = useSelector(state => state.user)
+    const dispatch = useDispatch();
+
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState([])
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+    const [clientSecret, setClientSecret] = useState(null);
 
     //review
     const [reviewModalVisible, setReviewModalVisible] = useState(false);
@@ -114,6 +123,21 @@ function OrderHistory() {
 
     const handleRetryPayment = async (order) => {
         setSelectedOrder(order);
+        if (order._id) {
+            try {
+                const data = await PostAPI({
+                    URI: "customers/payment/create-intent",
+                    API_TOKEN: user?.token,
+                    Data: { totalAmount: order.totalAmount, orderId: order._id },
+                    isTop: true
+                });
+
+                setClientSecret(data.clientSecret);
+            } catch (error) {
+                console.error("Error creating payment intent:", error);
+                dispatch(showToast({ type: "error", message: "Payment setup failed. Please try again." }));
+            }
+        }
         setPaymentModalVisible(true);
     };
 
@@ -361,9 +385,29 @@ function OrderHistory() {
                 bodyStyle={{ padding: 0, minHeight: '500px' }}
             >
 
-                <CheckoutPage summary={selectedOrder ? { grandTotal: selectedOrder.totalAmount } : {
-                    grandTotal: 0
-                }} orderData={selectedOrder} />
+                {clientSecret && (
+                    <div className="bg-white p-4 rounded-lg">
+                        <h3 className="text-lg font-semibold mb-4">Payment Information</h3>
+                        <Elements
+                            stripe={stripePromise}
+                            options={{
+                                clientSecret,
+                                appearance: {
+                                    theme: 'stripe',
+                                    variables: {
+                                        colorPrimary: '#2563eb',
+                                        borderRadius: '6px'
+                                    }
+                                }
+                            }}
+                        >
+                            <CheckoutForm
+                                clientSecret={clientSecret}
+                                orderData={selectedOrder}
+                            />
+                        </Elements>
+                    </div>
+                )}
             </Modal>
 
             <ReviewModal

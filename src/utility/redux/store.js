@@ -4,7 +4,7 @@ import wishListReducer from './wishListSlice'
 import userReducer from './userSlice'
 import orderDraftReducer from './orderDraftSlice'
 import toastReducer from './toastSlice'
-
+import directPurchaseReducer from './directPurchaseSlice'
 
 export default configureStore({
     reducer: {
@@ -12,6 +12,7 @@ export default configureStore({
         wishList: wishListReducer,
         user: userReducer,
         orderDraft: orderDraftReducer,
-        toast:toastReducer
+        toast: toastReducer,
+        directPurchase: directPurchaseReducer
     }
 })

@@ -224,7 +224,7 @@ function Page({ params }) {
 
             <div className="flex flex-row gap-4">
               <CartButton productId={product?._id} />
-              <BuyNow2 productId={product?._id} product={product} />
+              <BuyNow2 product={product} />
               <WishLIstButton ProductId={product?._id} />
             </div>
           </div>
