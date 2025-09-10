@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import Search from './Search'
 import Link from 'next/link'
-import { HeartOutlined, PhoneOutlined, ShoppingCartOutlined, UserAddOutlined } from '@ant-design/icons'
+import { CloseOutlined, HeartOutlined, PhoneOutlined, ShoppingCartOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { bulkReplaceCart, setCart } from '../../utility/redux/cartSlice'
@@ -181,79 +181,117 @@ function Header() {
   return (
     <>
       {popup && (
-        <Modal open={true} onCancel={() => setPopup(false)} footer={false}>
+        <Modal
+          open={true}
+          onCancel={() => setPopup(false)}
+          footer={false}
+          className="premium-modal"
+          closeIcon={<CloseOutlined className="text-gray-500 hover:text-secondary transition-colors" />}
+        >
           <UserSession Close={() => setPopup(false)} />
         </Modal>
       )}
 
-      <div className='bg-lightPrimary text-black sticky top-0 z-50 shadow-md'>
-        <div className='container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 py-2'>
-
-          {/* Logo */}
-          <Link href="/">
-            <Image src="/logos/emma_logo.svg" width={200} height={65} alt='Emma Fitness Logo' />
-          </Link>
-
-          {/* Search bar - Desktop */}
-          <div className='flex-1 hidden md:block'>
-            <Search />
+      <header className="bg-white text-gray-800 sticky top-0 z-50 shadow-lg border-b border-gray-100">
+        <div className="container mx-auto px-4 flex flex-col">
+          {/* Top bar with contact info and user actions */}
+          <div className="hidden md:flex justify-between items-center py-2 border-b border-gray-100 text-xs">
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-500">Free shipping on orders over AED 200</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Link href="/contact" className="text-gray-600 hover:text-secondary transition-colors">
+                Contact Us
+              </Link>
+              <span className="text-gray-300">|</span>
+              <Link href="/stores" className="text-gray-600 hover:text-secondary transition-colors">
+                Find Stores
+              </Link>
+              <span className="text-gray-300">|</span>
+              <div className="flex items-center gap-1 font-medium">
+                <PhoneOutlined className="text-secondary" />
+                <Link href="tel:+971559457419" className="hover:text-secondary transition-colors">
+                  +971 559 457 419
+                </Link>
+              </div>
+            </div>
           </div>
 
-          {/* Phone number */}
-          <div className='hidden md:flex items-center gap-2 font-bold text-sm'>
-            <PhoneOutlined className='text-secondary' />
-            <Link href="tel:+971 559457419">
-              +971559457419</Link>
-          </div>
+          {/* Main header content */}
+          <div className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
+            {/* Logo */}
+            <Link href="/" className="order-1 md:order-1">
+              <div className="relative w-40 h-10 md:w-48 md:h-12">
+                <Image
+                  src="/logos/emma_logo.svg"
+                  fill
+                  alt="Emma Fitness Logo"
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </Link>
 
-          {/* Icons */}
-          <div className='text-xl md:text-2xl font-bold flex flex-row gap-4 cursor-pointer items-center'>
-            {/* User */}
-            <Dropdown menu={{ items }} placement='top' arrow>
-              <UserAddOutlined className='text-red-500' />
-            </Dropdown>
+            {/* Search bar - Desktop */}
+            <div className="order-3 md:order-2 w-full md:w-1/3 lg:w-1/2 mt-4 md:mt-0">
+              <Search />
+            </div>
 
-            {/* Wishlist */}
-            <Skeleton loading={loading} active paragraph={false} title={false}>
-              <Link href="/user/wishlist" className='hover:text-secondary'>
-                <div className='relative'>
-                  <HeartOutlined className='text-red-500' />
-                  <div className='h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1'>
+            {/* Icons */}
+            <div className="order-2 md:order-3 flex items-center space-x-6">
+              {/* User */}
+              <Dropdown
+                menu={{ items }}
+                placement="bottomRight"
+                arrow={{ pointAtCenter: true }}
+                overlayClassName="premium-dropdown"
+                trigger={['click', 'hover']}
+              >
+                <button className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors">
+                  {user?.userId ? (
+                    <UserOutlined className="text-xl text-gray-700" />
+                  ) : (
+                    <UserAddOutlined className="text-xl text-gray-700" />
+                  )}
+                </button>
+              </Dropdown>
+
+              {/* Wishlist */}
+              <Skeleton loading={loading} active paragraph={false} title={false}>
+                <Link
+                  href="/user/wishlist"
+                  className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors relative"
+                >
+                  <HeartOutlined className="text-xl text-gray-700" />
+                  <div className="absolute -top-1 -right-1 h-5 w-5 text-xs text-white bg-secondary rounded-full flex items-center justify-center shadow-sm">
                     {wishList.items?.length || 0}
                   </div>
-                </div>
-              </Link>
-            </Skeleton>
+                </Link>
+              </Skeleton>
 
-            {/* Cart */}
-            <Skeleton loading={loading} active paragraph={false} title={false}>
-              <div onClick={handleCartClick} className="cursor-pointer hover:text-secondary text-3xl">
-                <div className="relative">
-                  <ShoppingCartOutlined className="text-red-500" />
-                  <div className="h-4 w-4 text-xs text-white bg-secondary rounded-full flex items-center justify-center absolute -top-1 -right-1">
+              {/* Cart */}
+              <Skeleton loading={loading} active paragraph={false} title={false}>
+                <button
+                  onClick={handleCartClick}
+                  className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors relative"
+                >
+                  <ShoppingCartOutlined className="text-xl text-gray-700" />
+                  <div className="absolute -top-1 -right-1 h-5 w-5 text-xs text-white bg-secondary rounded-full flex items-center justify-center shadow-sm">
                     {cart.items?.reduce((prev, cur) => parseInt(cur?.quantity || 1) + prev, 0) || 0}
                   </div>
-                </div>
-              </div>
-            </Skeleton>
+                </button>
+              </Skeleton>
+            </div>
           </div>
         </div>
 
-        {/* Mobile View: Search and Phone */}
-        <div className='block md:hidden container pb-2'>
-          <div className='mb-2'><Search /></div>
-          <div className='flex items-center gap-2 text-sm'>
-            <PhoneOutlined className='text-secondary' />
-            <Link href="tel:+971 559457419">
-              +971 559457419</Link>
-          </div>
+        {/* Category Navigation */}
+        <div className="border-t border-gray-100">
+          <CategoryNav />
         </div>
-
-        {/* Category List */}
-        <CategoryNav />
-      </div>
+      </header>
     </>
-  )
+  );
 
 }
 

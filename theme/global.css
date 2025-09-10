@@ -3,6 +3,27 @@
 @tailwind utilities;
 
 
+/* Enhancements for premium look */
+.premium-modal .ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.premium-dropdown .ant-dropdown-menu {
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+}
+
+.premium-dropdown .ant-dropdown-menu-item {
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.premium-dropdown .ant-dropdown-menu-item:hover {
+  background-color: #f9fafb;
+}
+
 .ant-menu-item:hover,
 .ant-menu-item-selected {
   background: #e40101 !important;
@@ -10,8 +31,6 @@
   color: yellow !important;
   
 }
-
-
 
 /* Hide the horizontal scrollbar but allow horizontal scrolling */
 .hide-scrollbar {

@@ -85,7 +85,7 @@ export default async function Page() {
       )}
 
       {newArrivals.length > 0 && (<>
-        <Title titlePart1={'New'} titlePart2={'Products'} />
+        <Title titlePart1={'New'} titlePart2={'Products'} viewAllUrl='/products'/>
         <section>
           <NewProducts products={newArrivals} />
         </section>
