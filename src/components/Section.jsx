@@ -59,7 +59,7 @@ const Section = ({ data }) => {
           <div className="md:w-1/3 flex flex-col gap-6 md:gap-8">
             {(() => {
               // Shuffle subBanners and pick 2
-              const shuffledBanners = [...data.subBanners].sort(() => 0.5 - Math.random());
+              const shuffledBanners = [...data?.subBanners].sort(() => 0.5 - Math.random());
               const bannersToShow = shuffledBanners.slice(0, 2);
 
               return bannersToShow.map((value, index) => (

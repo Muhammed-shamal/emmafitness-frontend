@@ -206,14 +206,14 @@ function Header() {
                 Contact Us
               </Link>
               <span className="text-gray-300">|</span>
-              <Link href="/stores" className="text-gray-600 hover:text-secondary transition-colors">
+              <Link href="#stores" className="text-gray-600 hover:text-secondary transition-colors">
                 Find Stores
               </Link>
               <span className="text-gray-300">|</span>
               <div className="flex items-center gap-1 font-medium">
                 <PhoneOutlined className="text-secondary" />
-                <Link href="tel:+971559457419" className="hover:text-secondary transition-colors">
-                  +971 559 457 419
+                <Link href="tel:+971563296585" className="hover:text-secondary transition-colors">
+                  +971 563296585
                 </Link>
               </div>
             </div>
