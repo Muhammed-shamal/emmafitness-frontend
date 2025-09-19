@@ -96,7 +96,7 @@ export default function ContactPage() {
             Contact Us
           </Title>
           <Paragraph style={{ textAlign: 'center', maxWidth: 600, margin: '0 auto 40px' }}>
-            Have questions about our products or need support? We're here to help and would love to hear from you.
+            Have questions about our products or need support? We&apos;re here to help and would love to hear from you.
           </Paragraph>
 
           <Row gutter={[32, 32]}>
