@@ -31,7 +31,6 @@ import {
 import Image from "next/image"
 import moment from "moment"
 import { baseUrl, productUrl } from "../../../utility/api/constant"
-import CheckoutPage from "../../checkout/CheckoutPage"
 import PostAPI from "../../../utility/api/postApi";
 import { showToast } from "../../../utility/redux/toastSlice"
 import { Elements } from "@stripe/react-stripe-js"
@@ -71,8 +70,6 @@ function OrderHistory() {
                     API_TOKEN: user?.token,
                 });
 
-                console.log('order data is', order, Array.isArray(order));
-
                 if (Array.isArray(order)) {
                     setOrders(order);
                 } else if (order?.data && Array.isArray(order.data)) {
@@ -94,7 +91,6 @@ function OrderHistory() {
 
 
     const handleReview = (item) => {
-        console.log('item data', item);
         setCurrentReviewItem(item);
         setReviewModalVisible(true);
     };
@@ -111,7 +107,6 @@ function OrderHistory() {
             })
 
             if (res.message) {
-                console.log('respons is', res);
                 message.success("Review submitted!");
                 setReviewModalVisible(false);
             }

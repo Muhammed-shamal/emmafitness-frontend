@@ -16,11 +16,11 @@ const ProductsByOfferPage = () => {
     const [offers, setOffers] = useState([]);
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [pagination, setPagination] = useState({
-        pageCount: 0,
-        pageNo: 1,
-        pageSize: 30
-    });
+    // const [pagination, setPagination] = useState({
+    //     pageCount: 0,
+    //     pageNo: 1,
+    //     pageSize: 30
+    // }); need to correct future;
     const [loadingOffers, setLoadingOffers] = useState(true);
     const [loadingProducts, setLoadingProducts] = useState(true);
 
@@ -49,16 +49,17 @@ const ProductsByOfferPage = () => {
             try {
                 setLoadingProducts(true);
                 const result = await fetchApi({
-                    URI: `public/products?populate=customLabel&populate=category.name,brand.Name&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}`
+                    URI: `public/products/getAll`
                 });
 
-                setPagination(prev => ({
-                    ...prev,
-                    pageCount: result?.meta?.pagination?.pageCount,
-                    total: result?.meta?.pagination?.total
-                }));
+                
+                // setPagination(prev => ({
+                //     ...prev,
+                //     pageCount: result?.meta?.pagination?.pageCount,
+                //     total: result?.meta?.pagination?.total
+                // }));
 
-                const transformedProducts = result?.data?.map(prdct => ({
+                const transformedProducts = result?.map(prdct => ({
                     _id: prdct._id,
                     name: prdct.name,
                     category: {
@@ -112,7 +113,7 @@ const ProductsByOfferPage = () => {
         };
 
         fetchProducts();
-    }, [pagination.pageNo, pagination.pageSize]);
+    }, []);
 
 
     // Filter products based on offer
@@ -128,15 +129,16 @@ const ProductsByOfferPage = () => {
                 switch (selectedOffer.offerType) {
                     case 'single':
                         // Single product offer
-                        if (selectedOffer.product && selectedOffer.product._id) {
-                            filtered = products.filter(p => p._id === selectedOffer.product._id);
+                        if (selectedOffer.product) {
+                            filtered = products.filter(p => p._id === selectedOffer.product);
+                            
                         }
                         break;
 
                     case 'category':
                         // Category offer
-                        if (selectedOffer.category && selectedOffer.category._id) {
-                            filtered = products.filter(p => p.category?._id === selectedOffer.category._id);
+                        if (selectedOffer.category) {
+                            filtered = products.filter(p => p.category?._id === selectedOffer.category);
                         }
                         break;
 
@@ -190,13 +192,13 @@ const ProductsByOfferPage = () => {
     };
 
 
-    const handlePageChange = (page, pageSize) => {
-        setPagination(prev => ({
-            ...prev,
-            pageNo: page,
-            pageSize
-        }));
-    };
+    // const handlePageChange = (page, pageSize) => {
+    //     setPagination(prev => ({
+    //         ...prev,
+    //         pageNo: page,
+    //         pageSize
+    //     }));
+    // };
 
 
     return (
@@ -259,7 +261,7 @@ const ProductsByOfferPage = () => {
                                     />
                                 ))}
                             </Row>
-                            {pagination.pageCount > 1 && (
+                            {/* {pagination.pageCount > 1 && (
                                 <div style={{ marginTop: 32, textAlign: 'center' }}>
                                     <Pagination
                                         current={pagination.pageNo}
@@ -271,7 +273,7 @@ const ProductsByOfferPage = () => {
                                         onShowSizeChange={handlePageChange}
                                     />
                                 </div>
-                            )}
+                            )} */}
                         </>
                     )}
                 </>

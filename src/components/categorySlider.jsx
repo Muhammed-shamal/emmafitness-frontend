@@ -5,6 +5,7 @@ import fetchApi from '../utility/api/fetchApi';
 import { categoryUrl } from '../utility/api/constant';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Skeleton } from 'antd';
 
 export default function CategorySlider() {
 
@@ -87,14 +88,14 @@ export default function CategorySlider() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4">
-      <div className="mx-auto bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+    <div className="min-h-screen bg-gradient-to-br py-12 px-4">
+      <div className="mx-auto max-w-7xl rounded-3xl p-8 shadow-md border border-white/20">
         <div className="text-center mb-12">
           <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3"
+            className="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-600 bg-clip-text text-transparent mb-3"
           >
             Explore Our Categories
           </motion.h1>
@@ -112,90 +113,111 @@ export default function CategorySlider() {
           {/* Main Categories - Horizontal Scroller */}
           <div className="relative ">
             <div className="flex overflow-x-auto space-x-4 pb-6 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent scrollbar-thumb-rounded-full">
-              {bannerCategories.map((cat) => {
-                const isActive = activeCategory?.id === cat.id;
-                const isHovered = hoveredCategory?.id === cat.id;
-                const isActiveOrHovered = isActive || isHovered;
+              {
+                loading ? Array.from({ length: 6 }).map((_, index) => (
+                  <div key={index} className="flex-shrink-0 w-32 p-5">
+                    <Skeleton.Avatar active shape="circle" size={64} />
+                    <Skeleton.Input style={{ marginTop: 12 }} active size="small" />
+                  </div>
+                )) :
+                  bannerCategories.map((cat) => {
+                    const isActive = activeCategory?.id === cat.id;
+                    const isHovered = hoveredCategory?.id === cat.id;
+                    const isActiveOrHovered = isActive || isHovered;
 
-                return (
-                  <div key={cat.id} className="flex-shrink-0">
-                    <motion.div
-                      whileHover={{ scale: 1.05, y: -3 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`flex flex-col items-center w-32 p-5 rounded-2xl cursor-pointer transition-all duration-300 relative shadow-sm group`}
-                      onMouseEnter={() => handleCategoryHover(cat)}
-                      onMouseLeave={() => !isHoveringSubcategory && setHoveredCategory(null)}
-                      onClick={() => handleCategoryClick(cat)}
-                      animate={{
-                        backgroundColor: isActiveOrHovered
-                          ? 'rgba(59, 130, 246, 0.08)'
-                          : 'rgba(255, 255, 255, 0.95)',
-                        border: isActiveOrHovered
-                          ? '1px solid rgba(59, 130, 246, 0.3)'
-                          : '1px solid rgba(229, 231, 235, 0.8)',
-                        boxShadow: isActiveOrHovered
-                          ? '0 12px 30px -8px rgba(59, 130, 246, 0.2)'
-                          : '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-                      }}
-                    >
-                      {/* Image Container */}
-                      <div className="relative w-20 h-20 mb-4 flex items-center justify-center">
-                        <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-lg">
-                          <Image
-                            src={`${categoryUrl}/${cat.image}`}
-                            alt={cat.name}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 64px) 100vw, 64px"
-                          />
+                    const content = (
+                      <motion.div
+                        whileHover={{ scale: 1.05, y: -3 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`flex flex-col items-center w-32 p-5 rounded-2xl cursor-pointer transition-all duration-300 relative shadow-sm group`}
+                        onMouseEnter={() => handleCategoryHover(cat)}
+                        onMouseLeave={() => !isHoveringSubcategory && setHoveredCategory(null)}
+                        onClick={() => {
+                          if (cat.children?.length > 0) {
+                            handleCategoryClick(cat);
+                          }
+                        }}
+                        animate={{
+                          backgroundColor: isActiveOrHovered
+                            ? 'rgba(59, 130, 246, 0.08)'
+                            : 'rgba(255, 255, 255, 0.95)',
+                          border: isActiveOrHovered
+                            ? '1px solid rgba(59, 130, 246, 0.3)'
+                            : '1px solid rgba(229, 231, 235, 0.8)',
+                          boxShadow: isActiveOrHovered
+                            ? '0 12px 30px -8px rgba(59, 130, 246, 0.2)'
+                            : '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
+                        }}
+                      >
+                        {/* Image Container */}
+                        <div className="relative w-30 h-30 mb-4 flex items-center justify-center">
+                          <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-lg">
+                            <Image
+                              src={`${categoryUrl}/${cat.image}`}
+                              alt={cat.name}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 64px) 100vw, 64px"
+                            />
+                          </div>
+
+                          {/* Active Hover Overlay */}
+                          {isActiveOrHovered && (
+                            <motion.div
+                              className="absolute inset-0 rounded-full z-0"
+                              initial={{ scale: 0.9, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ type: 'spring', stiffness: 250, damping: 20 }}
+                            />
+                          )}
                         </div>
 
-                        {/* Active Hover Overlay */}
-                        {isActiveOrHovered && (
+                        {/* Category Name */}
+                        <span className="text-sm font-semibold text-center text-gray-800 mb-1 block truncate max-w-full">
+                          {cat.name}
+                        </span>
+
+                        {/* Children Arrow */}
+                        {cat.children?.length > 0 && (
                           <motion.div
-                            className="absolute inset-0 rounded-full z-0"
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: 'spring', stiffness: 250, damping: 20 }}
-                          />
+                            className={`w-6 h-6 flex items-center justify-center rounded-full absolute -bottom-3 border transition-colors 
+            ${isActiveOrHovered
+                                ? 'bg-blue-500 text-white border-blue-400 shadow-md'
+                                : 'bg-gray-100 text-gray-500 border-gray-300'}`}
+                            animate={{ rotate: isActive ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-3 w-3"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </svg>
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    );
+
+                    return (
+                      <div key={cat.id} className="flex-shrink-0">
+                        {cat.children?.length > 0 ? (
+                          content
+                        ) : (
+                          <Link href={`/productByCategory/${encodeURIComponent(cat.id)}`}>
+                            {content}
+                          </Link>
                         )}
                       </div>
-
-                      {/* Category Name */}
-                      <span className="text-sm font-semibold text-center text-gray-800 mb-1 block truncate max-w-full">
-                        {cat.name}
-                      </span>
-
-                      {/* Children Arrow */}
-                      {cat.children?.length > 0 && (
-                        <motion.div
-                          className={`w-6 h-6 flex items-center justify-center rounded-full absolute -bottom-3 border transition-colors 
-              ${isActiveOrHovered
-                              ? 'bg-blue-500 text-white border-blue-400 shadow-md'
-                              : 'bg-gray-100 text-gray-500 border-gray-300'}`}
-                          animate={{ rotate: isActive ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-3 w-3"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </svg>
-                        </motion.div>
-                      )}
-                    </motion.div>
-                  </div>
-                );
-              })}
+                    );
+                  })}
             </div>
 
             {/* Gradient fade effect on sides for scroll indication */}

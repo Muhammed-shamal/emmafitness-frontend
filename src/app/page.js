@@ -78,9 +78,8 @@ export default async function Page() {
         </>
       )}
 
-      {/* <OffersBanner /> */}
-      <ProductSlider />
       <BestTrainersSection />
+      <ProductSlider />
 
       {specialOffer.length > 0 ? (
         <Sale offer={specialOffer[0]} />

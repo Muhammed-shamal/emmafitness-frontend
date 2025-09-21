@@ -95,7 +95,7 @@ const CheckoutPage = () => {
           : item.product.regularPrice * item.quantity
       ), 0);
 
-      const shipping = 10; // Fixed shipping for example
+      const shipping = 0; // Fixed shipping for example
       const taxAmount = subTotal * 0.05; // 5% tax
       const discount = cart.items.reduce((total, item) => total + (
         item.product.salePrice && item.product.salePrice < item.product.regularPrice
