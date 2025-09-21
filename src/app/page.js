@@ -14,6 +14,8 @@ import NoOffers from '../components/NoOffer'
 import StorePage from '../components/stores'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { baseUrl } from '../utility/api/constant'
+import HeroServicesSection from '../components/hero'
+import BestTrainersSection from '../components/hero2'
 
 export const metadata = {
   title: 'Top Fitness Brands at Competitive Prices: Shop Now at Emma Fitness in Dubai & Sharjah',
@@ -56,6 +58,7 @@ export default async function Page() {
         <CategorySlider />
       </div>
 
+      <HeroServicesSection />
       {trendingProducts.length > 0 && (<>
         <Title titlePart1={'Top Trending Products'} titlePart2={'For You'} viewAllUrl='/trending/products' bgType='light' />
         <section>
@@ -77,6 +80,7 @@ export default async function Page() {
 
       {/* <OffersBanner /> */}
       <ProductSlider />
+      <BestTrainersSection />
 
       {specialOffer.length > 0 ? (
         <Sale offer={specialOffer[0]} />
@@ -85,14 +89,14 @@ export default async function Page() {
       )}
 
       {newArrivals.length > 0 && (<>
-        <Title titlePart1={'New'} titlePart2={'Products'} viewAllUrl='/products'/>
+        <Title titlePart1={'New'} titlePart2={'Products'} viewAllUrl='/products' />
         <section>
           <NewProducts products={newArrivals} />
         </section>
       </>)}
 
 
-      {banner && <Section data={banner} />}
+      {/* {banner && <Section data={banner} />} */}
       {/* <SmallBanner /> */}
 
       {/* {cheapest.length > 0 && <div style={{ padding: '40px 20px' }}>

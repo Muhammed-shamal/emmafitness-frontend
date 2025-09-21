@@ -44,6 +44,7 @@ const Section = ({ data }) => {
               {/* Shop Button */}
               <Button
                 type="primary"
+                color='red'
                 size="large"
                 className="mt-4 h-12 px-6 rounded-full flex items-center"
               >

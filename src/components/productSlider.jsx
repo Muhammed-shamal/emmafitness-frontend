@@ -34,7 +34,6 @@ const ProductSlider = () => {
         fetchTopProducts();
     }, []);
 
-
     const getImage = (product) => {
         return product.images && product.images.length > 0
             ? `${productUrl}/${product.images[0]}` // adjust this path as per your backend

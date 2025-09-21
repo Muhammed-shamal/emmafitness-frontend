@@ -86,7 +86,7 @@ function OurBrands() {
                   // },
                   {
                     title: "Free Shipping",
-                    desc: "On all orders over $50"
+                    desc: "On all orders over AED 200"
                   }
                 ].map((point, idx) => (
                   <div key={idx} className="flex items-start p-3 bg-blue-50 rounded-lg">
@@ -116,7 +116,7 @@ function OurBrands() {
               {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
+                  className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200"
                   href="/products"
                 >
                   Shop Now
