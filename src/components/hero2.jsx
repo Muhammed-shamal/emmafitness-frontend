@@ -9,7 +9,7 @@ export default function BestTrainersSection() {
                 <div className="relative">
                     <div className="relative w-full h-[500px] rounded-xl overflow-hidden">
                         <Image
-                            src="/gallery/young-fitness-man-studio.jpg" // Replace with your image path
+                            src="/gallery/young-fitness-man-studio.jpg"
                             alt="Trainer"
                             fill
                             className="object-cover"

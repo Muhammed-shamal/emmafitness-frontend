@@ -110,7 +110,7 @@ export default function CategorySlider() {
 
         <section className="px-4 relative">
           {/* Main Categories - Horizontal Scroller */}
-          <div className="relative mb-6">
+          <div className="relative ">
             <div className="flex overflow-x-auto space-x-4 pb-6 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent scrollbar-thumb-rounded-full">
               {bannerCategories.map((cat) => {
                 const isActive = activeCategory?.id === cat.id;
@@ -298,6 +298,7 @@ export default function CategorySlider() {
             )}
           </AnimatePresence>
         </section>
+
 
         <motion.div
           initial={{ opacity: 0 }}
