@@ -198,9 +198,9 @@ function Header() {
         <div className="container mx-auto px-4 flex flex-col">
           {/* Top bar with contact info and user actions */}
           <div className="hidden md:flex justify-between items-center py-2 border-b border-gray-100 text-xs">
-            <div className="flex items-center space-x-4">
+            {/* <div className="flex items-center space-x-4">
               <span className="text-gray-500">Free shipping on orders over AED 200</span>
-            </div>
+            </div> */}
             <div className="flex items-center space-x-4">
               <Link href="/contact" className="text-gray-600 hover:text-secondary transition-colors">
                 Contact Us
@@ -288,7 +288,7 @@ function Header() {
         </div>
 
         {/* Category Navigation */}
-        <div className="border-t border-gray-100">
+        <div className="border-t border-gray-100 justify-center flex">
           <CategoryNav />
         </div>
       </header>

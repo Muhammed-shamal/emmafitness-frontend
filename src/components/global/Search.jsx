@@ -4,6 +4,7 @@ import { Select } from "antd"
 import { useState } from "react"
 import fetchApi from "../../utility/api/fetchApi"
 import { useRouter } from "next/navigation"
+import { productUrl } from "../../utility/api/constant"
 
 function Search() {
 
@@ -38,14 +39,26 @@ function Search() {
               return;
             }
 
+            console.log('data', data);
             const MAX_LENGTH = 100;
             const ndata = data.map((item) => ({
               value: item?.slug,
-              label:
-                item?.name.length > MAX_LENGTH
-                  ? `${item?.name.slice(0, MAX_LENGTH)}...`
-                  : item?.name,
+              label: (
+                <div className="flex items-center gap-2">
+                  <img
+                    src={`${productUrl}/`+ item?.images[0]} // adjust key if different
+                    alt={item?.name}
+                    className="w-8 h-8 object-cover rounded"
+                  />
+                  <span>
+                    {item?.name.length > MAX_LENGTH
+                      ? `${item?.name.slice(0, MAX_LENGTH)}...`
+                      : item?.name}
+                  </span>
+                </div>
+              ),
             }));
+
 
             callback(ndata);
           }

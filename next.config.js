@@ -5,7 +5,8 @@ const nextConfig = {
         remotePatterns: [{
             protocol: 'https',
             hostname: 'apiemmafitness.delavendervipspa.shop',
-        },]
+        },],
+        unoptimized:true
     },
 
 }

@@ -112,7 +112,7 @@ export default function CategorySlider() {
         <section className="px-4 relative">
           {/* Main Categories - Horizontal Scroller */}
           <div className="relative ">
-            <div className="flex overflow-x-auto space-x-4 pb-6 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent scrollbar-thumb-rounded-full">
+            <div className="flex overflow-x-auto [--tw-space-x-reverse:0] space-x-[40px] pb-6 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent scrollbar-thumb-rounded-full">
               {
                 loading ? Array.from({ length: 6 }).map((_, index) => (
                   <div key={index} className="flex-shrink-0 w-32 p-5">

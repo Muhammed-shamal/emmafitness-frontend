@@ -84,10 +84,10 @@ function OurBrands() {
                   //   title: "Satisfaction Guarantee",
                   //   desc: "30-day money back guarantee"
                   // },
-                  {
-                    title: "Free Shipping",
-                    desc: "On all orders over AED 200"
-                  }
+                  // {
+                  //   title: "Free Shipping",
+                  //   desc: "On all orders over AED 200"
+                  // }
                 ].map((point, idx) => (
                   <div key={idx} className="flex items-start p-3 bg-blue-50 rounded-lg">
                     <div className="bg-blue-100 p-2 rounded-md mr-3 flex-shrink-0">

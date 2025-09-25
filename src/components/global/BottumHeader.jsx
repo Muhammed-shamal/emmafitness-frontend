@@ -9,7 +9,7 @@ const iconData = [
   {
     icon: "delivery.svg",
     heading: "Fast Delivery & Installation",
-    label: "Next-day delivery available",
+    label: "3 to 5 business days",
   },
   {
     icon: "price.svg",

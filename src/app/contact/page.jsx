@@ -234,7 +234,7 @@ export default function ContactPage() {
                         <div>
                           <Text strong>Business Hours</Text>
                           <br />
-                          <Text>Mon-Fri: 9AM - 6PM EST<br />Sat: 10AM - 4PM EST<br />Sun: Closed</Text>
+                          <Text>Mon-Fri: 9AM - 6PM EST<br />Sat: 10AM - 4PM EST<br />Sun: 10AM - 4PM EST</Text>
                         </div>
                       </div>
                     </div>

@@ -218,7 +218,7 @@ export default function StorePage() {
                   <span className="text-2xl">🛒</span>
                 </div>
                 <h4 className="font-semibold mb-2">Try Before You Buy</h4>
-                <p className="text-gray-600 text-sm">Experience our products firsthand before making a decision</p>
+                <p className="text-gray-600 text-sm">Experience our products first hand before making a decision</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">

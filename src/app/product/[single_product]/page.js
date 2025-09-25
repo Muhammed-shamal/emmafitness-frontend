@@ -66,7 +66,7 @@ function Page({ params }) {
 
 
   const specialIcons = [
-    { url: "/icons/shipped.png", alt: "shopping", title: "Free Shipping" },
+    // { url: "/icons/shipped.png", alt: "shopping", title: "Free Shipping" },
     { url: "/icons/easy-installation.png", alt: "installation", title: "Free Installation" },
     { url: "/icons/guarantee.png", alt: "guarantee", title: "Product Warranty" },
   ]
@@ -91,80 +91,96 @@ function Page({ params }) {
           />
 
           <div className="lg:border-l pl-4 max-w-md flex flex-col gap-4">
-            <div className="mt-4">
-              <h1 className="text-xl font-bold">{product?.name}</h1>
-              <Image
-                src={`${product?.brand?.logo ? brandUrl + '/' + product?.brand.logo : "/product-placehold.png"}`}
-                className="object-cover"
-                width={120}
-                height={40}
-                alt="brand-logo"
-              />
+            <div className="mt-4 space-y-4">
+              {/* Product Name and Brand */}
+              <div>
+                <h1 className="text-xl font-bold">{product?.name}</h1>
+                <div className="flex items-center gap-2 mt-1">
+                  <small className="text-gray-600">{product?.brand?.name}</small>
+                  {product?.brand?.logo && (
+                    <Image
+                      src={brandUrl + '/' + product?.brand.logo}
+                      className="object-contain"
+                      width={120}
+                      height={40}
+                      alt={`${product?.brand?.name} logo`}
+                    />
+                  )}
+                </div>
+              </div>
 
               <Divider />
 
-              <div className="flex gap-2 md:gap-4">
+              {/* Special Icons */}
+              <div className="flex flex-wrap gap-4">
                 {specialIcons.map((it) => (
-                  <div key={it.url} className="flex flex-col items-center justify-center">
-                    <div className="border flex border-gray-200 items-center justify-center rounded-full h-10 w-10 md:h-12 md:w-12">
+                  <div key={it.url} className="flex flex-col items-center text-center">
+                    <div className="border border-gray-200 flex items-center justify-center rounded-full h-12 w-12">
                       <Image src={it.url} width={30} height={30} alt={it.alt} />
                     </div>
-                    <span className="text-xs text-gray-600 text-center">{it.title}</span>
+                    <span className="text-xs text-gray-600 mt-1">{it.title}</span>
                   </div>
                 ))}
               </div>
 
               <Divider />
 
+              {/* Price */}
               <Price salePrice={product?.salePrice} regularPrice={product?.regularPrice} />
 
-              <div className="mt-3">
+              {/* Off Label */}
+              <div className="mt-2">
                 <OffLabel RegularPrice={product?.regularPrice} SalePrice={product?.salePrice} />
               </div>
 
-              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-                {/* <Tag color="cyan" className="rounded-none">{product?.status}</Tag> */}
-
-                {product?.stockQty < 10 && product?.stockQty > 0 ? (
-                  <span className="text-orange-500 font-semibold">Stock - {product?.stockQty} left</span>
-                ) : product?.stockQty < 1 ? (
-                  <span className="text-red-600 font-semibold">Out of stock</span>
+              {/* Stock & Labels */}
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium">
+                {product?.stockQty < 1 ? (
+                  <span className="text-red-600">Out of stock</span>
+                ) : product?.stockQty < 10 ? (
+                  <span className="text-orange-500">Stock - {product?.stockQty} left</span>
                 ) : (
-                  <span className="text-green-700 font-semibold">In stock</span>
+                  <span className="text-green-700">In stock</span>
                 )}
 
                 {product?.isNewArrival && <Tag color="red">New Arrival</Tag>}
                 {product?.isFeatured && <Tag color="gold">Featured</Tag>}
                 {product?.isTrending && <Tag color="purple">Trending</Tag>}
                 {product?.isBestSeller && <Tag color="green">Best Seller</Tag>}
-                {product?.customLabel && <Tag color="yellow" className="text-black">{product?.customLabel}</Tag>}
+                {product?.customLabel && (
+                  <Tag color="yellow" className="text-black">
+                    {product.customLabel}
+                  </Tag>
+                )}
               </div>
 
               <Divider />
 
               {/* Support Buttons */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full text-sm">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                 <a
                   href={`https://wa.me/971563296585?text=Hello, I'm interested in ${product?.name}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between border rounded-md px-4 py-3 shadow hover:shadow-md transition"
                 >
-                  <span>Need More Details or Assistance? Chat with our specialist</span>
-                  <Image src="/icons/tiktok.svg" width={24} height={24} alt="WhatsApp" />
+                  <span>Need more details or assistance? Chat with our specialist</span>
+                  <Image src="/icons/whatsapp.svg" width={24} height={24} alt="WhatsApp" />
                 </a>
+
                 <a
                   href="tel:+971563296585"
                   className="flex items-center justify-between border rounded-md px-4 py-3 shadow hover:shadow-md transition"
                 >
                   <span>Request a Callback</span>
-                  <Image src="/icons/phone.svg" width={24} height={24} alt="Callback" />
+                  <Image src="/icons/phone.svg" width={24} height={24} alt="Phone" />
                 </a>
               </div>
 
               {/* Delivery Estimate */}
-              <div className="text-sm mt-4 text-gray-600 font-medium">
-                <p>🚚 Expected Delivery in <span className="text-black font-semibold">3–5 Business Days</span></p>
+              <div className="text-sm text-gray-600 font-medium">
+                🚚 Expected Delivery in{" "}
+                <span className="text-black font-semibold">3–5 Business Days</span>
               </div>
 
               {/* Social Share Section */}
@@ -179,7 +195,6 @@ function Page({ params }) {
                   >
                     <FaFacebookSquare />
                   </a>
-
                   <a
                     href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}`}
                     target="_blank"
@@ -188,7 +203,6 @@ function Page({ params }) {
                   >
                     <FaTwitter />
                   </a>
-
                   <a
                     href={`https://www.linkedin.com/shareArticle?url=${encodeURIComponent(currentUrl)}`}
                     target="_blank"
@@ -197,7 +211,6 @@ function Page({ params }) {
                   >
                     <FaLinkedin />
                   </a>
-
                   <a
                     href={`https://wa.me/?text=${encodeURIComponent(currentUrl)}`}
                     target="_blank"
@@ -206,7 +219,6 @@ function Page({ params }) {
                   >
                     <FaWhatsapp />
                   </a>
-
                   <button
                     onClick={() => navigator.clipboard.writeText(currentUrl)}
                     title="Copy link"
@@ -217,8 +229,8 @@ function Page({ params }) {
                 </div>
               </div>
 
-
-             <DescriptionWithReadMore text={product?.description} />
+              {/* Description */}
+              <DescriptionWithReadMore text={product?.description} />
             </div>
 
             <div className="flex flex-row gap-4">
