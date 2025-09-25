@@ -136,7 +136,7 @@ export default async function Page() {
       </div>
 
 
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5872586466508!2d55.4440232!3d25.284466299999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ef5f58681ae533f%3A0x791a34995fa3d39e!2sEmma%20Fitness%20Gym%20Equipments%20Commercial%20and%20Home!5e0!3m2!1sen!2sin!4v1754233183285!5m2!1sen!2sin"
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5325698157017!2d55.45064190000001!3d25.286305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5f1d7c968b23%3A0xb8fb04a6490a4b9c!2sINSPIRE%20FITNESS%20MUWAILEH%20SHARJAH!5e0!3m2!1sen!2sin!4v1758814932639!5m2!1sen!2sin"
         width="100%" height="600" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy='no-referrer-when-downgrade'></iframe>
     </main>
   )
