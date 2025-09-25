@@ -44,8 +44,6 @@ const CheckoutPage = () => {
   const hasCartItems = cart.items && cart.items.length > 0;
   const hasDirectPurchase = directPurchase.isDirectPurchase && directPurchase.product;
 
-  console.log('has diectpurchase',hasDirectPurchase)
-
   // Redirect if no items to purchase
   useEffect(() => {
     if (!hasCartItems && !hasDirectPurchase) {
@@ -62,7 +60,7 @@ const CheckoutPage = () => {
         URI: `customers/address/getBy/${user.userId}`,
         API_TOKEN: user.token
       });
-      console.log('address drom server', address);
+      
       setAddress(address);
       setLoading(false);
     };

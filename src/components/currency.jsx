@@ -25,7 +25,6 @@ export default function Currency() {
           await Currency_instance.get(`/v1/latest?apikey=${Currency_APIKEY}`)
         ).data.data;
 
-        console.log('response is',response)
         setCurrencyPairs(
           Object.entries(response).map(([currency, price]) => ({
             currency,

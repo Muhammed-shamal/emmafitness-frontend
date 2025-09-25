@@ -34,7 +34,6 @@ function SignUp({ Close = () => { } }) {
     try {
       setResult({ ...result, loading: true });
       const user = await postApi({ URI: 'auth/customer/new-register', Data: e, isTop: true })
-      console.log('user is', user);
       if (user.error) throw user
 
       signIn({

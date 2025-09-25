@@ -43,7 +43,6 @@ function WishLists() {
   };
 
   const renderWishlistItem = (item) => {
-    console.log("item", item)
     const product = item?.product;
     if (!product) return null;
 

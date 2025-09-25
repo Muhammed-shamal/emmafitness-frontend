@@ -26,8 +26,7 @@ const useCheckout = () => {
       const quantity =
         cartItem.find((ci) => ci.productId == productId)?.quantity || 1
 
-        console.log("productId",productId)
-      console.log('quanity', quantity)
+        
       return {
         products: productId,
         name: item?.name,

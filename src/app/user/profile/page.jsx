@@ -25,7 +25,6 @@ const Page = () => {
       setResult(prev => ({ ...prev, loading: true }))
       try {
         const response = await fetchApi({ URI: `customers/account/profile/${user?.userId}`, API_TOKEN: user?.token })
-        console.log("response from me", response)
         setData({
           name: response?.customer.name || '',
           phone: response?.customer.phone || '',

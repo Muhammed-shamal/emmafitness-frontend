@@ -26,20 +26,6 @@ const CategoryListingPage = () => {
         const fetchCategories = async () => {
             try {
                 const res = await fetchApi({ URI: 'public/categories-nav' });
-                console.log('res is',res);
-                // const raw = res?.data || [];
-
-                // // Map into structure expected by your UI
-                // const structured = raw.map(cat => ({
-                //     id: cat._id,
-                //     name: cat.name,
-                //     slug: cat.slug,
-                //     subCategories: cat.children?.map(child => ({
-                //         name: child.name,
-                //         slug: child.slug
-                //     })) || []
-                // }));
-
                 setCategories(res?.data || []);
             } catch (e) {
                 console.error('Failed to fetch categories', e);

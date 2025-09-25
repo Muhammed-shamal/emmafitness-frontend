@@ -50,7 +50,6 @@ export const cartSlice = createSlice({
             state.error = null;
         },
         bulkReplaceCart: (state, action) => {
-            console.log('action payload',action.payload);
             state.items = [...state.items, ...action.payload];
         },
     },

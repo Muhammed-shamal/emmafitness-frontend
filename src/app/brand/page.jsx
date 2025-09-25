@@ -29,7 +29,7 @@ import CustomSpinner from "../../components/global/CustomSpinner"
       })
       .catch(e => {
         setLoading(false)
-        console.log(e)
+        console.error(e)
       })
   }, [searchparams, reload])
 

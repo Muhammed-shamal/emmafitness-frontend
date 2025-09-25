@@ -15,7 +15,7 @@ const useAddAndRemoveCart = () => {
       try {
         // ✅ Fetch server cart
         const serverCart = await fetchApi({ URI: `customers/cart/getBy/${userId}`, API_TOKEN: token });
-        console.log('server cart', serverCart)
+      
         const serverItems = serverCart?.data?.items || [];
 
         // ✅ Normalize local cart for comparison
@@ -48,7 +48,7 @@ const useAddAndRemoveCart = () => {
             isTop: true,
             API_TOKEN: token
           });
-          console.log("response for add", response)
+          
           cartDispatch(showToast({ type: 'success', message: 'product add to cart successfully' }));
         }
 
@@ -60,7 +60,7 @@ const useAddAndRemoveCart = () => {
             isTop: true,
             token
           });
-          console.log("response update", response)
+          
           cartDispatch(showToast({ type: 'success', message: 'your cart has been updated' }));
         }
       } catch (err) {

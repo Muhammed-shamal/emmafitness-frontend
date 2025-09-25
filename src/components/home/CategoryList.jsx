@@ -42,7 +42,7 @@ function CategoryList() {
     useEffect(() => {
         setLoading(true)
         const fetch = async () => {
-            const result = await fetchApi({ URI: "Categories?populate=*&sort=Order&pagination[limit]=100" }).catch(e=>console.log(e)).finally(()=>setLoading(false)) || null
+            const result = await fetchApi({ URI: "Categories?populate=*&sort=Order&pagination[limit]=100" }).catch(e=>console.error(e)).finally(()=>setLoading(false)) || null
             setCategory(result?.data?.map(dt => ({
                 label: dt?.attributes?.Name,
                 img: dt?.attributes?.Photo?.data?.attributes?.url ? `${dt?.attributes?.Photo?.data?.attributes?.url}` : "/product-placehold.png",

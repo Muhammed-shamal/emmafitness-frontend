@@ -121,9 +121,7 @@ function Header() {
         const result = await fetchApi({
           URI: `customers/cart/getBy/${user?.userId}`,
           API_TOKEN: user?.token
-        });
-
-        console.log('result are',result);
+        });        
 
         // Flatten and assign only items
         const cartItems = result?.items || [];

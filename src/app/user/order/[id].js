@@ -38,7 +38,6 @@ const OrderDetailsPage = () => {
     useEffect(() => {
         const fetchDetails = async () => {
             const order = user?.userId && await fetchApi({ URI: `customers/order/getMyOrders/${id}`, API_TOKEN: user?.token })
-            console.log('order details are', order)
             setOrder([...order?.data])
         }
         fetchDetails()

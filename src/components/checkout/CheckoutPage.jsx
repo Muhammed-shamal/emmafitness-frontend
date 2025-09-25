@@ -23,7 +23,6 @@ export default function CheckoutPage({ summary, orderData }) {
                 Data: { totalAmount: summary.grandTotal, orderId: orderData._id },
                 isTop: true
             });
-            console.log('data', data)
             setClientSecret(data.clientSecret);
         };
 

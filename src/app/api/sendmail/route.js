@@ -44,7 +44,7 @@ export async function POST(request) {
     })
     return Response.json({ data: "Mail has been send" })
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return Response.json(500, { data: "Could not send the mail" })
 
   }

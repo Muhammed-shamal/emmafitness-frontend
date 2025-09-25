@@ -17,7 +17,6 @@ function Page({ params }) {
         const fetchProductsByCategory = async () => {
             try {
                 const response = await fetchApi({ URI: `public/products/${params.category}` });
-                console.log('response by categor', response)
                 setProducts(response.data);
             } catch (err) {
                 setError(err.message);

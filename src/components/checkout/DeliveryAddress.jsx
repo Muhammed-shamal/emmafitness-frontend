@@ -11,8 +11,6 @@ function DeliveryAddress({ address = [], selected, reload }) {
     reload(pre => !pre)
   }
 
-  console.log('address from child',address)
-
   return (
     <div className='bg-gray-100 border border-gray-200 p-2 md:p-4 space-y-4'>
       <Modal open={popup} footer={false} onCancel={popupCloseHandle}>

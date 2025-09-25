@@ -39,7 +39,6 @@ function Search() {
               return;
             }
 
-            console.log('data', data);
             const MAX_LENGTH = 100;
             const ndata = data.map((item) => ({
               value: item?.slug,

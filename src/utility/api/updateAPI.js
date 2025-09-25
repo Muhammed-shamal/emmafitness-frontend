@@ -17,10 +17,10 @@ const updateApi = async ({ URI, Data = {}, isTop = false, token }) => {
     try {
       const errorData = await result.json();
       message = errorData?.message || result.statusText;
-      console.log('Error response:', errorData);
+      
     } catch (_) {
       message = result.statusText;
-      console.log('Error parsing response:', _);
+      console.error('Error parsing response:', _);
     }
     throw new Error(message);
   }

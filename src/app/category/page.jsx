@@ -23,13 +23,12 @@ function Page() {
     setLoading(true)
     fetchApi({ URI: `public/products?${filter({ params })}&populate=customLabel&populate=category&sort=createdAt:Desc&pagination[page]=${pagination?.pageNo}&pagination[pageSize]=${pagination?.pageSize}` })
       .then(res => {
-        console.log("res is in fetch products with filter",res)
         setResult(res)
         setLoading(false)
       })
       .catch(e => {
         setLoading(false)
-        console.log(e)
+        console.error(e)
       })
   }, [params, reload])
 

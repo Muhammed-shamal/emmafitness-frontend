@@ -15,13 +15,13 @@ const useSignOut = () => {
                 URI: 'auth/customer/logout',
                 API_TOKEN: token,
             });
-            console.log('logout res', user);
+            
             localStorage.clear();
             sessionStorage.clear();
             dispatch(loggedIn({}))
             window.location.reload();
         } catch (error) {
-            console.log("failed to logout", error)
+            console.error("failed to logout", error)
         }
     }
     return signOut
@@ -37,7 +37,7 @@ const useSignIn = () => {
 
         //  if have, move it into db and remove from local storage
         const localCart = JSON.parse(localStorage.getItem('cart'))
-        const serverCart = await fetchApi({ URI: 'customers/me?populate=carts.product,wishlist.product', API_TOKEN: token }).catch(e => console.log(e))
+        const serverCart = await fetchApi({ URI: 'customers/me?populate=carts.product,wishlist.product', API_TOKEN: token }).catch(e => console.error(e))
         if (serverCart?.carts?.length > 0) {
             dispatch(bulkReplaceCart(serverCart?.carts?.map(it => ({ productId: it?.product?.id, quantity: it?.quantity }))))
         }

@@ -52,14 +52,13 @@ function CreateAddress({ close }) {
             };
 
             setResult({ ...result, loading: true });
-            console.log("user details", userDetails)
 
             await PostAPI({ URI: 'address/create', Data: data, isTop: true, API_TOKEN: userDetails.token });
             dispatch(showToast({ type: 'success', message: 'Successfully saved new address' }));
             close && close(false)
             form.resetFields()
         } catch (err) {
-            console.log("err in add ", err)
+            console.error("err in add ", err)
             setResult({ err: true, msg: "Unable to save address", loading: false });
         }
     }

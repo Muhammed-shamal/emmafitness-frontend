@@ -28,7 +28,7 @@ function Filter({ categories = true, brand = true, maxAmount = 20000 }) {
         })))
 
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
     }
     fetch()

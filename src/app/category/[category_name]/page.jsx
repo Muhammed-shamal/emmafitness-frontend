@@ -31,7 +31,7 @@ function Page() {
       })
       .catch(e => {
         setLoading(false)
-        console.log(e)
+        console.error(e)
       })
   }, [searchparams, reload])
 

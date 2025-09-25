@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { productUrl } from '../../utility/api/constant';
 
 const DirectPurchaseProduct = ({ product, quantity }) => {
-  console.log('produc data is',product);
   return (
     <div className="bg-white p-4 rounded-lg shadow">
       <h3 className="text-lg font-semibold mb-4">Product Details</h3>

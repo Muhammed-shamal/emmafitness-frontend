@@ -82,7 +82,6 @@ function ForgotUser({ close,goToLogin }) {
       }, 2000);
       
     } catch (err) {
-      console.log('Error:', err);
       dispatch(showToast({ 
         type: 'error', 
         message: err.response?.data?.message || "Invalid or expired OTP. Please try again." 
