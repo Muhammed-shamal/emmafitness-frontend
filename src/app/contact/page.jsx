@@ -24,6 +24,7 @@ import {
   
 } from '@ant-design/icons';
 import emailjs from '@emailjs/browser';
+import basicData from '../../utility/basicDatas';
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -207,7 +208,7 @@ export default function ContactPage() {
                         <div>
                           <Text strong>Phone Support</Text>
                           <br />
-                          <Text>+971 563296585</Text>
+                          <Text>{basicData.telphone.label}</Text>
                         </div>
                       </div>
 
@@ -216,7 +217,7 @@ export default function ContactPage() {
                         <div>
                           <Text strong>Email</Text>
                           <br />
-                          <Text>emmafitdxb@gmail.com</Text>
+                          <Text>{basicData.email.label}</Text>
                         </div>
                       </div>
 

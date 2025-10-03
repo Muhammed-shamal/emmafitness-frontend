@@ -6,7 +6,7 @@ import Header from '../components/global/Header';
 import Footer from '../components/global/footer/Footer';
 import { Providers } from '../utility/redux/provider'
 import BackToTop from '../components/BackToTop'
-import { GoogleTagManager } from '@next/third-parties/google'
+// import { GoogleTagManager } from '@next/third-parties/google'
 import { WhatsAppOutlined } from '@ant-design/icons';
 import { Toaster } from 'react-hot-toast';
 import BottomHeader from '../components/global/BottumHeader'

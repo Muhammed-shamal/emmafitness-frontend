@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import basicData from "../utility/basicDatas";
 
 export default function BestTrainersSection() {
    return (
@@ -51,7 +52,7 @@ export default function BestTrainersSection() {
                 {/* CTA Button */}
                 <div className="pt-4">
                     <Link
-                        href="https://wa.me/971563296585"
+                        href={basicData.whatsapp.slug}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"

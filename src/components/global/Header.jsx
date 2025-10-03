@@ -16,6 +16,7 @@ import { addBulkWishlist, setWishList } from '../../utility/redux/wishListSlice'
 import CategoryNav from './CategoryNav'
 import { showToast } from '../../utility/redux/toastSlice'
 import { useRouter } from 'next/navigation'
+import basicData from '../../utility/basicDatas'
 
 
 function Header() {
@@ -210,8 +211,8 @@ function Header() {
               <span className="text-gray-300">|</span>
               <div className="flex items-center gap-1 font-medium">
                 <PhoneOutlined className="text-secondary" />
-                <Link href="tel:+971563296585" className="hover:text-secondary transition-colors">
-                  +971 563296585
+                <Link href={basicData.telphone.slug} className="hover:text-secondary transition-colors">
+                  {basicData.telphone.label}
                 </Link>
               </div>
             </div>

@@ -58,7 +58,7 @@ export default async function Page() {
         <CategorySlider />
       </div>
 
-      <HeroServicesSection />
+      {/* <HeroServicesSection /> */}
       {trendingProducts.length > 0 && (<>
         <Title titlePart1={'Top Trending Products'} titlePart2={'For You'} viewAllUrl='/trending/products' bgType='light' />
         <section>
@@ -78,7 +78,7 @@ export default async function Page() {
         </>
       )}
 
-      <BestTrainersSection />
+      {/* <BestTrainersSection /> */}
       <ProductSlider />
 
       {specialOffer.length > 0 ? (

@@ -18,7 +18,7 @@ function AddressSection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 flex-wrap">
             {/* Phone */}
             <a 
-              href={basicDatas.telphone.slug} 
+              href={basicDatas.telphone2.slug} 
               className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-all duration-200 group"
             >
               <div className="bg-white/20 p-1.5 rounded-full group-hover:scale-110 transition-transform">
@@ -30,7 +30,7 @@ function AddressSection() {
                   className="filter brightness-0 invert"
                 />
               </div>
-              <span className="text-sm md:text-base font-medium">{basicDatas.telphone.label}</span>
+              <span className="text-sm md:text-base font-medium">{basicDatas.telphone2.label}</span>
             </a>
             
             {/* WhatsApp */}

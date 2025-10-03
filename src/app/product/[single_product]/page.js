@@ -24,6 +24,7 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { StarFilled, StarOutlined, UserOutlined } from "@ant-design/icons";
+import basicData from "../../../utility/basicDatas";
 
 function Page({ params }) {
   const router = useRouter();
@@ -159,7 +160,7 @@ function Page({ params }) {
               {/* Support Buttons */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                 <a
-                  href={`https://wa.me/971563296585?text=Hello, I'm interested in ${product?.name}`}
+                  href={`${basicData.whatsapp.slug}?text=Hello, I'm interested in ${product?.name}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between border rounded-md px-4 py-3 shadow hover:shadow-md transition"
@@ -169,7 +170,7 @@ function Page({ params }) {
                 </a>
 
                 <a
-                  href="tel:+971563296585"
+                  href={basicData.telphone.slug}
                   className="flex items-center justify-between border rounded-md px-4 py-3 shadow hover:shadow-md transition"
                 >
                   <span>Request a Callback</span>
