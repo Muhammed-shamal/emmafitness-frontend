@@ -28,16 +28,41 @@ export default function CategoryNav() {
                     })) || []
                 }));
 
-                setCategories(structured);
+                // Define your preferred order
+                const order = [
+                    'Cardio',
+                    'Strength plate loaded',
+                    'Strength pin loaded',
+                    'Benches',
+                    'Weights',
+                    'Accessories',
+                    'Floor mats'
+                ];
+
+                // Sort based on order
+                const sorted = structured.sort((a, b) => {
+                    const indexA = order.indexOf(a.name);
+                    const indexB = order.indexOf(b.name);
+
+                    // If not found in order, push to the end
+                    if (indexA === -1 && indexB === -1) return 0;
+                    if (indexA === -1) return 1;
+                    if (indexB === -1) return -1;
+
+                    return indexA - indexB;
+                });
+
+                setCategories(sorted);
             } catch (e) {
                 console.error('Failed to fetch categories', e);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
         };
 
         fetchCategories();
     }, []);
+
 
 
     // Desktop dropdown handlers
